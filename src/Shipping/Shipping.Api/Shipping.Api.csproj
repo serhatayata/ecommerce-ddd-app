@@ -8,4 +8,9 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0"/>
     <PackageReference Include="Scalar.AspNetCore" Version="2.0.14"/>
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shipping.Application\Shipping.Application.csproj" />
+    <ProjectReference Include="..\..\Common\Common.Api\Common.Api.csproj" />
+  </ItemGroup>
 </Project>
