@@ -40,6 +40,16 @@ public class ApplicationUser : IdentityUser<int>, IAggregateRoot
         AddDomainEvent(new UserCreatedDomainEvent(Id, Email));
     }
 
+    public ApplicationUser(
+        string email)
+        : base()
+    {
+        Email = email;
+        CreatedOnUtc = DateTime.UtcNow;
+        
+        AddDomainEvent(new UserCreatedDomainEvent(Id, Email));
+    }
+
     // Private constructor for EF Core
     private ApplicationUser() { }
 
