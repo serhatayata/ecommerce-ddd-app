@@ -1,4 +1,5 @@
 using Common.Application.Models;
+using Identity.Application.Commands.Common;
 using Identity.Application.ServiceContracts;
 using MediatR;
 

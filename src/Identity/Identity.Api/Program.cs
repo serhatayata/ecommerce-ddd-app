@@ -1,10 +1,13 @@
 using Scalar.AspNetCore;
+using Identity.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
+
+builder.Services.AddIdentityApplication();
 
 var app = builder.Build();
 

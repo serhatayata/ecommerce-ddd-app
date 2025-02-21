@@ -1,6 +1,7 @@
 using Common.Application.Models;
 using Identity.Application.Commands;
 using Identity.Application.Commands.ChangePassword;
+using Identity.Application.Commands.Common;
 using Identity.Application.ServiceContracts;
 using Identity.Domain.Models;
 using Microsoft.AspNetCore.Identity;
@@ -61,7 +62,7 @@ internal class IdentityService : IIdentityService
 
     public async Task<Result> ChangePassword(ChangePasswordRequestModel changePasswordRequest)
     {
-        var user = await userManager.FindByIdAsync(changePasswordRequest.UserId);
+        var user = await userManager.FindByIdAsync(changePasswordRequest.UserId.ToString());
 
         if (user == null)
         {
@@ -78,5 +79,21 @@ internal class IdentityService : IIdentityService
         return identityResult.Succeeded
             ? Result.Success
             : Result.Failure(errors);
+    }
+
+    public async Task<Result<UserDetailResponseModel>> GetUserDetails(int userId)
+    {
+        var user = await userManager.FindByIdAsync(userId.ToString());
+
+        if (user == null)
+            return InvalidErrorMessage;
+
+        return new UserDetailResponseModel()
+        {
+            Id = user.Id,
+            Email = user.Email,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+        };
     }
 }

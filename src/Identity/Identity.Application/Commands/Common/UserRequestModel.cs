@@ -1,4 +1,4 @@
-namespace Identity.Application.Commands;
+namespace Identity.Application.Commands.Common;
 
 public abstract class UserRequestModel
 {
