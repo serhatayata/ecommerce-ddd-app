@@ -1,3 +1,4 @@
+using Identity.Domain;
 using Identity.Domain.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -5,7 +6,7 @@ using System.Reflection;
 
 namespace Identity.Infrastructure.Persistence;
 
-internal class IdentityDbContext : IdentityDbContext<
+public class IdentityDbContext : IdentityDbContext<
     ApplicationUser, 
     ApplicationRole, 
     int,
@@ -13,7 +14,7 @@ internal class IdentityDbContext : IdentityDbContext<
     ApplicationUserRole,
     ApplicationUserLogin,
     ApplicationRoleClaim,
-    ApplicationUserToken>
+    ApplicationUserToken>, IIdentityDbContext
 {
     public IdentityDbContext(DbContextOptions<IdentityDbContext> options)
         : base(options)
@@ -31,6 +32,9 @@ internal class IdentityDbContext : IdentityDbContext<
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+        builder.HasDefaultSchema("identity");
+
         base.OnModelCreating(builder);
     }
 }

@@ -1,6 +1,6 @@
 using Identity.Domain.Models;
 
-namespace Identity.Infrastructure.Services;
+namespace Identity.Application.ServiceContracts;
 
 public interface IJwtGenerator
 {

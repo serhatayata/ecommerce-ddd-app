@@ -16,25 +16,33 @@ public class IdentityController : ApiController
     [HttpPost]
     [Route(nameof(Register))]
     public async Task<ActionResult> Register(
-        RegisterUserCommand command)
-        => await Send(command);
+    RegisterUserCommand command)
+    {
+        return await Send(command);
+    }
 
     [HttpPost]
     [Route(nameof(Login))]
     public async Task<ActionResult<UserResponseModel>> Login(
-        LoginUserCommand command)
-        => await Send(command);
+    LoginUserCommand command)
+    {
+        return await Send(command);
+    }
 
     [HttpPut]
     [Authorize]
     [Route(nameof(ChangePassword))]
     public async Task<ActionResult> ChangePassword(
-        ChangePasswordCommand command)
-        => await Send(command);
+    ChangePasswordCommand command)
+    {
+        return await Send(command);
+    }
 
     [HttpGet]
     [Route(nameof(GetUserDetails))]
     public async Task<ActionResult<UserDetailResponseModel>> GetUserDetails(
-        UserDetailsQuery query)
-        => await Send(query);
+    UserDetailsQuery query)
+    {
+        return await Send(query);
+    }
 }

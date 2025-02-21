@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Common.Application.Settings;
 using Common.Domain.Models;
+using Identity.Application.ServiceContracts;
 using Identity.Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;

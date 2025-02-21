@@ -1,5 +1,4 @@
 using Common.Application.Models;
-using Identity.Application.Commands;
 using Identity.Application.Commands.ChangePassword;
 using Identity.Application.Commands.Common;
 using Identity.Application.ServiceContracts;
