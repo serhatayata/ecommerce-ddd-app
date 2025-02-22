@@ -1,6 +1,8 @@
 using System.Reflection;
 using Common.Application.Behaviours;
 using Common.Application.Settings;
+using Identity.Application.Sagas.UserRegistration;
+using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

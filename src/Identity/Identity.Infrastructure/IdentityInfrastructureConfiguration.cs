@@ -2,10 +2,13 @@ using System.Reflection;
 using Common.Domain.Models;
 using Common.Domain.Repositories;
 using Common.Infrastructure.Persistence;
+using Identity.Application.Sagas.UserRegistration;
 using Identity.Application.ServiceContracts;
+using Identity.Domain.Events;
 using Identity.Domain.Models;
 using Identity.Infrastructure.Persistence;
 using Identity.Infrastructure.Services;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,7 +25,8 @@ public static class IdentityInfrastructureConfiguration
             .AddIdentity()
             .AddDatabase(configuration)
             .AddRepositories()
-            .AddTransient<IDbInitializer, IdentityDbInitializer>();
+            .AddTransient<IDbInitializer, IdentityDbInitializer>()
+            .AddSagaConfigurations(configuration);
 
         return services;
     }
@@ -66,8 +70,8 @@ public static class IdentityInfrastructureConfiguration
         return services;
     }
 
-    internal static IServiceCollection AddRepositories(
-        this IServiceCollection services)
+    private static IServiceCollection AddRepositories(
+    this IServiceCollection services)
     {
         services
             .Scan(scan => scan
@@ -78,5 +82,47 @@ public static class IdentityInfrastructureConfiguration
                 .WithTransientLifetime());
 
         return services;
+    }
+
+    private static IServiceCollection AddSagaConfigurations(
+    this IServiceCollection services,
+    IConfiguration configuration)
+    {
+        return services.AddMassTransit(m =>
+        {
+            m.AddSagaStateMachine<UserRegistrationSaga, UserRegistrationState>()
+             .EntityFrameworkRepository(opt =>
+             {
+                 opt.AddDbContext<DbContext, IdentitySagaDbContext>((srv, cfg) =>
+                 {
+                     cfg.UseSqlServer(connectionString: configuration.GetConnectionString("SqlConnection"),
+                                      sqlServerOptionsAction: sqlOpt =>
+                                      {
+                                          sqlOpt.MigrationsAssembly(Assembly.GetExecutingAssembly().GetName().Name);
+                                      });
+                 });
+             });
+
+            // Other sagas
+            // m.AddSagaStateMachine<PasswordResetSaga, PasswordResetState>()
+            //   .EntityFrameworkRepository(opt =>
+            //   {
+            //     opt.ExistingDbContext<IdentitySagaDbContext>();
+            //   });
+
+            m.UsingRabbitMq((context, cfg) =>
+            {
+                var rabbitMQHost = configuration.GetConnectionString("RabbitMQ");
+                cfg.Host(rabbitMQHost);
+                    
+                #region UserCreated
+                var userCreatedDomainEventName = MessageBrokerExtensions.GetQueueName<UserCreatedDomainEvent>();
+                cfg.ReceiveEndpoint(userCreatedDomainEventName, e =>
+                {
+                    e.ConfigureSaga<UserRegistrationState>(context);
+                });
+                #endregion
+            });
+        });
     }
 }

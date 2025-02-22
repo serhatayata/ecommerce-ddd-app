@@ -1,17 +1,16 @@
-using MassTransit;
+namespace Common.Domain.Events.Identity;
 
-namespace Common.Domain.Events.Identity.Users;
-
-public record RegistrationCompletedEvent : CorrelatedBy<Guid>
+public record RegistrationIntegrationEvent : IntegrationEvent
 {
     public int UserId { get; }
     public string Email { get; }
     public DateTime CompletedAt { get; }
-    public Guid CorrelationId { get; }
 
-    public RegistrationCompletedEvent(
+    public RegistrationIntegrationEvent(
+    Guid correlationId,
     int userId, 
     string email)
+    : base (correlationId, DateTime.UtcNow)
     {
         UserId = userId;
         Email = email;

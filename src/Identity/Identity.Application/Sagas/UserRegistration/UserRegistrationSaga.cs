@@ -1,5 +1,5 @@
 using MassTransit;
-using Common.Domain.Events.Identity.Users;
+using Identity.Domain.Events;
 using Common.Domain.Events.Notification;
 
 namespace Identity.Application.Sagas.UserRegistration;
@@ -10,20 +10,20 @@ public class UserRegistrationSaga : MassTransitStateMachine<UserRegistrationStat
     public State EmailVerified { get; private set; }
     public State Completed { get; private set; }
 
-    public Event<UserCreatedDomainEvent> UserCreatedEvent { get; private set; }
-    public Event<EmailVerifiedDomainEvent> EmailVerifiedEvent { get; private set; }
-    public Event<RegistrationCompletedEvent> RegistrationCompletedEvent { get; private set; }
+    public Event<UserCreatedDomainEvent> UserCreatedDomainEvent { get; private set; }
+    public Event<EmailVerifiedDomainEvent> EmailVerifiedDomainEvent { get; private set; }
+    public Event<RegistrationCompletedDomainEvent> RegistrationCompletedDomainEvent { get; private set; }
 
     public UserRegistrationSaga()
     {
         InstanceState(x => x.CurrentState);
 
-        Event(() => UserCreatedEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
-        Event(() => EmailVerifiedEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
-        Event(() => RegistrationCompletedEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
+        Event(() => UserCreatedDomainEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
+        Event(() => EmailVerifiedDomainEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
+        Event(() => RegistrationCompletedDomainEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
 
         Initially(
-            When(UserCreatedEvent)
+            When(UserCreatedDomainEvent)
                 .Then(context =>
                 {
                     context.Saga.UserId = context.Message.UserId;
@@ -31,17 +31,17 @@ public class UserRegistrationSaga : MassTransitStateMachine<UserRegistrationStat
                     context.Saga.CreatedAt = DateTime.UtcNow;
                 })
                 .TransitionTo(AwaitingEmailVerification)
-                .Publish(context => new SendVerificationEmailEvent(context.Saga.CorrelationId, context.Saga.Email))
+                .Publish(context => new SendVerificationEmailIntegrationEvent(context.Saga.CorrelationId, context.Saga.Email))
         );
 
         During(AwaitingEmailVerification,
-            When(EmailVerifiedEvent)
+            When(EmailVerifiedDomainEvent)
                 .TransitionTo(EmailVerified)
-                .Publish(context => new SendWelcomeEmailEvent(context.Saga.CorrelationId, context.Saga.Email))
+                .Publish(context => new SendWelcomeEmailIntegrationEvent(context.Saga.CorrelationId, context.Saga.Email))
         );
 
         During(EmailVerified,
-            When(RegistrationCompletedEvent)
+            When(RegistrationCompletedDomainEvent)
                 .Then(context => context.Saga.CompletedAt = DateTime.UtcNow)
                 .TransitionTo(Completed)
         );
