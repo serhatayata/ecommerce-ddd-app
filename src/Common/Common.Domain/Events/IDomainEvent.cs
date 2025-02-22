@@ -1,7 +1,7 @@
-using MediatR;
+using MassTransit;
 
 namespace Common.Domain.Models;
 
-public interface IDomainEvent : INotification
+public interface IDomainEvent : CorrelatedBy<Guid>
 {
 }

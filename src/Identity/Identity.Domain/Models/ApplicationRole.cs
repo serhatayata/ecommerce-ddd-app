@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 using Common.Domain.Models;
-using Identity.Domain.Events.Roles;
 
 namespace Identity.Domain.Models;
 
@@ -11,7 +10,6 @@ public class ApplicationRole : IdentityRole<int>, IAggregateRoot
 
     public ApplicationRole(string name) : base(name)
     {
-        AddDomainEvent(new RoleCreatedDomainEvent(Id, name));
     }
 
     private ApplicationRole() { } // For EF Core
@@ -24,7 +22,6 @@ public class ApplicationRole : IdentityRole<int>, IAggregateRoot
     {
         var oldName = Name;
         Name = newName;
-        AddDomainEvent(new RoleNameUpdatedDomainEvent(Id, oldName, newName));
     }
 
     public void AddClaim(string type, string value)
@@ -37,7 +34,6 @@ public class ApplicationRole : IdentityRole<int>, IAggregateRoot
         };
         
         _claims.Add(claim);
-        AddDomainEvent(new RoleClaimAddedDomainEvent(Id, type, value));
     }
 
     public void RemoveClaim(string type, string value)
@@ -47,10 +43,7 @@ public class ApplicationRole : IdentityRole<int>, IAggregateRoot
             c.ClaimValue == value);
 
         if (claim != null)
-        {
             _claims.Remove(claim);
-            AddDomainEvent(new RoleClaimRemovedDomainEvent(Id, type, value));
-        }
     }
 
     private void AddDomainEvent(IDomainEvent domainEvent)

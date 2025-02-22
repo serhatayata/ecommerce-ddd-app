@@ -1,5 +1,5 @@
+using Common.Domain.Events.Identity.Users;
 using Common.Domain.Models;
-using Identity.Domain.Events.Users;
 using Microsoft.AspNetCore.Identity;
 
 namespace Identity.Domain.Models;
@@ -59,8 +59,6 @@ public class ApplicationUser : IdentityUser<int>, IAggregateRoot
         FirstName = firstName;
         LastName = lastName;
         LastModifiedOnUtc = DateTime.UtcNow;
-        
-        AddDomainEvent(new UserProfileUpdatedDomainEvent(Id, FirstName, LastName));
     }
 
     public void AddClaim(string type, string value)
@@ -73,7 +71,6 @@ public class ApplicationUser : IdentityUser<int>, IAggregateRoot
         };
         
         _claims.Add(claim);
-        AddDomainEvent(new UserClaimAddedDomainEvent(Id, type, value));
     }
 
     public void AddToRole(ApplicationRole role)
@@ -90,7 +87,6 @@ public class ApplicationUser : IdentityUser<int>, IAggregateRoot
         };
 
         _userRoles.Add(userRole);
-        AddDomainEvent(new UserAddedToRoleDomainEvent(Id, role.Id));
     }
 
     private void AddDomainEvent(IDomainEvent domainEvent)
