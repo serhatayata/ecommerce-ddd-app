@@ -1,3 +1,5 @@
+using Common.Domain.Events;
+
 namespace Common.Domain.Models;
 
 public interface IEntity

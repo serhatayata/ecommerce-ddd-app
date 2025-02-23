@@ -1,5 +1,6 @@
-using Common.Domain.Events.Identity.Users;
+using Common.Domain.Events;
 using Common.Domain.Models;
+using Identity.Domain.Events;
 using Microsoft.AspNetCore.Identity;
 
 namespace Identity.Domain.Models;

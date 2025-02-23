@@ -1,8 +1,8 @@
-using Common.Domain.Models;
+using Common.Domain.Events;
 
 namespace Identity.Domain.Events;
 
-public sealed record UserCreatedDomainEvent : IDomainEvent
+public sealed record UserCreatedDomainEvent : DomainEvent
 {
     public UserCreatedDomainEvent(
     int userId, 

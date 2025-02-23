@@ -1,6 +1,8 @@
+using Common.Domain.Events;
+
 namespace Identity.Domain.Events;
 
-public sealed record RegistrationCompletedDomainEvent
+public sealed record RegistrationCompletedDomainEvent : DomainEvent
 {
     public int UserId { get; }
     public string Email { get; }

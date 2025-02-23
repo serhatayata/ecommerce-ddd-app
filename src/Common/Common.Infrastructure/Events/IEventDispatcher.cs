@@ -1,4 +1,4 @@
-using Common.Domain.Models;
+using Common.Domain.Events;
 
 namespace Common.Infrastructure.Events;
 

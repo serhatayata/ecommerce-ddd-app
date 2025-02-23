@@ -1,8 +1,8 @@
-using Common.Domain.Models;
+using Common.Domain.Events;
 
 namespace Identity.Domain.Events;
 
-public sealed record EmailVerifiedDomainEvent : IDomainEvent
+public sealed record EmailVerifiedDomainEvent : DomainEvent
 {
     public EmailVerifiedDomainEvent(
     int userId, 

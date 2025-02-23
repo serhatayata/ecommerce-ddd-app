@@ -2,7 +2,9 @@ namespace Identity.Application.Commands.Common;
 
 public abstract class UserRequestModel
 {
-    protected UserRequestModel(string email, string password)
+    protected UserRequestModel(
+    string email, 
+    string password)
     {
         Email = email;
         Password = password;

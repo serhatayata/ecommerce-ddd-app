@@ -1,6 +1,6 @@
 namespace Common.Domain.Events;
 
-public interface IDomainEvent
+public abstract record DomainEvent : IDomainEvent
 {
     public Guid CorrelationId { get; set; }
 }

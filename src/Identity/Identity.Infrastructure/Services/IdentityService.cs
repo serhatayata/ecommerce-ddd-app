@@ -22,9 +22,9 @@ internal class IdentityService : IIdentityService
         this.jwtGenerator = jwtGenerator;
     }
 
-    public async Task<Result<ApplicationUser>> Register(UserRequestModel userRequest)
+    public async Task<Result<ApplicationUser>> Register(UserRegisterRequestModel userRequest)
     {
-        var user = new ApplicationUser(userRequest.Email);
+        var user = new ApplicationUser(userRequest.Email, userRequest);
 
         var identityResult = await userManager.CreateAsync(
             user,
