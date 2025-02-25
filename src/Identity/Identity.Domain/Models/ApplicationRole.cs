@@ -6,7 +6,6 @@ namespace Identity.Domain.Models;
 
 public class ApplicationRole : IdentityRole<int>, IAggregateRoot
 {
-    private readonly List<IDomainEvent> _domainEvents = new();
     private readonly List<ApplicationRoleClaim> _claims = new();
 
     public ApplicationRole(string name) : base(name)
@@ -15,7 +14,6 @@ public class ApplicationRole : IdentityRole<int>, IAggregateRoot
 
     private ApplicationRole() { } // For EF Core
 
-    public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
     public IReadOnlyCollection<ApplicationRoleClaim> Claims => _claims.AsReadOnly();
 
     // Domain methods with events
@@ -45,15 +43,5 @@ public class ApplicationRole : IdentityRole<int>, IAggregateRoot
 
         if (claim != null)
             _claims.Remove(claim);
-    }
-
-    private void AddDomainEvent(IDomainEvent domainEvent)
-    {
-        _domainEvents.Add(domainEvent);
-    }
-
-    public void ClearDomainEvents()
-    {
-        _domainEvents.Clear();
     }
 }

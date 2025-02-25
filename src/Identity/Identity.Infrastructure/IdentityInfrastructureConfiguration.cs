@@ -90,20 +90,22 @@ public static class IdentityInfrastructureConfiguration
     this IServiceCollection services,
     IConfiguration configuration)
     {
+        services.AddDbContext<IdentitySagaDbContext>((srv, cfg) =>
+        {
+            cfg.UseSqlServer(connectionString: configuration.GetConnectionString("DefaultConnection"),
+                             sqlServerOptionsAction: sqlOpt =>
+                             {
+                                 sqlOpt.MigrationsAssembly(Assembly.GetExecutingAssembly().GetName().Name);
+                                 sqlOpt.MigrationsHistoryTable("__EFMigrationsHistory", "identitysaga");
+                             });
+        });
+
         return services.AddMassTransit(m =>
         {
             m.AddSagaStateMachine<UserRegistrationSaga, UserRegistrationState>()
              .EntityFrameworkRepository(opt =>
              {
-                 opt.AddDbContext<DbContext, IdentitySagaDbContext>((srv, cfg) =>
-                 {
-                     cfg.UseSqlServer(connectionString: configuration.GetConnectionString("DefaultConnection"),
-                                      sqlServerOptionsAction: sqlOpt =>
-                                      {
-                                          sqlOpt.MigrationsAssembly(Assembly.GetExecutingAssembly().GetName().Name);
-                                          sqlOpt.MigrationsHistoryTable("__EFMigrationsHistory", "identitysaga");
-                                      });
-                 });
+                 opt.ExistingDbContext<IdentitySagaDbContext>();
              });
 
             // Other sagas
@@ -118,13 +120,13 @@ public static class IdentityInfrastructureConfiguration
                 var rabbitMQHost = configuration.GetConnectionString("RabbitMQ");
                 cfg.Host(rabbitMQHost);
                 
-                // #region UserCreatedDomainEvent
-                // var userCreatedDomainEventName = MessageBrokerExtensions.GetQueueName<UserCreatedDomainEvent>();
-                // cfg.ReceiveEndpoint(userCreatedDomainEventName, e =>
-                // {
-                //     e.ConfigureSaga<UserRegistrationState>(context);
-                // });
-                // #endregion
+                #region UserCreatedDomainEvent
+                var userCreatedDomainEventName = MessageBrokerExtensions.GetQueueName<UserCreatedDomainEvent>();
+                cfg.ReceiveEndpoint(userCreatedDomainEventName, e =>
+                {
+                    e.ConfigureSaga<UserRegistrationState>(context);
+                });
+                #endregion
             });
         });
     }

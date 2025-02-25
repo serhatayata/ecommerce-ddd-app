@@ -1,13 +1,10 @@
-using Common.Domain.Events;
 using Common.Domain.Models;
-using Identity.Domain.Events;
 using Microsoft.AspNetCore.Identity;
 
 namespace Identity.Domain.Models;
 
 public class ApplicationUser : IdentityUser<int>, IAggregateRoot
 {
-    private readonly List<IDomainEvent> _domainEvents = new();
     private readonly List<ApplicationUserClaim> _claims = new();
     private readonly List<ApplicationUserRole> _userRoles = new();
     private readonly List<ApplicationUserLogin> _logins = new();
@@ -22,7 +19,6 @@ public class ApplicationUser : IdentityUser<int>, IAggregateRoot
     public IReadOnlyCollection<ApplicationUserRole> UserRoles => _userRoles.AsReadOnly();
     public IReadOnlyCollection<ApplicationUserLogin> Logins => _logins.AsReadOnly();
     public IReadOnlyCollection<ApplicationUserToken> Tokens => _tokens.AsReadOnly();
-    public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 
     // Constructor for creating new users
     public ApplicationUser(
@@ -37,8 +33,6 @@ public class ApplicationUser : IdentityUser<int>, IAggregateRoot
         FirstName = firstName;
         LastName = lastName;
         CreatedOnUtc = DateTime.UtcNow;
-        
-        AddDomainEvent(new UserCreatedDomainEvent(Id, Email));
     }
 
     public ApplicationUser(
@@ -47,8 +41,6 @@ public class ApplicationUser : IdentityUser<int>, IAggregateRoot
     {
         Email = email;
         CreatedOnUtc = DateTime.UtcNow;
-        
-        AddDomainEvent(new UserCreatedDomainEvent(Id, Email));
     }
 
     // Private constructor for EF Core
@@ -88,15 +80,5 @@ public class ApplicationUser : IdentityUser<int>, IAggregateRoot
         };
 
         _userRoles.Add(userRole);
-    }
-
-    private void AddDomainEvent(IDomainEvent domainEvent)
-    {
-        _domainEvents.Add(domainEvent);
-    }
-
-    public void ClearDomainEvents()
-    {
-        _domainEvents.Clear();
     }
 }

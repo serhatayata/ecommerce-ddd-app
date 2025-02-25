@@ -1,6 +1,7 @@
 using Common.Application.Models;
 using Identity.Application.Commands.ChangePassword;
 using Identity.Application.Commands.Common;
+using Identity.Application.Commands.RegisterUser;
 using Identity.Application.ServiceContracts;
 using Identity.Domain.Models;
 using Microsoft.AspNetCore.Identity;
@@ -24,7 +25,7 @@ internal class IdentityService : IIdentityService
 
     public async Task<Result<ApplicationUser>> Register(UserRegisterRequestModel userRequest)
     {
-        var user = new ApplicationUser(userRequest.Email, userRequest);
+        var user = new ApplicationUser(userRequest.Email, userRequest.Email, userRequest.FirstName, userRequest.LastName);
 
         var identityResult = await userManager.CreateAsync(
             user,

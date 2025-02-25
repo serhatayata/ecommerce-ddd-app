@@ -1,6 +1,5 @@
 using Common.Application.Extensions;
 using Common.Application.Models;
-using Identity.Application.Commands.Common;
 using Identity.Application.ServiceContracts;
 using Identity.Domain.Events;
 using MassTransit;
@@ -8,14 +7,16 @@ using MediatR;
 
 namespace Identity.Application.Commands.RegisterUser;
 
-public class RegisterUserCommand : UserRequestModel, IRequest<Result>
+public class RegisterUserCommand : UserRegisterRequestModel, IRequest<Result>
 {
     public RegisterUserCommand(
     string username,
     string email,
+    string firstName,
+    string lastName,
     string password,
     string confirmPassword)
-    : base(email, password)
+    : base(email, username, firstName, lastName, password)
     {
         ConfirmPassword = confirmPassword;
         Username = username;
@@ -42,19 +43,26 @@ public class RegisterUserCommand : UserRequestModel, IRequest<Result>
         RegisterUserCommand request,
         CancellationToken cancellationToken)
         {
-            var result = await _identity.Register(request);
+            try
+            {
+                var result = await _identity.Register(request);
 
-            if (!result.Succeeded)
-                return Result.Failure(result.Errors);
+                if (!result.Succeeded)
+                    return Result.Failure(result.Errors);
 
-            var userCreatedEvent = new UserCreatedDomainEvent(result.Data.Id, result.Data.Email);
+                var userCreatedEvent = new UserCreatedDomainEvent(result.Data.Id, result.Data.Email);
 
-            var userCreatedDomainEventName = MessageBrokerExtensions.GetQueueName<UserCreatedDomainEvent>();
-            var sendEndpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{userCreatedDomainEventName}"));
+                var userCreatedDomainEventName = MessageBrokerExtensions.GetQueueName<UserCreatedDomainEvent>();
+                var sendEndpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{userCreatedDomainEventName}"));
 
-            await sendEndpoint.Send(userCreatedEvent, cancellationToken);
+                await sendEndpoint.Send(userCreatedEvent, cancellationToken);
 
-            return result;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return Result.Failure(null);
+            }
         }
     }
 }
