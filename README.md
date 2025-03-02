@@ -87,9 +87,4 @@ Context Mapping is a technique in Domain-Driven Design (DDD) used to define and 
   - Often seen in event-driven architectures using domain events.
   - Example: A banking system using ISO 20022 messaging for transactions.
 
-### Context Mapping
-
-![app-architecture](https://github.com/user-attachments/assets/2ed3253b-4483-467f-a6d7-e4361c8f9fb2)
-
-
 
