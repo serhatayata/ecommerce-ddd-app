@@ -2,19 +2,18 @@ using Common.Domain.Events;
 
 namespace Identity.Domain.Events;
 
-public sealed record UserCreatedDomainEvent : DomainEvent
+public sealed record UserNotCreatedDomainEvent : DomainEvent
 {
-    public UserCreatedDomainEvent(
-    int userId, 
+    public UserNotCreatedDomainEvent(
     string email,
+    string? reason,
     Guid correlationId) 
     : base(correlationId)
     {
-        UserId = userId;
         Email = email;
-        CorrelationId = correlationId;
+        Reason = reason;
     }
 
-    public int UserId { get; }
     public string Email { get; }
+    public string? Reason { get; }
 }

@@ -6,7 +6,13 @@ public class MessageBrokerExtensions
 {
     public static string GetQueueName<T>()
     {
-        var value = Regex.Replace(typeof(T).Name, "([A-Z])", "-$1").ToLowerInvariant();
-        return value.Substring(1, value.Length - 1);
+        var filtered = Regex.Replace(typeof(T).Name, "([A-Z])", "-$1").ToLowerInvariant();
+        return filtered.Substring(1, filtered.Length - 1);
+    }
+
+    public static string GetExchangeName<T>()
+    {
+        var filtered = Regex.Replace(typeof(T).Name, "([A-Z])", "-$1").ToLowerInvariant();
+        return filtered.Substring(1, filtered.Length - 1);
     }
 }

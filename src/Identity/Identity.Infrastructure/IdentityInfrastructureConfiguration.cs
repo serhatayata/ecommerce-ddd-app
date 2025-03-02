@@ -1,5 +1,6 @@
 using System.Reflection;
 using Common.Application.Extensions;
+using Common.Domain.Events.Notification;
 using Common.Domain.Models;
 using Common.Domain.Repositories;
 using Common.Infrastructure.Persistence;
@@ -120,9 +121,30 @@ public static class IdentityInfrastructureConfiguration
                 var rabbitMQHost = configuration.GetConnectionString("RabbitMQ");
                 cfg.Host(rabbitMQHost);
                 
+                // Integration Events
+                #region SendVerificationEmailIntegrationEvent
+                cfg.Message<SendVerificationEmailIntegrationEvent>(e =>
+                {
+                    var sendVerificationEmailExchangeName = MessageBrokerExtensions.GetExchangeName<SendVerificationEmailIntegrationEvent>();
+                    e.SetEntityName(sendVerificationEmailExchangeName); // Exchange name
+                });
+
+                cfg.Publish<SendVerificationEmailIntegrationEvent>(e =>
+                {
+                    e.ExchangeType = "fanout"; // Set exchange type to fanout
+                });
+                #endregion
+                /// DomainEvents
                 #region UserCreatedDomainEvent
                 var userCreatedDomainEventName = MessageBrokerExtensions.GetQueueName<UserCreatedDomainEvent>();
                 cfg.ReceiveEndpoint(userCreatedDomainEventName, e =>
+                {
+                    e.ConfigureSaga<UserRegistrationState>(context);
+                });
+                #endregion
+                #region UserNotCreatedDomainEvent
+                var userNotCreatedDomainEventName = MessageBrokerExtensions.GetQueueName<UserNotCreatedDomainEvent>();
+                cfg.ReceiveEndpoint(userNotCreatedDomainEventName, e =>
                 {
                     e.ConfigureSaga<UserRegistrationState>(context);
                 });
