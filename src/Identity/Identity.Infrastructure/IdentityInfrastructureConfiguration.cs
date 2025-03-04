@@ -134,6 +134,20 @@ public static class IdentityInfrastructureConfiguration
                     e.ExchangeType = "fanout"; // Set exchange type to fanout
                 });
                 #endregion
+                #region EmailVerifiedIntegrationEvent
+                var emailVerifiedIntegrationEventName = MessageBrokerExtensions.GetQueueName<EmailVerifiedIntegrationEvent>();
+                cfg.ReceiveEndpoint(emailVerifiedIntegrationEventName, e =>
+                {
+                    e.ConfigureSaga<UserRegistrationState>(context);
+                    
+                    var exchangeName = MessageBrokerExtensions.GetExchangeName<EmailVerifiedIntegrationEvent>();
+                    e.Bind(exchangeName, x =>
+                    {
+                        x.ExchangeType = "fanout";
+                        x.Durable = true;
+                    });
+                });
+                #endregion
                 /// DomainEvents
                 #region UserCreatedDomainEvent
                 var userCreatedDomainEventName = MessageBrokerExtensions.GetQueueName<UserCreatedDomainEvent>();
