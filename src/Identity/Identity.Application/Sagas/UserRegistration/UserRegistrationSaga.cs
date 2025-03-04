@@ -8,7 +8,7 @@ public class UserRegistrationSaga : MassTransitStateMachine<UserRegistrationStat
 {
     public State EmailVerificationPending { get; private set; }
     public State Failed { get; private set; }
-     public State Completed { get; private set; }
+    public State Completed { get; private set; }
 
     // Domain Events
     public Event<UserCreatedDomainEvent> UserCreatedDomainEvent { get; private set; }
