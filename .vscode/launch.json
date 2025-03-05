@@ -1,0 +1,47 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Identity API",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-identity",
+            "program": "${workspaceFolder}/src/Identity/Identity.Api/bin/Debug/net9.0/Identity.Api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/Identity/Identity.Api",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(http://\\S+)",
+                "uriFormat": "%s/scalar/v1"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_URLS": "http://localhost:5000"
+            },
+            "launchUrl": "scalar/v1",
+            "applicationUrl": "http://localhost:5000",
+            "console": "internalConsole"
+        },
+        {
+            "name": "Notification Worker",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-notification",
+            "program": "${workspaceFolder}/src/Notification/Notification.Worker/bin/Debug/net9.0/Notification.Worker.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/Notification/Notification.Worker",
+            "stopAtEntry": false,
+            "env": {
+                "DOTNET_ENVIRONMENT": "Development"
+            },
+            "console": "internalConsole"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Identity API + Notification Worker",
+            "configurations": ["Identity API", "Notification Worker"]
+        }
+    ]
+}

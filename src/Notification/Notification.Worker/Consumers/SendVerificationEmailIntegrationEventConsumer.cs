@@ -6,10 +6,14 @@ namespace Notification.Worker.Consumers;
 public class SendVerificationEmailIntegrationEventConsumer : IConsumer<SendVerificationEmailIntegrationEvent>
 {
     private readonly ILogger<SendVerificationEmailIntegrationEventConsumer> _logger;
+    private readonly IPublishEndpoint _publishEndpoint;
 
-    public SendVerificationEmailIntegrationEventConsumer(ILogger<SendVerificationEmailIntegrationEventConsumer> logger)
+    public SendVerificationEmailIntegrationEventConsumer(
+        ILogger<SendVerificationEmailIntegrationEventConsumer> logger,
+        IPublishEndpoint publishEndpoint)
     {
         _logger = logger;
+        _publishEndpoint = publishEndpoint;
     }
 
     public async Task Consume(ConsumeContext<SendVerificationEmailIntegrationEvent> context)
@@ -19,6 +23,6 @@ public class SendVerificationEmailIntegrationEventConsumer : IConsumer<SendVerif
 
         // email sending...
 
-        await Task.CompletedTask;
+        await _publishEndpoint.Publish(new EmailVerifiedIntegrationEvent(message.CorrelationId, message.Email));
     }
 }

@@ -1,3 +1,5 @@
+using Common.Application.Extensions;
+using Common.Domain.Events.Notification;
 using MassTransit;
 using Notification.Worker;
 using Notification.Worker.Consumers;
@@ -14,7 +16,20 @@ builder.Services.AddMassTransit(x =>
         var rabbitMqConnStr = configuration.GetConnectionString("RabbitMq");
         cfg.Host(rabbitMqConnStr);
 
-        cfg.ConfigureEndpoints(context);
+        #region SendVerificationEmailIntegrationEventConsumer
+        var sendVerificationEmailQueueName = MessageBrokerExtensions.GetQueueName<SendVerificationEmailIntegrationEvent>();
+        cfg.ReceiveEndpoint(sendVerificationEmailQueueName, e =>
+        {
+            e.ConfigureConsumer<SendVerificationEmailIntegrationEventConsumer>(context);
+            
+            var sendVerificationEmailExchangeName = MessageBrokerExtensions.GetExchangeName<SendVerificationEmailIntegrationEvent>();
+            e.Bind(sendVerificationEmailExchangeName, x =>
+            {
+                x.ExchangeType = "fanout";
+                x.Durable = true;
+            });
+        });
+        #endregion
     });
 });
 

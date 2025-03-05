@@ -123,15 +123,23 @@ public static class IdentityInfrastructureConfiguration
                 
                 // Integration Events
                 #region SendVerificationEmailIntegrationEvent
+                var sendVerificationEmailExchangeName = MessageBrokerExtensions.GetExchangeName<SendVerificationEmailIntegrationEvent>();
                 cfg.Message<SendVerificationEmailIntegrationEvent>(e =>
                 {
-                    var sendVerificationEmailExchangeName = MessageBrokerExtensions.GetExchangeName<SendVerificationEmailIntegrationEvent>();
                     e.SetEntityName(sendVerificationEmailExchangeName); // Exchange name
                 });
 
-                cfg.Publish<SendVerificationEmailIntegrationEvent>(e =>
+                var sendVerificationEmailQueueName = MessageBrokerExtensions.GetQueueName<SendVerificationEmailIntegrationEvent>();
+                cfg.ReceiveEndpoint(sendVerificationEmailQueueName, e =>
                 {
-                    e.ExchangeType = "fanout"; // Set exchange type to fanout
+                    e.ConfigureSaga<UserRegistrationState>(context);
+                    
+                    // Bind to the fanout exchange
+                    e.Bind(sendVerificationEmailExchangeName, x =>
+                    {
+                        x.ExchangeType = "fanout";
+                        x.Durable = true;
+                    });
                 });
                 #endregion
                 #region EmailVerifiedIntegrationEvent

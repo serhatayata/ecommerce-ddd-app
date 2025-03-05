@@ -37,9 +37,11 @@ public class UserRegistrationSaga : MassTransitStateMachine<UserRegistrationStat
                     context.Saga.CreatedAt = DateTime.UtcNow;
                 })
                 .TransitionTo(EmailVerificationPending)
-                .Publish(context => new SendVerificationEmailIntegrationEvent(
+                .Publish(context => {
+                    return new SendVerificationEmailIntegrationEvent(
                     context.Saga.CorrelationId, 
-                    context.Saga.Email)),
+                    context.Saga.Email);
+                }),
             
             When(UserNotCreatedDomainEvent)
                 .Then(context =>
