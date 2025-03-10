@@ -3,6 +3,7 @@ using Identity.Application.Commands.ChangePassword;
 using Identity.Application.Commands.Common;
 using Identity.Application.Commands.RegisterUser;
 using Identity.Application.ServiceContracts;
+using Identity.Domain.Events;
 using Identity.Domain.Models;
 using Microsoft.AspNetCore.Identity;
 
@@ -30,12 +31,15 @@ internal class IdentityService : IIdentityService
         var identityResult = await userManager.CreateAsync(
             user,
             userRequest.Password);
+        
+        if (identityResult.Succeeded)
+            user.AddDomainEvent(new UserCreatedDomainEvent(user.Id, user.Email));
+        else
+            user.AddDomainEvent(new UserNotCreatedDomainEvent(user.Email, string.Empty));
 
         var errors = identityResult.Errors.Select(e => e.Description);
 
-        return identityResult.Succeeded
-            ? Result<ApplicationUser>.SuccessWith(user)
-            : Result<ApplicationUser>.Failure(errors);
+        return Result<ApplicationUser>.SuccessWith(user);
     }
 
     public async Task<Result<UserResponseModel>> Login(UserRequestModel userRequest)

@@ -1,20 +1,25 @@
 using Common.Domain.Events;
+using System.Text.Json.Serialization;
 
 namespace Identity.Domain.Events;
 
 public sealed record UserCreatedDomainEvent : DomainEvent
 {
+    [JsonConstructor]
+    public UserCreatedDomainEvent()
+    {
+    }
+    
     public UserCreatedDomainEvent(
     int userId, 
     string email,
-    Guid correlationId) 
+    Guid? correlationId = null) 
     : base(correlationId)
     {
         UserId = userId;
         Email = email;
-        CorrelationId = correlationId;
     }
 
-    public int UserId { get; }
-    public string Email { get; }
+    public int UserId { get; init; }
+    public string Email { get; init; }
 }

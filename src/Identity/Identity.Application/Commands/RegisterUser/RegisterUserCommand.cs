@@ -50,31 +50,26 @@ public class RegisterUserCommand : UserRegisterRequestModel, IRequest<Result>
             {
                 var result = await _identity.Register(request);
 
-                if (!result.Succeeded)
+                if (result.Data.DomainEvents.Any())
                 {
-                    var userNotCreatedEvent = new UserNotCreatedDomainEvent(
-                        request.Email,
-                        result.Errors.FirstOrDefault(),
-                        request.CorrelationId);  // Pass correlationId
-
-                    var eventName = MessageBrokerExtensions.GetQueueName<UserNotCreatedDomainEvent>();
-                    var sendEndpoint = await _sendEndpointProvider.GetSendEndpoint(
-                        new Uri($"queue:{eventName}"));
-
-                    await sendEndpoint.Send(userNotCreatedEvent, cancellationToken);
-                    
-                    return Result.Failure(result.Errors);
+                    foreach (var domainEvent in result.Data.DomainEvents)
+                    {
+                        var eventType = domainEvent.GetType();
+                        var queueName = MessageBrokerExtensions.GetQueueName(eventType);
+                        
+                        ISendEndpoint sendEndpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{queueName}"));;
+                        switch (domainEvent)
+                        {
+                            case UserCreatedDomainEvent userCreatedEvent:
+                                await sendEndpoint.Send(userCreatedEvent, cancellationToken);
+                                break;
+                            
+                            case UserNotCreatedDomainEvent userNotCreatedEvent:
+                                await sendEndpoint.Send(userNotCreatedEvent, cancellationToken);
+                                break;
+                        }                            
+                    }
                 }
-
-                var userCreatedEvent = new UserCreatedDomainEvent(
-                    result.Data.Id, 
-                    result.Data.Email,
-                    request.CorrelationId);  // Pass correlationId
-                var userCreatedDomainEventName = MessageBrokerExtensions.GetQueueName<UserCreatedDomainEvent>();
-                var successEndpoint = await _sendEndpointProvider.GetSendEndpoint(
-                    new Uri($"queue:{userCreatedDomainEventName}"));
-
-                await successEndpoint.Send(userCreatedEvent, cancellationToken);
 
                 return result;
             }

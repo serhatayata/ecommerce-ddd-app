@@ -1,14 +1,17 @@
+using Common.Domain.Events;
 using Common.Domain.Models;
 using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Identity.Domain.Models;
 
-public class ApplicationUser : IdentityUser<int>, IAggregateRoot
+public class ApplicationUser : IdentityUser<int>, IAggregateRoot, IHasDomainEvents
 {
     private readonly List<ApplicationUserClaim> _claims = new();
     private readonly List<ApplicationUserRole> _userRoles = new();
     private readonly List<ApplicationUserLogin> _logins = new();
     private readonly List<ApplicationUserToken> _tokens = new();
+    private readonly List<IDomainEvent> _domainEvents = new();
 
     public string FirstName { get; private set; } = null!;
     public string LastName { get; private set; } = null!;
@@ -19,6 +22,9 @@ public class ApplicationUser : IdentityUser<int>, IAggregateRoot
     public IReadOnlyCollection<ApplicationUserRole> UserRoles => _userRoles.AsReadOnly();
     public IReadOnlyCollection<ApplicationUserLogin> Logins => _logins.AsReadOnly();
     public IReadOnlyCollection<ApplicationUserToken> Tokens => _tokens.AsReadOnly();
+
+    [NotMapped]
+    public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 
     // Constructor for creating new users
     public ApplicationUser(
@@ -80,5 +86,15 @@ public class ApplicationUser : IdentityUser<int>, IAggregateRoot
         };
 
         _userRoles.Add(userRole);
+    }
+
+    public void AddDomainEvent(IDomainEvent domainEvent)
+    {
+        _domainEvents.Add(domainEvent);
+    }
+
+    public void ClearDomainEvents()
+    {
+        _domainEvents.Clear();
     }
 }
