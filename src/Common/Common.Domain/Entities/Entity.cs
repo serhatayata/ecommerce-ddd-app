@@ -15,7 +15,7 @@ public class Entity
 
     public void ClearEvents() => events.Clear();
 
-    protected void RaiseEvent(IDomainEvent domainEvent)
+    protected void AddEvent(IDomainEvent domainEvent)
         => events.Add(domainEvent);
 
     public override bool Equals(object? obj)
