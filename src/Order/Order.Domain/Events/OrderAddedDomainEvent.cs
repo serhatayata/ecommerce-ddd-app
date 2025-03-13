@@ -1,11 +1,12 @@
 using System.Text.Json.Serialization;
 using Common.Domain.Events;
+using MediatR;
 using Order.Domain.DTOs;
 using Order.Domain.Models.Orders;
 
 namespace Order.Domain.Events;
 
-public sealed record OrderAddedDomainEvent : DomainEvent
+public sealed record OrderAddedDomainEvent : DomainEvent, INotification
 {
     [JsonConstructor]
     public OrderAddedDomainEvent()

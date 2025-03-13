@@ -1,9 +1,10 @@
 using Common.Domain.Events;
+using MediatR;
 using System.Text.Json.Serialization;
 
 namespace Identity.Domain.Events;
 
-public sealed record UserCreatedDomainEvent : DomainEvent
+public sealed record UserCreatedDomainEvent : DomainEvent, INotification
 {
     [JsonConstructor]
     public UserCreatedDomainEvent()
