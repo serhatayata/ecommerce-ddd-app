@@ -1,5 +1,6 @@
 using Common.Domain.Events;
 using Common.Domain.Models;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
 

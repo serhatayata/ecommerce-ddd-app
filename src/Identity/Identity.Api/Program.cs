@@ -17,6 +17,11 @@ builder.Services.AddAuthorization();
 builder.Services.Register(configuration);
 builder.Services.AddIdentityApi();
 
+// Add MediatR with notification handlers
+builder.Services.AddMediatR(cfg => {
+    cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
+});
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

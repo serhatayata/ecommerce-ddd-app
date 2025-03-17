@@ -1,4 +1,5 @@
 using Common.Domain.Events;
+using MediatR;
 
 namespace Common.Domain.Models;
 

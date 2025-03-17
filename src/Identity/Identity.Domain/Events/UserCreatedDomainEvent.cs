@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Identity.Domain.Events;
 
-public sealed record UserCreatedDomainEvent : DomainEvent, INotification
+public sealed record UserCreatedDomainEvent : DomainEvent
 {
     [JsonConstructor]
     public UserCreatedDomainEvent()

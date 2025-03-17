@@ -32,14 +32,14 @@ public class RegisterUserCommand : UserRegisterRequestModel, IRequest<Result>
     public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, Result>
     {
         private readonly IIdentityService _identity;
-        private readonly ISendEndpointProvider _sendEndpointProvider;
+        private readonly IMediator _mediator;
         
         public RegisterUserCommandHandler(
         IIdentityService identity,
-        ISendEndpointProvider sendEndpointProvider)
+        IMediator mediator)
         {
             _identity = identity;
-            _sendEndpointProvider = sendEndpointProvider;
+            _mediator = mediator;
         }
 
         public async Task<Result> Handle(
@@ -51,25 +51,8 @@ public class RegisterUserCommand : UserRegisterRequestModel, IRequest<Result>
                 var result = await _identity.Register(request);
 
                 if (result.Data.DomainEvents.Any())
-                {
                     foreach (var domainEvent in result.Data.DomainEvents)
-                    {
-                        var eventType = domainEvent.GetType();
-                        var queueName = MessageBrokerExtensions.GetQueueName(eventType);
-                        
-                        ISendEndpoint sendEndpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{queueName}"));;
-                        switch (domainEvent)
-                        {
-                            case UserCreatedDomainEvent userCreatedEvent:
-                                await sendEndpoint.Send(userCreatedEvent, cancellationToken);
-                                break;
-                            
-                            case UserNotCreatedDomainEvent userNotCreatedEvent:
-                                await sendEndpoint.Send(userNotCreatedEvent, cancellationToken);
-                                break;
-                        }                            
-                    }
-                }
+                        await _mediator.Publish(domainEvent, cancellationToken);                          
 
                 return result;
             }

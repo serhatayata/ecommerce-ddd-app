@@ -37,8 +37,6 @@ internal class IdentityService : IIdentityService
         else
             user.AddDomainEvent(new UserNotCreatedDomainEvent(user.Email, string.Empty));
 
-        var errors = identityResult.Errors.Select(e => e.Description);
-
         return Result<ApplicationUser>.SuccessWith(user);
     }
 

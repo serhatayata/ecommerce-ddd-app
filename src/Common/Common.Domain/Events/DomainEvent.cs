@@ -1,3 +1,5 @@
+using MediatR;
+
 namespace Common.Domain.Events;
 
 public abstract record DomainEvent : IDomainEvent
