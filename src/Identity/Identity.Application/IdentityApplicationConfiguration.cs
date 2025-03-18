@@ -17,8 +17,10 @@ public static class IdentityApplicationConfiguration
     this IServiceCollection services,
     IConfiguration configuration)
     {
+        var applicationSettings = configuration.GetSection(nameof(ApplicationSettings));
+
         services
-            .Configure<ApplicationSettings>(configuration.GetSection(nameof(ApplicationSettings)))
+            .Configure<ApplicationSettings>(applicationSettings)
             .AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly))
             .AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
 

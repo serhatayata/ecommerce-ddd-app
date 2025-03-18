@@ -17,8 +17,8 @@ internal class JwtGeneratorService : IJwtGenerator
     private readonly ApplicationSettings applicationSettings;
 
     public JwtGeneratorService(
-        UserManager<ApplicationUser> userManager,
-        IOptions<ApplicationSettings> applicationSettings)
+    UserManager<ApplicationUser> userManager,
+    IOptions<ApplicationSettings> applicationSettings)
     {
         this.userManager = userManager;
         this.applicationSettings = applicationSettings.Value;

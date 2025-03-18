@@ -2,6 +2,7 @@ using Scalar.AspNetCore;
 using Identity.IoC;
 using Common.Infrastructure.Extensions;
 using Identity.Api;
+using Common.Application.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
