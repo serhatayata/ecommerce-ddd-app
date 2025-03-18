@@ -5,16 +5,16 @@ using MediatR;
 
 namespace Identity.Application.Events.Handlers;
 
-public class UserCreatedDomainEventHandler : INotificationHandler<UserCreatedDomainEvent>
+public class UserNotCreatedDomainEventHandler : INotificationHandler<UserNotCreatedDomainEvent>
 {
     private readonly ISendEndpointProvider _sendEndpointProvider;
 
-    public UserCreatedDomainEventHandler(
+    public UserNotCreatedDomainEventHandler(
     ISendEndpointProvider sendEndpointProvider)
         => _sendEndpointProvider = sendEndpointProvider;
 
     public async Task Handle(
-    UserCreatedDomainEvent notification, 
+    UserNotCreatedDomainEvent notification, 
     CancellationToken cancellationToken)
     {
         var eventType = notification.GetType();
