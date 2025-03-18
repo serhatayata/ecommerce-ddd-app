@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Order.Domain.DTOs;
+namespace OrderManagement.Domain.DTOs;
 
 public sealed record OrderItemDto
 {

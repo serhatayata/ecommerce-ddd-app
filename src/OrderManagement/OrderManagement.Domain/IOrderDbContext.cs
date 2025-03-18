@@ -1,4 +1,4 @@
-namespace Order.Domain;
+namespace OrderManagement.Domain;
 
 public interface IOrderDbContext
 {

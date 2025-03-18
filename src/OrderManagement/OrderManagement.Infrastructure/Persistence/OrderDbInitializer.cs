@@ -1,6 +1,6 @@
 using Common.Infrastructure.Persistence;
 
-namespace Order.Infrastructure.Persistence;
+namespace OrderManagement.Infrastructure.Persistence;
 
 public class OrderDbInitializer : DbInitializer
 {

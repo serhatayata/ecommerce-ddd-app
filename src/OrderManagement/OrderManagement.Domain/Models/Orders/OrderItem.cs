@@ -1,6 +1,6 @@
 using Common.Domain.Models;
 
-namespace Order.Domain.Models.Orders;
+namespace OrderManagement.Domain.Models.Orders;
 
 public class OrderItem : Entity
 {

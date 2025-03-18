@@ -1,10 +1,10 @@
 using System.Text.Json.Serialization;
 using Common.Domain.Events;
 using MediatR;
-using Order.Domain.DTOs;
-using Order.Domain.Models.Orders;
+using OrderManagement.Domain.DTOs;
+using OrderManagement.Domain.Models.Orders;
 
-namespace Order.Domain.Events;
+namespace OrderManagement.Domain.Events;
 
 public sealed record OrderAddedDomainEvent : DomainEvent, INotification
 {

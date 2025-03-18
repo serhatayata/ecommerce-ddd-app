@@ -2,7 +2,7 @@ using System.Reflection;
 using Common.Domain.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Order.Domain;
+namespace OrderManagement.Domain;
 
 public static class OrderDomainConfiguration
 {

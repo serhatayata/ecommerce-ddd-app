@@ -1,8 +1,8 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using Order.Domain.Models.Orders;
+using OrderManagement.Domain.Models.Orders;
 
-namespace Order.Infrastructure.Persistence;
+namespace OrderManagement.Infrastructure.Persistence;
 
 public class OrderDbContext : DbContext
 {
@@ -11,7 +11,7 @@ public class OrderDbContext : DbContext
     {
     }
 
-    public DbSet<Domain.Models.Orders.Order> Orders { get; set; } = default!;
+    public DbSet<Order> Orders { get; set; } = default!;
     public DbSet<OrderItem> OrderItems { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder)

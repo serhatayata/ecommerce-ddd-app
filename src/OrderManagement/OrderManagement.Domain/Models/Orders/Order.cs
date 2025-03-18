@@ -1,7 +1,7 @@
 using Common.Domain.Models;
-using Order.Domain.Events;
+using OrderManagement.Domain.Events;
 
-namespace Order.Domain.Models.Orders;
+namespace OrderManagement.Domain.Models.Orders;
 
 public class Order : Entity, IAggregateRoot
 {

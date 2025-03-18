@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
-namespace Order.Infrastructure.Persistence;
+namespace OrderManagement.Infrastructure.Persistence;
 
 public class OrderDbContextFactory: IDesignTimeDbContextFactory<OrderDbContext>
 {

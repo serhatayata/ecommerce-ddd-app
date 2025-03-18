@@ -4,9 +4,9 @@ using Common.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Order.Infrastructure.Persistence;
+using OrderManagement.Infrastructure.Persistence;
 
-namespace Order.Infrastructure;
+namespace OrderManagement.Infrastructure;
 
 public static class OrderInfrastructureConfiguration
 {
@@ -17,8 +17,8 @@ public static class OrderInfrastructureConfiguration
         services
             .AddDatabase(configuration)
             .AddRepositories()
-            .AddTransient<IDbInitializer, OrderDbInitializer>()
-            .AddSagaConfigurations(configuration);
+            .AddTransient<IDbInitializer, OrderDbInitializer>();
+            // .AddSagaConfigurations(configuration);
 
         return services;
     }
@@ -58,20 +58,20 @@ public static class OrderInfrastructureConfiguration
         return services;
     }
 
-    private static IServiceCollection AddSagaConfigurations(
-    this IServiceCollection services,
-    IConfiguration configuration)
-    {
-        services.AddDbContext<OrderSagaDbContext>((srv, cfg) =>
-        {
-            cfg.UseSqlServer(connectionString: configuration.GetConnectionString("DefaultConnection"),
-                             sqlServerOptionsAction: sqlOpt =>
-                             {
-                                 sqlOpt.MigrationsAssembly(Assembly.GetExecutingAssembly().GetName().Name);
-                                 sqlOpt.MigrationsHistoryTable("__EFMigrationsHistory", "ordersaga");
-                             });
-        });
+    // private static IServiceCollection AddSagaConfigurations(
+    // this IServiceCollection services,
+    // IConfiguration configuration)
+    // {
+    //     services.AddDbContext<OrderSagaDbContext>((srv, cfg) =>
+    //     {
+    //         cfg.UseSqlServer(connectionString: configuration.GetConnectionString("DefaultConnection"),
+    //                          sqlServerOptionsAction: sqlOpt =>
+    //                          {
+    //                              sqlOpt.MigrationsAssembly(Assembly.GetExecutingAssembly().GetName().Name);
+    //                              sqlOpt.MigrationsHistoryTable("__EFMigrationsHistory", "ordersaga");
+    //                          });
+    //     });
 
-        return services;
-    }
+    //     return services;
+    // }
 }

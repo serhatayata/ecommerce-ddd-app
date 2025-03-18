@@ -1,6 +1,6 @@
-@Order.Api_HostAddress = http://localhost:5001
+@OrderManagement.Api_HostAddress = http://localhost:5001
 
-GET {{Order.Api_HostAddress}}/
+GET {{OrderManagement.Api_HostAddress}}/
 Accept: application/json
 
 ###
