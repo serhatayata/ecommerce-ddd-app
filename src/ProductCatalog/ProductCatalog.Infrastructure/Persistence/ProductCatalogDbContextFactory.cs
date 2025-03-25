@@ -2,11 +2,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
-namespace Identity.Infrastructure.Persistence;
+namespace ProductCatalog.Infrastructure.Persistence;
 
-public class IdentityDbContextFactory : IDesignTimeDbContextFactory<IdentityDbContext>
+public class ProductCatalogDbContextFactory : IDesignTimeDbContextFactory<ProductCatalogDbContext>
 {
-    public IdentityDbContext CreateDbContext(string[] args)
+    public ProductCatalogDbContext CreateDbContext(string[] args)
     {
         IConfigurationRoot configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
@@ -15,21 +15,20 @@ public class IdentityDbContextFactory : IDesignTimeDbContextFactory<IdentityDbCo
                          reloadOnChange: true)
             .Build();
 
-        var builder = new DbContextOptionsBuilder<IdentityDbContext>();
-
+        var builder = new DbContextOptionsBuilder<ProductCatalogDbContext>();
         var connectionString = configuration.GetConnectionString("DefaultConnection");
 
         builder.UseSqlServer(
-            configuration.GetConnectionString("DefaultConnection"),
+            connectionString,
             sqlOptions => sqlOptions
+                .MigrationsHistoryTable("__EFMigrationsHistory", "productcatalog")
                 .EnableRetryOnFailure(
                     maxRetryCount: 10,
                     maxRetryDelay: TimeSpan.FromSeconds(30),
                     errorNumbersToAdd: null)
                 .MigrationsAssembly(
-                    typeof(IdentityDbContext).Assembly.FullName)
-                .MigrationsHistoryTable("__EFMigrationsHistory", "identity"));
+                    typeof(ProductCatalogDbContext).Assembly.FullName));
 
-        return new IdentityDbContext(builder.Options);
+        return new ProductCatalogDbContext(builder.Options);
     }
 }

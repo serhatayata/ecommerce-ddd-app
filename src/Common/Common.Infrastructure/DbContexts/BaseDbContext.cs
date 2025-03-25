@@ -1,18 +1,18 @@
 using Common.Domain.Models;
-using Common.Infrastructure.Events;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Common.Infrastructure.DbContexts;
 
 public abstract class BaseDbContext<TContext> : DbContext where TContext : DbContext
 {
-    private readonly IEventDispatcher _eventDispatcher;
+    private readonly IMediator _mediator;
     private readonly Stack<object> _savesChangesTracker;
 
-    protected BaseDbContext(DbContextOptions<TContext> options, IEventDispatcher eventDispatcher)
+    protected BaseDbContext(DbContextOptions<TContext> options, IMediator mediator)
         : base(options)
     {
-        _eventDispatcher = eventDispatcher;
+        _mediator = mediator;
         _savesChangesTracker = new Stack<object>();
     }
 
@@ -33,7 +33,7 @@ public abstract class BaseDbContext<TContext> : DbContext where TContext : DbCon
 
             foreach (var domainEvent in events)
             {
-                await _eventDispatcher.Dispatch(domainEvent);
+                await _mediator.Publish(domainEvent);
             }
         }
 

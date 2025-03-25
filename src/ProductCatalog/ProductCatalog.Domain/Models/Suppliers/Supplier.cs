@@ -7,6 +7,8 @@ public class Supplier : Entity
 {
     private readonly List<Product> _products = new();
 
+    public Supplier() { }
+
     public Supplier(
         string name,
         string contactName,
@@ -30,15 +32,4 @@ public class Supplier : Entity
     public bool IsActive { get; private set; }
 
     public virtual IReadOnlyCollection<Product> Products => _products.AsReadOnly();
-
-    public void UpdateContact(
-    string contactName, 
-    string email, 
-    string phone)
-    {
-        ContactName = contactName;
-        Email = email;
-        Phone = phone;
-        // AddDomainEvent(new SupplierContactUpdatedDomainEvent(Id, Name, Email));
-    }
 }

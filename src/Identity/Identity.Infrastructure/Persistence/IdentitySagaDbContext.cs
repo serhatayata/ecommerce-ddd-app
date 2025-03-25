@@ -16,4 +16,11 @@ public class IdentitySagaDbContext : SagaDbContext
     { 
         get { yield return new UserRegistrationStateMap(); }
     }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.HasDefaultSchema("identitysaga");
+
+        base.OnModelCreating(modelBuilder);
+    }
 }

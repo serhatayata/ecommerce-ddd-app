@@ -24,10 +24,4 @@ public class Brand : Entity
     public bool IsActive { get; private set; }
 
     public virtual IReadOnlyCollection<Product> Products => _products.AsReadOnly();
-
-    public void Deactivate()
-    {
-        IsActive = false;
-        // AddDomainEvent(new BrandDeactivatedDomainEvent(Id, Name));
-    }
 }

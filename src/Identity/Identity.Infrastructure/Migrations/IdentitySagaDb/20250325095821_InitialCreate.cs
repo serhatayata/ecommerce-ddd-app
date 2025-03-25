@@ -6,13 +6,17 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Identity.Infrastructure.Migrations.IdentitySagaDb
 {
     /// <inheritdoc />
-    public partial class InitialIdentitySaga : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.EnsureSchema(
+                name: "identitysaga");
+
             migrationBuilder.CreateTable(
                 name: "UserRegistrationState",
+                schema: "identitysaga",
                 columns: table => new
                 {
                     CorrelationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -33,7 +37,8 @@ namespace Identity.Infrastructure.Migrations.IdentitySagaDb
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "UserRegistrationState");
+                name: "UserRegistrationState",
+                schema: "identitysaga");
         }
     }
 }

@@ -26,10 +26,4 @@ public class Category : Entity
     public virtual Category Parent { get; private set; }
     public virtual IReadOnlyCollection<Category> Children { get; private set; }
     public virtual IReadOnlyCollection<Product> Products => _products.AsReadOnly();
-
-    public void Deactivate()
-    {
-        IsActive = false;
-        // AddDomainEvent(new CategoryDeactivatedDomainEvent(Id, Name));
-    }
 }

@@ -1,4 +1,5 @@
 using Common.Domain.Models;
+using ProductCatalog.Domain.Events;
 using ProductCatalog.Domain.Models.Brands;
 using ProductCatalog.Domain.Models.Categories;
 using ProductCatalog.Domain.Models.Suppliers;
@@ -7,7 +8,9 @@ namespace ProductCatalog.Domain.Models.Products;
 
 public class Product : Entity, IAggregateRoot
 {
-    private Product(
+    public Product() { }
+
+    public Product(
         string name,
         string description,
         Money price,
@@ -45,7 +48,6 @@ public class Product : Entity, IAggregateRoot
         string name,
         string description,
         decimal price,
-        string currency,
         int brandId,
         int categoryId,
         int supplierId)

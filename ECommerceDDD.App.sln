@@ -83,6 +83,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderManagement.Domain", "s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderManagement.Infrastructure", "src\OrderManagement\OrderManagement.Infrastructure\OrderManagement.Infrastructure.csproj", "{948CD96A-B29F-42D5-8DA4-6436303D2C8A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductCatalog.IoC", "src\ProductCatalog\ProductCatalog.IoC\ProductCatalog.IoC.csproj", "{EBFA1F21-9B59-4872-A42A-56F3612D445A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -213,6 +215,10 @@ Global
 		{948CD96A-B29F-42D5-8DA4-6436303D2C8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{948CD96A-B29F-42D5-8DA4-6436303D2C8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{948CD96A-B29F-42D5-8DA4-6436303D2C8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBFA1F21-9B59-4872-A42A-56F3612D445A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBFA1F21-9B59-4872-A42A-56F3612D445A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBFA1F21-9B59-4872-A42A-56F3612D445A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBFA1F21-9B59-4872-A42A-56F3612D445A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -256,5 +262,6 @@ Global
 		{5B76A081-1A0D-4068-98DB-0D3B12721A09} = {5A592B5C-244C-4079-91AA-683D48622086}
 		{E6C425EB-6734-4CC7-BEA6-20A9B3A15AE6} = {5A592B5C-244C-4079-91AA-683D48622086}
 		{948CD96A-B29F-42D5-8DA4-6436303D2C8A} = {5A592B5C-244C-4079-91AA-683D48622086}
+		{EBFA1F21-9B59-4872-A42A-56F3612D445A} = {9E84B214-FB56-47A6-AFE4-91700EC5DDD3}
 	EndGlobalSection
 EndGlobal

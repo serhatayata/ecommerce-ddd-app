@@ -1,12 +1,26 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using Common.Domain.Events;
 
-namespace ProductCatalog.Domain.Events
+namespace ProductCatalog.Domain.Events;
+
+public sealed record ProductCreatedDomainEvent : DomainEvent
 {
-    public class ProductCreatedDomainEvent
+    [JsonConstructor]
+    public ProductCreatedDomainEvent()
     {
-        HERE
+        
     }
+
+    public ProductCreatedDomainEvent(
+    int productId, 
+    string productName,
+    Guid? correlationId = null)
+    : base(correlationId)
+    {
+        ProductId = productId;
+        ProductName = productName;
+    }
+
+    public int ProductId { get; }
+    public string ProductName { get; }
 }

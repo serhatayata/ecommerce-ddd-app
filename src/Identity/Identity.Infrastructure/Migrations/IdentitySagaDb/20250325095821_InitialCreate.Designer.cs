@@ -12,14 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Identity.Infrastructure.Migrations.IdentitySagaDb
 {
     [DbContext(typeof(IdentitySagaDbContext))]
-    [Migration("20250223095129_InitialIdentitySaga")]
-    partial class InitialIdentitySaga
+    [Migration("20250325095821_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("identitysaga")
                 .HasAnnotation("ProductVersion", "9.0.0-preview.1.24081.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -52,7 +53,7 @@ namespace Identity.Infrastructure.Migrations.IdentitySagaDb
 
                     b.HasKey("CorrelationId");
 
-                    b.ToTable("UserRegistrationState");
+                    b.ToTable("UserRegistrationState", "identitysaga");
                 });
 #pragma warning restore 612, 618
         }
