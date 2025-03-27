@@ -1,17 +1,18 @@
 using System.Reflection;
 using Common.Application.Behaviours;
 using Common.Application.Settings;
+using Common.Application.Mapping;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Identity.Application;
+namespace ProductCatalog.Application;
 
-public static class IdentityApplicationConfiguration
+public static class ProductCatalogApplicationConfiguration
 {
     private static readonly Assembly Assembly = Assembly.GetExecutingAssembly();
 
-    public static IServiceCollection AddIdentityApplication(
+    public static IServiceCollection AddProductCatalogApplication(
     this IServiceCollection services,
     IConfiguration configuration)
     {
@@ -20,7 +21,8 @@ public static class IdentityApplicationConfiguration
         services
             .Configure<ApplicationSettings>(applicationSettings)
             .AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly))
-            .AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
+            .AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>))
+            .AddAutoMapper(cfg => cfg.AddProfile(new MappingProfile(Assembly)));
 
         return services;
     }

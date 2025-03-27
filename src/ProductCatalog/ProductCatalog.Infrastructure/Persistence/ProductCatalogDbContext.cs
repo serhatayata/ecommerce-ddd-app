@@ -1,4 +1,6 @@
 using System.Reflection;
+using Common.Infrastructure.DbContexts;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ProductCatalog.Domain.Models.Brands;
 using ProductCatalog.Domain.Models.Categories;
@@ -7,11 +9,12 @@ using ProductCatalog.Domain.Models.Suppliers;
 
 namespace ProductCatalog.Infrastructure.Persistence;
 
-public class ProductCatalogDbContext : DbContext
+public class ProductCatalogDbContext : BaseDbContext<ProductCatalogDbContext>
 {
     public ProductCatalogDbContext(
-    DbContextOptions<ProductCatalogDbContext> options)
-    : base(options)
+    DbContextOptions<ProductCatalogDbContext> options,
+    IMediator mediator)
+    : base(options, mediator)
     {
     }
 

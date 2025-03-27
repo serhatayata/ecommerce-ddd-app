@@ -4,7 +4,9 @@ using Common.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ProductCatalog.Domain.Contracts;
 using ProductCatalog.Infrastructure.Persistence;
+using ProductCatalog.Infrastructure.Repositories.Products;
 
 namespace ProductCatalog.Infrastructure;
 
@@ -17,7 +19,8 @@ public static class ProductCatalogInfrastructureConfiguration
         services
             .AddDatabase(configuration)
             .AddRepositories()
-            .AddTransient<IDbInitializer, ProductCatalogDbInitializer>();
+            .AddTransient<IDbInitializer, ProductCatalogDbInitializer>()
+            .AddTransient<IProductRepository, ProductRepository>();
             // .AddSagaConfigurations(configuration);
 
         return services;

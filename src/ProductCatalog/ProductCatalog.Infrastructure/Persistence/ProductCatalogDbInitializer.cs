@@ -48,16 +48,20 @@ internal class ProductCatalogDbInitializer : DbInitializer
             return;
 
         var electronics = new Category("Electronics", "Electronic devices and accessories");
-        var computers = new Category("Computers", "Desktop and laptop computers", electronics.Id);
-        var audioDevices = new Category("Audio Devices", "Headphones and speakers", electronics.Id);
-        
         var sports = new Category("Sports", "Sports equipment and accessories");
-        var footwear = new Category("Footwear", "Athletic shoes and boots", sports.Id);
-
         var homeAppliances = new Category("Home Appliances", "Kitchen and home electronics");
 
-        var categories = new[] { electronics, computers, audioDevices, sports, footwear, homeAppliances };
-        _dbContext.Categories.AddRange(categories);
+        _dbContext.Categories.AddRange(electronics, sports, homeAppliances);
+        _dbContext.SaveChanges();
+
+        var children = new[]
+        {
+            new Category("Computers", "Desktop and laptop computers", electronics.Id),
+            new Category("Audio Devices", "Headphones and speakers", electronics.Id),
+            new Category("Footwear", "Athletic shoes and boots", sports.Id)
+        };
+
+        _dbContext.Categories.AddRange(children);
         _dbContext.SaveChanges();
     }
 

@@ -23,7 +23,7 @@ public class Category : Entity
     public int? ParentId { get; private set; }
     public bool IsActive { get; private set; }
 
-    public virtual Category Parent { get; private set; }
+    public virtual Category? Parent { get; private set; }
     public virtual IReadOnlyCollection<Category> Children { get; private set; }
     public virtual IReadOnlyCollection<Product> Products => _products.AsReadOnly();
 }

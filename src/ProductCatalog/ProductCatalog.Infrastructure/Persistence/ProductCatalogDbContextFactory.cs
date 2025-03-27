@@ -1,11 +1,19 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using MediatR;
 
 namespace ProductCatalog.Infrastructure.Persistence;
 
 public class ProductCatalogDbContextFactory : IDesignTimeDbContextFactory<ProductCatalogDbContext>
 {
+    private readonly IMediator _mediator;
+
+    public ProductCatalogDbContextFactory(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
+
     public ProductCatalogDbContext CreateDbContext(string[] args)
     {
         IConfigurationRoot configuration = new ConfigurationBuilder()
@@ -29,6 +37,6 @@ public class ProductCatalogDbContextFactory : IDesignTimeDbContextFactory<Produc
                 .MigrationsAssembly(
                     typeof(ProductCatalogDbContext).Assembly.FullName));
 
-        return new ProductCatalogDbContext(builder.Options);
+        return new ProductCatalogDbContext(builder.Options, _mediator);
     }
 }
