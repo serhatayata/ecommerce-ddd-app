@@ -34,6 +34,8 @@ This project is structured using DDD and Clean Architecture, focusing on:
 
 ➡ MediatR for CQRS
 
+➡ MassTransit for SAGA
+
 ➡ Event Sourcing with domain events
 
 ➡ Docker for containerization
