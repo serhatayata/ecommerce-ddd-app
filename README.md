@@ -34,6 +34,8 @@ This project is structured using DDD and Clean Architecture, focusing on:
 
 ➡ MediatR for CQRS
 
+➡ MassTransit for SAGA
+
 ➡ Event Sourcing with domain events
 
 ➡ Docker for containerization
@@ -73,4 +75,9 @@ Contributions are welcome! Please follow these steps:
 4. Push to the branch (git push origin feature-new)
 
 5. Open a Pull Request
+
+## 🛠 Some github repositories that I got help for the project.
+
+1. https://github.com/evgenirusev/.NET-Domain-Driven-Design-Template
+2. https://github.com/ardalis/ddd-guestbook
  
