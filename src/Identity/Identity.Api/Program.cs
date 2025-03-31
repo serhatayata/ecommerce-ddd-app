@@ -3,6 +3,8 @@ using Identity.IoC;
 using Common.Infrastructure.Extensions;
 using Identity.Api;
 using Common.Application.Settings;
+using FluentValidation;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -14,6 +16,8 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
+
+builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
 builder.Services.Register(configuration);
 builder.Services.AddIdentityApi();

@@ -62,4 +62,25 @@ public class Product : Entity, IAggregateRoot
             categoryId,
             supplierId);
     }
+
+    public Product Update(
+        string name,
+        string description,
+        decimal price,
+        int brandId,
+        int categoryId,
+        int supplierId)
+    {
+        var moneyResult = Money.From(price);
+
+        Name = name;
+        Description = description;
+        Price = moneyResult;
+        BrandId = brandId;
+        CategoryId = categoryId;
+        SupplierId = supplierId;
+        UpdatedAt = DateTime.UtcNow;
+
+        return this;
+    }
 }
