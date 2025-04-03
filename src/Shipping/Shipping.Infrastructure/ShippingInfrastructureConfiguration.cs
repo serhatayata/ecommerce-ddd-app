@@ -70,11 +70,35 @@ public static class ShippingInfrastructureConfiguration
     {
         return services.AddMassTransit(m =>
         {
-            m.AddConsumer<ShipmentShippedIntegrationEventConsumer>();
-            m.AddConsumer<ShipmentDeliveredIntegrationEventConsumer>();
+            m.AddConsumer<ShipShipmentIntegrationEventConsumer>();
+            m.AddConsumer<DeliverShipmentIntegrationEventConsumer>();
 
             m.UsingRabbitMq((context, cfg) =>
             {
+                #region ShipShipmentIntegrationEvent
+                var shipShipmentIntegrationEventName = MessageBrokerExtensions.GetQueueName<ShipShipmentIntegrationEvent>();
+                cfg.ReceiveEndpoint(shipShipmentIntegrationEventName, e =>
+                {
+                    var exchangeName = MessageBrokerExtensions.GetExchangeName<ShipShipmentIntegrationEvent>();
+                    e.Bind(exchangeName, x =>
+                    {
+                        x.ExchangeType = "fanout";
+                        x.Durable = true;
+                    });
+                });
+                #endregion
+                #region DeliverShipmentIntegrationEvent
+                var deliverShipmentIntegrationEventName = MessageBrokerExtensions.GetQueueName<DeliverShipmentIntegrationEvent>();
+                cfg.ReceiveEndpoint(deliverShipmentIntegrationEventName, e =>
+                {
+                    var exchangeName = MessageBrokerExtensions.GetExchangeName<DeliverShipmentIntegrationEvent>();
+                    e.Bind(exchangeName, x =>
+                    {
+                        x.ExchangeType = "fanout";
+                        x.Durable = true;
+                    });
+                });
+                #endregion
                 #region ShipmentShippedIntegrationEvent
                 var shipmentShippedIntegrationEventName = MessageBrokerExtensions.GetQueueName<ShipmentShippedIntegrationEvent>();
                 cfg.ReceiveEndpoint(shipmentShippedIntegrationEventName, e =>

@@ -4,7 +4,7 @@ public sealed record ShipmentDeliveredIntegrationEvent : IntegrationEvent
 {
     public ShipmentDeliveredIntegrationEvent(
         Guid correlationId,
-        Guid shipmentId,
+        int shipmentId,
         string trackingNumber,
         DateTime deliveredDate)
         : base(correlationId, DateTime.UtcNow)
@@ -14,7 +14,7 @@ public sealed record ShipmentDeliveredIntegrationEvent : IntegrationEvent
         DeliveredDate = deliveredDate;
     }
 
-    public Guid ShipmentId { get; }
+    public int ShipmentId { get; }
     public string TrackingNumber { get; }
     public DateTime DeliveredDate { get; }
 }
