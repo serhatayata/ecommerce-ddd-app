@@ -6,6 +6,10 @@ public class Shipment : Entity, IAggregateRoot
 {
     private readonly List<ShipmentItem> _items = new();
 
+    public Shipment()
+    {
+    }
+
     public Shipment(
         int orderId,
         Address shippingAddress,
@@ -37,6 +41,24 @@ public class Shipment : Entity, IAggregateRoot
         Status = ShipmentStatus.Shipped;
         ShippedAt = DateTime.UtcNow;
     }
+    
+    public void UpdateStatus(ShipmentStatus newStatus)
+    {
+        Status = newStatus;
+        
+        switch (newStatus)
+        {
+            case ShipmentStatus.Shipped:
+                ShippedAt = DateTime.UtcNow;
+                break;
+            case ShipmentStatus.Delivered:
+                DeliveredAt = DateTime.UtcNow;
+                break;
+        }
+    }
+
+    public void UpdateShipmentCompany(int shipmentCompanyId)
+        => ShipmentCompanyId = shipmentCompanyId;
 
     public void AddItem(int productId, int quantity)
         => _items.Add(new ShipmentItem(productId, quantity));

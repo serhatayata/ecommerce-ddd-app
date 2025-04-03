@@ -4,6 +4,10 @@ namespace Shipping.Domain.Models.Shipments;
 
 public class ShipmentItem : Entity
 {
+    public ShipmentItem()
+    {
+    }
+
     public ShipmentItem(int productId, int quantity)
     {
         ProductId = productId;

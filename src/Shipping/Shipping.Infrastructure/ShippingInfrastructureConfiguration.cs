@@ -1,9 +1,13 @@
 using System.Reflection;
+using Common.Application.Extensions;
+using Common.Domain.Events.Shippings;
 using Common.Domain.Repositories;
 using Common.Infrastructure.Persistence;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Shipping.Application.Consumers;
 using Shipping.Domain.Contracts;
 using Shipping.Infrastructure.Persistence;
 using Shipping.Infrastructure.Repositories.Shipments;
@@ -20,7 +24,8 @@ public static class ShippingInfrastructureConfiguration
             .AddDatabase(configuration)
             .AddRepositories()
             .AddTransient<IDbInitializer, ShippingDbInitializer>()
-            .AddTransient<IShipmentRepository, ShipmentRepository>();
+            .AddTransient<IShipmentRepository, ShipmentRepository>()
+            .AddQueueConfigurations();
 
         return services;
     }
@@ -58,5 +63,43 @@ public static class ShippingInfrastructureConfiguration
                 .WithTransientLifetime());
 
         return services;
+    }
+
+    private static IServiceCollection AddQueueConfigurations(
+    this IServiceCollection services)
+    {
+        return services.AddMassTransit(m =>
+        {
+            m.AddConsumer<ShipmentShippedIntegrationEventConsumer>();
+            m.AddConsumer<ShipmentDeliveredIntegrationEventConsumer>();
+
+            m.UsingRabbitMq((context, cfg) =>
+            {
+                #region ShipmentShippedIntegrationEvent
+                var shipmentShippedIntegrationEventName = MessageBrokerExtensions.GetQueueName<ShipmentShippedIntegrationEvent>();
+                cfg.ReceiveEndpoint(shipmentShippedIntegrationEventName, e =>
+                {
+                    var exchangeName = MessageBrokerExtensions.GetExchangeName<ShipmentShippedIntegrationEvent>();
+                    e.Bind(exchangeName, x =>
+                    {
+                        x.ExchangeType = "fanout";
+                        x.Durable = true;
+                    });
+                });
+                #endregion
+                #region ShipmentDeliveredIntegrationEvent
+                var shipmentDeliveredIntegrationEventName = MessageBrokerExtensions.GetQueueName<ShipmentDeliveredIntegrationEvent>();
+                cfg.ReceiveEndpoint(shipmentDeliveredIntegrationEventName, e =>
+                {
+                    var exchangeName = MessageBrokerExtensions.GetExchangeName<ShipmentDeliveredIntegrationEvent>();
+                    e.Bind(exchangeName, x =>
+                    {
+                        x.ExchangeType = "fanout";
+                        x.Durable = true;
+                    });
+                });
+                #endregion
+            });
+        });
     }
 }

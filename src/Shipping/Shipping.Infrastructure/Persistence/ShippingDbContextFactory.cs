@@ -7,13 +7,6 @@ namespace Shipping.Infrastructure.Persistence;
 
 public class ShippingDbContextFactory : IDesignTimeDbContextFactory<ShippingDbContext>
 {
-    private readonly IMediator _mediator;
-
-    public ShippingDbContextFactory(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     public ShippingDbContext CreateDbContext(string[] args)
     {
         IConfigurationRoot configuration = new ConfigurationBuilder()
@@ -37,5 +30,6 @@ public class ShippingDbContextFactory : IDesignTimeDbContextFactory<ShippingDbCo
                 .MigrationsAssembly(
                     typeof(ShippingDbContext).Assembly.FullName));
 
-        return new ShippingDbContext(builder.Options, _mediator);    }
+        return new ShippingDbContext(builder.Options, null);    
+    }
 }

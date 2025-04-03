@@ -59,6 +59,28 @@
             "launchUrl": "scalar/v1",
             "applicationUrl": "http://localhost:5003",
             "console": "internalConsole"
+        },
+        {
+            "name": "Shipping API",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-shipping",
+            "program": "${workspaceFolder}/src/Shipping/Shipping.Api/bin/Debug/net9.0/Shipping.Api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/Shipping/Shipping.Api",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(http://\\S+)",
+                "uriFormat": "%s/scalar/v1"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_URLS": "http://localhost:5004"
+            },
+            "launchUrl": "scalar/v1",
+            "applicationUrl": "http://localhost:5004",
+            "console": "internalConsole"
         }
     ],
     "compounds": [
@@ -67,12 +89,20 @@
             "configurations": ["ProductCatalog API"]
         },
         {
+            "name": "Shipping API",
+            "configurations": ["Shipping API"]
+        },
+        {
             "name": "Identity API + Notification Worker",
             "configurations": ["Identity API", "Notification Worker"]
         },
         {
             "name": "Identity API + Notification Worker + ProductCatalog API",
             "configurations": ["Identity API", "Notification Worker", "ProductCatalog API"]
+        },
+        {
+            "name": "All Services",
+            "configurations": ["Identity API", "Notification Worker", "ProductCatalog API", "Shipping API"]
         }
     ]
 }

@@ -44,6 +44,22 @@
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "label": "build-shipping",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/Shipping/Shipping.Api/Shipping.Api.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
 }
