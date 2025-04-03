@@ -85,6 +85,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderManagement.Infrastruct
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductCatalog.IoC", "src\ProductCatalog\ProductCatalog.IoC\ProductCatalog.IoC.csproj", "{EBFA1F21-9B59-4872-A42A-56F3612D445A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shipping.IoC", "src\Shipping\Shipping.IoC\Shipping.IoC.csproj", "{F1D788BE-DC00-43F2-B856-67CA70623852}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -219,6 +221,10 @@ Global
 		{EBFA1F21-9B59-4872-A42A-56F3612D445A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EBFA1F21-9B59-4872-A42A-56F3612D445A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EBFA1F21-9B59-4872-A42A-56F3612D445A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1D788BE-DC00-43F2-B856-67CA70623852}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1D788BE-DC00-43F2-B856-67CA70623852}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1D788BE-DC00-43F2-B856-67CA70623852}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1D788BE-DC00-43F2-B856-67CA70623852}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -263,5 +269,6 @@ Global
 		{E6C425EB-6734-4CC7-BEA6-20A9B3A15AE6} = {5A592B5C-244C-4079-91AA-683D48622086}
 		{948CD96A-B29F-42D5-8DA4-6436303D2C8A} = {5A592B5C-244C-4079-91AA-683D48622086}
 		{EBFA1F21-9B59-4872-A42A-56F3612D445A} = {9E84B214-FB56-47A6-AFE4-91700EC5DDD3}
+		{F1D788BE-DC00-43F2-B856-67CA70623852} = {0BA7A61B-6370-4A04-8F66-B27D7D243AB2}
 	EndGlobalSection
 EndGlobal

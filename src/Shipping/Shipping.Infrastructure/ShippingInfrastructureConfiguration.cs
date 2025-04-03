@@ -4,23 +4,23 @@ using Common.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ProductCatalog.Domain.Contracts;
-using ProductCatalog.Infrastructure.Persistence;
-using ProductCatalog.Infrastructure.Repositories.Products;
+using Shipping.Domain.Contracts;
+using Shipping.Infrastructure.Persistence;
+using Shipping.Infrastructure.Repositories.Shipments;
 
-namespace ProductCatalog.Infrastructure;
+namespace Shipping.Infrastructure;
 
-public static class ProductCatalogInfrastructureConfiguration
+public static class ShippingInfrastructureConfiguration
 {
-    public static IServiceCollection AddProductCatalogInfrastructure(
+    public static IServiceCollection AddShippingInfrastructure(
     this IServiceCollection services,
     IConfiguration configuration)
     {
         services
             .AddDatabase(configuration)
             .AddRepositories()
-            .AddTransient<IDbInitializer, ProductCatalogDbInitializer>()
-            .AddTransient<IProductRepository, ProductRepository>();
+            .AddTransient<IDbInitializer, ShippingDbInitializer>()
+            .AddTransient<IShipmentRepository, ShipmentRepository>();
 
         return services;
     }
@@ -30,18 +30,18 @@ public static class ProductCatalogInfrastructureConfiguration
     IConfiguration configuration)
     {
         services
-            .AddScoped<DbContext, ProductCatalogDbContext>()
-            .AddDbContext<ProductCatalogDbContext>(options => options
+            .AddScoped<DbContext, ShippingDbContext>()
+            .AddDbContext<ShippingDbContext>(options => options
                 .UseSqlServer(
                     configuration.GetConnectionString("DefaultConnection"),
                     sqlOptions => sqlOptions
-                        .MigrationsHistoryTable("__EFMigrationsHistory", "productcatalog")
+                        .MigrationsHistoryTable("__EFMigrationsHistory", "shipping")
                         .EnableRetryOnFailure(
                             maxRetryCount: 10,
                             maxRetryDelay: TimeSpan.FromSeconds(30),
                             errorNumbersToAdd: null)
                         .MigrationsAssembly(
-                            typeof(ProductCatalogDbContext).Assembly.FullName)));
+                            typeof(ShippingDbContext).Assembly.FullName)));
 
         return services;
     }
