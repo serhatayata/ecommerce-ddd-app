@@ -79,6 +79,7 @@ public static class ShippingInfrastructureConfiguration
                 var shipShipmentIntegrationEventName = MessageBrokerExtensions.GetQueueName<ShipShipmentIntegrationEvent>();
                 cfg.ReceiveEndpoint(shipShipmentIntegrationEventName, e =>
                 {
+                    e.ConfigureConsumer<ShipShipmentIntegrationEventConsumer>(context);
                     var exchangeName = MessageBrokerExtensions.GetExchangeName<ShipShipmentIntegrationEvent>();
                     e.Bind(exchangeName, x =>
                     {
@@ -91,6 +92,7 @@ public static class ShippingInfrastructureConfiguration
                 var deliverShipmentIntegrationEventName = MessageBrokerExtensions.GetQueueName<DeliverShipmentIntegrationEvent>();
                 cfg.ReceiveEndpoint(deliverShipmentIntegrationEventName, e =>
                 {
+                    e.ConfigureConsumer<DeliverShipmentIntegrationEventConsumer>(context);
                     var exchangeName = MessageBrokerExtensions.GetExchangeName<DeliverShipmentIntegrationEvent>();
                     e.Bind(exchangeName, x =>
                     {
