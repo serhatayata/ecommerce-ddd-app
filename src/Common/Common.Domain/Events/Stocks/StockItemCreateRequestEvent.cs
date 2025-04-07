@@ -1,6 +1,6 @@
 namespace Common.Domain.Events.Stocks;
 
-public sealed record StockItemCreatedIntegrationEvent : IntegrationEvent
+public sealed record StockItemCreateRequestEvent : IntegrationEvent
 {
     public int StockItemId { get; init; }
     public int ProductId { get; init; }
@@ -8,7 +8,7 @@ public sealed record StockItemCreatedIntegrationEvent : IntegrationEvent
     public string Location { get; init; }
     public DateTime CreatedDate { get; init; }
 
-    public StockItemCreatedIntegrationEvent(
+    public StockItemCreateRequestEvent(
         int stockItemId,
         int productId,
         int quantity,
