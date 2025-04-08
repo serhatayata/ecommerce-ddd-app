@@ -3,7 +3,7 @@ using MassTransit;
 
 namespace Notification.Worker.Consumers;
 
-public class SendVerificationEmailIntegrationEventConsumer : IConsumer<SendVerificationEmailIntegrationEvent>
+public class SendVerificationEmailIntegrationEventConsumer : IConsumer<SendVerificationEmailRequestEvent>
 {
     private readonly ILogger<SendVerificationEmailIntegrationEventConsumer> _logger;
     private readonly IPublishEndpoint _publishEndpoint;
@@ -16,13 +16,13 @@ public class SendVerificationEmailIntegrationEventConsumer : IConsumer<SendVerif
         _publishEndpoint = publishEndpoint;
     }
 
-    public async Task Consume(ConsumeContext<SendVerificationEmailIntegrationEvent> context)
+    public async Task Consume(ConsumeContext<SendVerificationEmailRequestEvent> context)
     {
         var message = context.Message;
         _logger.LogInformation("Received verification email request for: {Email}", message.Email);
 
         // email sending...
 
-        await _publishEndpoint.Publish(new EmailVerifiedIntegrationEvent(message.CorrelationId, message.Email));
+        await _publishEndpoint.Publish(new EmailVerifiedEvent(message.CorrelationId, message.Email));
     }
 }

@@ -57,7 +57,7 @@ public class ShipmentController : ApiController
 
         await Send(command);
 
-        await _publishEndpoint.Publish(new ShipShipmentIntegrationEvent(
+        await _publishEndpoint.Publish(new ShipShipmentRequestEvent(
             Guid.NewGuid(),
             command.OrderId,
             command.TrackingNumber,

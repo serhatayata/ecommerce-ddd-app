@@ -15,7 +15,7 @@ public class UserRegistrationSaga : MassTransitStateMachine<UserRegistrationStat
     public Event<UserNotCreatedDomainEvent> UserNotCreatedDomainEvent { get; private set; }
 
     //Integration Events
-    public Event<EmailVerifiedIntegrationEvent> EmailVerifiedEvent { get; private set; }
+    public Event<EmailVerifiedEvent> EmailVerifiedEvent { get; private set; }
 
     public UserRegistrationSaga()
     {
@@ -38,7 +38,7 @@ public class UserRegistrationSaga : MassTransitStateMachine<UserRegistrationStat
                 })
                 .TransitionTo(EmailVerificationPending)
                 .Publish(context => {
-                    return new SendVerificationEmailIntegrationEvent(
+                    return new SendVerificationEmailRequestEvent(
                     context.Saga.CorrelationId, 
                     context.Saga.Email);
                 }),

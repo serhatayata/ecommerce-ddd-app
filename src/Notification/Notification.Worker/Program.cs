@@ -17,12 +17,12 @@ builder.Services.AddMassTransit(x =>
         cfg.Host(rabbitMqConnStr);
 
         #region SendVerificationEmailIntegrationEventConsumer
-        var sendVerificationEmailQueueName = MessageBrokerExtensions.GetQueueName<SendVerificationEmailIntegrationEvent>();
+        var sendVerificationEmailQueueName = MessageBrokerExtensions.GetQueueName<SendVerificationEmailRequestEvent>();
         cfg.ReceiveEndpoint(sendVerificationEmailQueueName, e =>
         {
             e.ConfigureConsumer<SendVerificationEmailIntegrationEventConsumer>(context);
             
-            var sendVerificationEmailExchangeName = MessageBrokerExtensions.GetExchangeName<SendVerificationEmailIntegrationEvent>();
+            var sendVerificationEmailExchangeName = MessageBrokerExtensions.GetExchangeName<SendVerificationEmailRequestEvent>();
             e.Bind(sendVerificationEmailExchangeName, x =>
             {
                 x.ExchangeType = "fanout";

@@ -76,11 +76,11 @@ public static class ShippingInfrastructureConfiguration
             m.UsingRabbitMq((context, cfg) =>
             {
                 #region ShipShipmentIntegrationEvent
-                var shipShipmentIntegrationEventName = MessageBrokerExtensions.GetQueueName<ShipShipmentIntegrationEvent>();
+                var shipShipmentIntegrationEventName = MessageBrokerExtensions.GetQueueName<ShipShipmentRequestEvent>();
                 cfg.ReceiveEndpoint(shipShipmentIntegrationEventName, e =>
                 {
                     e.ConfigureConsumer<ShipShipmentIntegrationEventConsumer>(context);
-                    var exchangeName = MessageBrokerExtensions.GetExchangeName<ShipShipmentIntegrationEvent>();
+                    var exchangeName = MessageBrokerExtensions.GetExchangeName<ShipShipmentRequestEvent>();
                     e.Bind(exchangeName, x =>
                     {
                         x.ExchangeType = "fanout";
@@ -89,11 +89,11 @@ public static class ShippingInfrastructureConfiguration
                 });
                 #endregion
                 #region DeliverShipmentIntegrationEvent
-                var deliverShipmentIntegrationEventName = MessageBrokerExtensions.GetQueueName<DeliverShipmentIntegrationEvent>();
+                var deliverShipmentIntegrationEventName = MessageBrokerExtensions.GetQueueName<DeliverShipmentRequestEvent>();
                 cfg.ReceiveEndpoint(deliverShipmentIntegrationEventName, e =>
                 {
                     e.ConfigureConsumer<DeliverShipmentIntegrationEventConsumer>(context);
-                    var exchangeName = MessageBrokerExtensions.GetExchangeName<DeliverShipmentIntegrationEvent>();
+                    var exchangeName = MessageBrokerExtensions.GetExchangeName<DeliverShipmentRequestEvent>();
                     e.Bind(exchangeName, x =>
                     {
                         x.ExchangeType = "fanout";
@@ -102,10 +102,10 @@ public static class ShippingInfrastructureConfiguration
                 });
                 #endregion
                 #region ShipmentShippedIntegrationEvent
-                var shipmentShippedIntegrationEventName = MessageBrokerExtensions.GetQueueName<ShipmentShippedIntegrationEvent>();
+                var shipmentShippedIntegrationEventName = MessageBrokerExtensions.GetQueueName<ShipmentShippedEvent>();
                 cfg.ReceiveEndpoint(shipmentShippedIntegrationEventName, e =>
                 {
-                    var exchangeName = MessageBrokerExtensions.GetExchangeName<ShipmentShippedIntegrationEvent>();
+                    var exchangeName = MessageBrokerExtensions.GetExchangeName<ShipmentShippedEvent>();
                     e.Bind(exchangeName, x =>
                     {
                         x.ExchangeType = "fanout";
@@ -114,10 +114,10 @@ public static class ShippingInfrastructureConfiguration
                 });
                 #endregion
                 #region ShipmentDeliveredIntegrationEvent
-                var shipmentDeliveredIntegrationEventName = MessageBrokerExtensions.GetQueueName<ShipmentDeliveredIntegrationEvent>();
+                var shipmentDeliveredIntegrationEventName = MessageBrokerExtensions.GetQueueName<ShipmentDeliveredEvent>();
                 cfg.ReceiveEndpoint(shipmentDeliveredIntegrationEventName, e =>
                 {
-                    var exchangeName = MessageBrokerExtensions.GetExchangeName<ShipmentDeliveredIntegrationEvent>();
+                    var exchangeName = MessageBrokerExtensions.GetExchangeName<ShipmentDeliveredEvent>();
                     e.Bind(exchangeName, x =>
                     {
                         x.ExchangeType = "fanout";

@@ -1,8 +1,8 @@
 namespace Common.Domain.Events.Notification;
 
-public sealed record SendWelcomeEmailIntegrationEvent : IntegrationEvent
+public sealed record SendWelcomeEmailRequestEvent : IntegrationEvent
 {
-    public SendWelcomeEmailIntegrationEvent(
+    public SendWelcomeEmailRequestEvent(
     Guid correlationId, 
     string email) 
     : base(correlationId, DateTime.UtcNow)

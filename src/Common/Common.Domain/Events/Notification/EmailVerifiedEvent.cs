@@ -1,8 +1,8 @@
 namespace Common.Domain.Events.Notification;
 
-public sealed record EmailVerifiedIntegrationEvent : IntegrationEvent
+public sealed record EmailVerifiedEvent : IntegrationEvent
 {
-    public EmailVerifiedIntegrationEvent(
+    public EmailVerifiedEvent(
     Guid correlationId,
     string email)
     : base(correlationId, DateTime.UtcNow)

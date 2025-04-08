@@ -123,13 +123,13 @@ public static class IdentityInfrastructureConfiguration
                 
                 // Integration Events
                 #region SendVerificationEmailIntegrationEvent
-                var sendVerificationEmailExchangeName = MessageBrokerExtensions.GetExchangeName<SendVerificationEmailIntegrationEvent>();
-                cfg.Message<SendVerificationEmailIntegrationEvent>(e =>
+                var sendVerificationEmailExchangeName = MessageBrokerExtensions.GetExchangeName<SendVerificationEmailRequestEvent>();
+                cfg.Message<SendVerificationEmailRequestEvent>(e =>
                 {
                     e.SetEntityName(sendVerificationEmailExchangeName); // Exchange name
                 });
 
-                var sendVerificationEmailQueueName = MessageBrokerExtensions.GetQueueName<SendVerificationEmailIntegrationEvent>();
+                var sendVerificationEmailQueueName = MessageBrokerExtensions.GetQueueName<SendVerificationEmailRequestEvent>();
                 cfg.ReceiveEndpoint(sendVerificationEmailQueueName, e =>
                 {
                     e.ConfigureSaga<UserRegistrationState>(context);
@@ -143,12 +143,12 @@ public static class IdentityInfrastructureConfiguration
                 });
                 #endregion
                 #region EmailVerifiedIntegrationEvent
-                var emailVerifiedIntegrationEventName = MessageBrokerExtensions.GetQueueName<EmailVerifiedIntegrationEvent>();
+                var emailVerifiedIntegrationEventName = MessageBrokerExtensions.GetQueueName<EmailVerifiedEvent>();
                 cfg.ReceiveEndpoint(emailVerifiedIntegrationEventName, e =>
                 {
                     e.ConfigureSaga<UserRegistrationState>(context);
                     
-                    var exchangeName = MessageBrokerExtensions.GetExchangeName<EmailVerifiedIntegrationEvent>();
+                    var exchangeName = MessageBrokerExtensions.GetExchangeName<EmailVerifiedEvent>();
                     e.Bind(exchangeName, x =>
                     {
                         x.ExchangeType = "fanout";

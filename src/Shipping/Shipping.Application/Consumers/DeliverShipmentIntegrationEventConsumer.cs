@@ -6,7 +6,7 @@ using Shipping.Application.Commands.Shipments.Deliver;
 
 namespace Shipping.Application.Consumers;
 
-public class DeliverShipmentIntegrationEventConsumer : IConsumer<DeliverShipmentIntegrationEvent>
+public class DeliverShipmentIntegrationEventConsumer : IConsumer<DeliverShipmentRequestEvent>
 {
     private readonly ILogger<DeliverShipmentIntegrationEventConsumer> _logger;
     private readonly IMediator _mediator;
@@ -22,7 +22,7 @@ public class DeliverShipmentIntegrationEventConsumer : IConsumer<DeliverShipment
         _publishEndpoint = publishEndpoint;
     }
 
-    public async Task Consume(ConsumeContext<DeliverShipmentIntegrationEvent> context)
+    public async Task Consume(ConsumeContext<DeliverShipmentRequestEvent> context)
     {
         var message = context.Message;
         _logger.LogInformation("Received shipment delivered request for: {TrackingNumber}", 
@@ -33,7 +33,7 @@ public class DeliverShipmentIntegrationEventConsumer : IConsumer<DeliverShipment
             var result = await _mediator.Send(new DeliverShipmentCommand(){ ShipmentId = message.ShipmentId });
 
             if (result.Succeeded)
-                await _publishEndpoint.Publish(new ShipmentDeliveredIntegrationEvent(
+                await _publishEndpoint.Publish(new ShipmentDeliveredEvent(
                     message.CorrelationId,
                     message.ShipmentId,
                     message.TrackingNumber,

@@ -1,12 +1,12 @@
 namespace Common.Domain.Events.Identity;
 
-public record RegistrationIntegrationEvent : IntegrationEvent
+public record RegistrationCompletedEvent : IntegrationEvent
 {
     public int UserId { get; }
     public string Email { get; }
     public DateTime CompletedAt { get; }
 
-    public RegistrationIntegrationEvent(
+    public RegistrationCompletedEvent(
     Guid correlationId,
     int userId, 
     string email)

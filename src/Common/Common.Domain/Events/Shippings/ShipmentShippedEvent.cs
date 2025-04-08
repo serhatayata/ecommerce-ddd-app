@@ -1,8 +1,8 @@
 namespace Common.Domain.Events.Shippings;
 
-public sealed record ShipmentShippedIntegrationEvent : IntegrationEvent
+public sealed record ShipmentShippedEvent : IntegrationEvent
 {
-    public ShipmentShippedIntegrationEvent(
+    public ShipmentShippedEvent(
         Guid correlationId,
         int shipmentId,
         string trackingNumber,
