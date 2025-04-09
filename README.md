@@ -79,5 +79,4 @@ Contributions are welcome! Please follow these steps:
 ## 🛠 Some github repositories that I got help for the project.
 
 1. https://github.com/evgenirusev/.NET-Domain-Driven-Design-Template
-2. https://github.com/ardalis/ddd-guestbook
  
