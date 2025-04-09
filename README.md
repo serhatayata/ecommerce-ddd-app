@@ -1,4 +1,4 @@
-# eCommerce DDD Application
+# eCommerce DDD Application (STILL IN PROGRESS)
 
 ## 📌 Overview
 This repository is a Domain-Driven Design (DDD) implementation for an eCommerce application. It follows clean architecture principles, ensuring scalability, maintainability, and domain separation.
