@@ -3,13 +3,13 @@ using MassTransit;
 
 namespace Notification.Worker.Consumers;
 
-public class SendVerificationEmailIntegrationEventConsumer : IConsumer<SendVerificationEmailRequestEvent>
+public class SendVerificationEmailRequestEventConsumer : IConsumer<SendVerificationEmailRequestEvent>
 {
-    private readonly ILogger<SendVerificationEmailIntegrationEventConsumer> _logger;
+    private readonly ILogger<SendVerificationEmailRequestEventConsumer> _logger;
     private readonly IPublishEndpoint _publishEndpoint;
 
-    public SendVerificationEmailIntegrationEventConsumer(
-        ILogger<SendVerificationEmailIntegrationEventConsumer> logger,
+    public SendVerificationEmailRequestEventConsumer(
+        ILogger<SendVerificationEmailRequestEventConsumer> logger,
         IPublishEndpoint publishEndpoint)
     {
         _logger = logger;

@@ -9,18 +9,18 @@ var configuration = builder.Configuration;
 
 builder.Services.AddMassTransit(x =>
 {
-    x.AddConsumer<SendVerificationEmailIntegrationEventConsumer>();
+    x.AddConsumer<SendVerificationEmailRequestEventConsumer>();
 
     x.UsingRabbitMq((context, cfg) =>
     {
         var rabbitMqConnStr = configuration.GetConnectionString("RabbitMq");
         cfg.Host(rabbitMqConnStr);
 
-        #region SendVerificationEmailIntegrationEventConsumer
+        #region SendVerificationEmailRequestEventConsumer
         var sendVerificationEmailQueueName = MessageBrokerExtensions.GetQueueName<SendVerificationEmailRequestEvent>();
         cfg.ReceiveEndpoint(sendVerificationEmailQueueName, e =>
         {
-            e.ConfigureConsumer<SendVerificationEmailIntegrationEventConsumer>(context);
+            e.ConfigureConsumer<SendVerificationEmailRequestEventConsumer>(context);
             
             var sendVerificationEmailExchangeName = MessageBrokerExtensions.GetExchangeName<SendVerificationEmailRequestEvent>();
             e.Bind(sendVerificationEmailExchangeName, x =>

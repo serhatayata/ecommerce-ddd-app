@@ -70,8 +70,8 @@ public static class ShippingInfrastructureConfiguration
     {
         return services.AddMassTransit(m =>
         {
-            m.AddConsumer<ShipShipmentIntegrationEventConsumer>();
-            m.AddConsumer<DeliverShipmentIntegrationEventConsumer>();
+            m.AddConsumer<ShipShipmentRequestEventConsumer>();
+            m.AddConsumer<DeliverShipmentRequestEventConsumer>();
 
             m.UsingRabbitMq((context, cfg) =>
             {
@@ -79,7 +79,7 @@ public static class ShippingInfrastructureConfiguration
                 var shipShipmentIntegrationEventName = MessageBrokerExtensions.GetQueueName<ShipShipmentRequestEvent>();
                 cfg.ReceiveEndpoint(shipShipmentIntegrationEventName, e =>
                 {
-                    e.ConfigureConsumer<ShipShipmentIntegrationEventConsumer>(context);
+                    e.ConfigureConsumer<ShipShipmentRequestEventConsumer>(context);
                     var exchangeName = MessageBrokerExtensions.GetExchangeName<ShipShipmentRequestEvent>();
                     e.Bind(exchangeName, x =>
                     {
@@ -92,7 +92,7 @@ public static class ShippingInfrastructureConfiguration
                 var deliverShipmentIntegrationEventName = MessageBrokerExtensions.GetQueueName<DeliverShipmentRequestEvent>();
                 cfg.ReceiveEndpoint(deliverShipmentIntegrationEventName, e =>
                 {
-                    e.ConfigureConsumer<DeliverShipmentIntegrationEventConsumer>(context);
+                    e.ConfigureConsumer<DeliverShipmentRequestEventConsumer>(context);
                     var exchangeName = MessageBrokerExtensions.GetExchangeName<DeliverShipmentRequestEvent>();
                     e.Bind(exchangeName, x =>
                     {

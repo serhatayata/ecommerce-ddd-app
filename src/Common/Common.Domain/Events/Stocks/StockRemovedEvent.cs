@@ -4,17 +4,17 @@ public sealed record StockRemovedEvent : IntegrationEvent
 {
     public StockRemovedEvent(
         Guid correlationId,
-        Guid productId,
+        int stockItemId,
         int quantity,
         DateTime removedDate) 
         : base(correlationId, DateTime.UtcNow)
     {
-        ProductId = productId;
+        StockItemId = stockItemId;
         Quantity = quantity;
         RemovedDate = removedDate;
     }
 
-    public Guid ProductId { get; set; }
+    public int StockItemId { get; set; }
     public int Quantity { get; set; }
     public DateTime RemovedDate { get; set; }
 }

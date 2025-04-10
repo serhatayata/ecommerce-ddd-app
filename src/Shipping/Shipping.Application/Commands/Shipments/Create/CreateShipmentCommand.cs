@@ -19,13 +19,10 @@ public class CreateShipmentCommand : IRequest<CreateShipmentResponse>
     public class CreateShipmentCommandHandler : IRequestHandler<CreateShipmentCommand, CreateShipmentResponse>
     {
         private readonly IShipmentRepository _shipmentRepository;
-        private readonly IMediator _mediator;
 
         public CreateShipmentCommandHandler(
-        IShipmentRepository shipmentRepository,
-        IMediator mediator)
+        IShipmentRepository shipmentRepository)
         {
-            _mediator = mediator;
             _shipmentRepository = shipmentRepository;
         }
 

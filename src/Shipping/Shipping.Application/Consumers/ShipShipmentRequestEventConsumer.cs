@@ -6,14 +6,14 @@ using Shipping.Application.Commands.Shipments.Ship;
 
 namespace Shipping.Application.Consumers;
 
-public class ShipShipmentIntegrationEventConsumer : IConsumer<ShipShipmentRequestEvent>
+public class ShipShipmentRequestEventConsumer : IConsumer<ShipShipmentRequestEvent>
 {
-    private readonly ILogger<ShipShipmentIntegrationEventConsumer> _logger;
+    private readonly ILogger<ShipShipmentRequestEventConsumer> _logger;
     private readonly IMediator _mediator;
     private readonly IPublishEndpoint _publishEndpoint;
 
-    public ShipShipmentIntegrationEventConsumer(
-        ILogger<ShipShipmentIntegrationEventConsumer> logger,
+    public ShipShipmentRequestEventConsumer(
+        ILogger<ShipShipmentRequestEventConsumer> logger,
         IMediator mediator,
         IPublishEndpoint publishEndpoint)
     {
