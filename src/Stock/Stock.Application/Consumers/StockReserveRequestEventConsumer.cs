@@ -2,7 +2,7 @@ using Common.Domain.Events.Stocks;
 using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Stock.Application.Commands.StockItems.StockReserve;
+using Stock.Application.Commands.StockReservations.StockReserve;
 
 namespace Stock.Application.Consumers;
 

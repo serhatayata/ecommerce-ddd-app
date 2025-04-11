@@ -17,8 +17,6 @@ public class StockRemovedDomainEventHandler : INotificationHandler<StockRemovedD
     StockRemovedDomainEvent notification, 
     CancellationToken cancellationToken)
     {
-        // Use Stock remove command for business here
-
         // Create StockRemovedIntegrationEvent here
 
         string queueName = "";

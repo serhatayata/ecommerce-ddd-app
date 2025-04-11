@@ -26,7 +26,7 @@ public class StockReserveCommand : IRequest<StockReserveResponse>
                 return null;
 
             stockItem.ReserveStock(request.ReservedQuantity, request.OrderId);
-            await _stockItemRepository.SaveAsync(stockItem, cancellationToken);
+            await _stockItemRepository.UpdateAsync(stockItem, cancellationToken);
 
             return new StockReserveResponse(request.StockItemId, request.ReservedQuantity, request.OrderId);
         }

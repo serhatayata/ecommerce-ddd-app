@@ -8,7 +8,12 @@ public class StockItemEntityConfiguration : IEntityTypeConfiguration<StockItem>
 {
     public void Configure(EntityTypeBuilder<StockItem> builder)
     {
+        builder.ToTable("StockItems", "stock");
+        
         builder.HasKey(x => x.Id);
+
+        builder.Property(x => x.Id)
+            .ValueGeneratedOnAdd();
         
         builder.Property(x => x.ProductId)
             .IsRequired();
@@ -17,19 +22,32 @@ public class StockItemEntityConfiguration : IEntityTypeConfiguration<StockItem>
             .IsRequired();
 
         builder.Property(x => x.Status)
+            .HasConversion<string>()
             .IsRequired();
 
         builder.Property(x => x.LastUpdated)
             .IsRequired();
 
+        // Configure Location value object
         builder.OwnsOne(x => x.Location, locationBuilder =>
         {
-            locationBuilder.Property(l => l.Warehouse).IsRequired();
-            locationBuilder.Property(l => l.Aisle).IsRequired();
-            locationBuilder.Property(l => l.Shelf).IsRequired();
-            locationBuilder.Property(l => l.Bin).IsRequired();
+            locationBuilder.Property(l => l.Warehouse)
+                .HasColumnName("Location_Warehouse")
+                .HasMaxLength(100)
+                .IsRequired();
+
+            locationBuilder.Property(l => l.Aisle)
+                .HasColumnName("Location_Aisle")
+                .HasMaxLength(50)
+                .IsRequired();
+
+            locationBuilder.Property(l => l.Shelf)
+                .HasColumnName("Location_Shelf")
+                .HasMaxLength(50)
+                .IsRequired();
         });
 
+        // Configure relationships
         builder.HasMany(x => x.Transactions)
             .WithOne(t => t.StockItem)
             .HasForeignKey(t => t.StockItemId)
@@ -40,7 +58,7 @@ public class StockItemEntityConfiguration : IEntityTypeConfiguration<StockItem>
             .HasForeignKey(r => r.StockItemId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        // Add useful indexes
         builder.HasIndex(x => x.ProductId);
-        builder.HasIndex("Location_Warehouse");
     }
 }

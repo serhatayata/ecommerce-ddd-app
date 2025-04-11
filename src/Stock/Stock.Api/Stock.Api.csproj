@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Stock.Application\Stock.Application.csproj" />
+    <ProjectReference Include="..\Stock.IoC\Stock.IoC.csproj" />
     <ProjectReference Include="..\..\Common\Common.Api\Common.Api.csproj" />
   </ItemGroup>
 

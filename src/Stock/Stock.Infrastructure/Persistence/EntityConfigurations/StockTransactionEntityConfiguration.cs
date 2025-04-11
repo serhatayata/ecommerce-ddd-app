@@ -9,6 +9,9 @@ public class StockTransactionEntityConfiguration : IEntityTypeConfiguration<Stoc
     public void Configure(EntityTypeBuilder<StockTransaction> builder)
     {
         builder.HasKey(x => x.Id);
+        
+        builder.Property(x => x.Id)
+            .ValueGeneratedOnAdd();
 
         builder.Property(x => x.Quantity)
             .IsRequired();

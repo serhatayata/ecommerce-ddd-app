@@ -10,12 +10,10 @@ namespace Stock.Domain.Models.Stocks;
 /// </summary>
 public class Location : ValueObject
 {
-    public string Warehouse { get; }
-    public string Aisle { get; }
-    public string Shelf { get; }
-    public string Bin { get; }
+    // Private parameterless constructor for EF Core
+    private Location() { }
 
-    private Location(string warehouse, string aisle, string shelf, string bin)
+    public Location(string warehouse, string aisle, string shelf)
     {
         if (string.IsNullOrWhiteSpace(warehouse))
             throw new ArgumentException("Warehouse cannot be empty", nameof(warehouse));
@@ -23,11 +21,16 @@ public class Location : ValueObject
         Warehouse = warehouse;
         Aisle = aisle;
         Shelf = shelf;
-        Bin = bin;
     }
 
+    // Properties must be protected set for EF Core
+    public string Warehouse { get; protected set; }
+    public string Aisle { get; protected set; }
+    public string Shelf { get; protected set; }
+    public string Bin { get; protected set; }
+
     public static Location Create(string warehouse, string aisle, string shelf, string bin)
-        => new(warehouse, aisle, shelf, bin);
+        => new Location { Warehouse = warehouse, Aisle = aisle, Shelf = shelf, Bin = bin };
 
     public override string ToString() 
         => $"{Warehouse}-{Aisle}-{Shelf}-{Bin}";

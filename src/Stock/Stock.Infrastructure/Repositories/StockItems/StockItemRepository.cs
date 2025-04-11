@@ -108,4 +108,9 @@ public class StockItemRepository : EfRepository<StockItem, StockDbContext>, ISto
         CancellationToken cancellationToken = default)
         => await _dbContext.StockTransactions.FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
     #endregion
+
+    public async Task<StockItem> GetByIdWithReservationsAsync(int id, CancellationToken cancellationToken)
+        => await _dbContext.StockItems
+            .Include(x => x.Reservations)
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 }

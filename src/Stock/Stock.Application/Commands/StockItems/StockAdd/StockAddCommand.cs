@@ -29,7 +29,7 @@ public class StockAddCommand : IRequest<StockAddResponse>
                 return null;
 
             stockItem.AddStock(request.AddedQuantity, "Stock added via command.");
-            await _stockItemRepository.SaveAsync(stockItem, cancellationToken);
+            await _stockItemRepository.UpdateAsync(stockItem, cancellationToken);
 
             return new StockAddResponse
             {

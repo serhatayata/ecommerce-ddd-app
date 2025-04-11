@@ -30,8 +30,8 @@ public class StockItem : Entity, IAggregateRoot
     public StockStatus Status { get; private set; }
     public DateTime LastUpdated { get; private set; }
 
-    public IReadOnlyCollection<StockTransaction> Transactions => _transactions.AsReadOnly();
-    public IReadOnlyCollection<StockReservation> Reservations => _reservations.AsReadOnly();
+    public ICollection<StockTransaction> Transactions => _transactions.AsReadOnly();
+    public ICollection<StockReservation> Reservations => _reservations.AsReadOnly();
 
     public void AddStock(int quantity, string reason)
     {

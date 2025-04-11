@@ -17,8 +17,6 @@ public class StockItemCreatedDomainEventHandler : INotificationHandler<StockItem
     StockItemCreatedDomainEvent notification, 
     CancellationToken cancellationToken)
     {
-        // Use StockItem create command for business here
-
         // Create StockItemCreatedIntegrationEvent
 
         string queueName = "";

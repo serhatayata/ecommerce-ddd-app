@@ -17,8 +17,6 @@ public class StockReservedDomainEventHandler : INotificationHandler<StockReserve
     StockReservedDomainEvent notification, 
     CancellationToken cancellationToken)
     {
-        // Use Stock reserve command for business here
-
         // Create StockReservedIntegrationEvent here
 
         var queueName = "";

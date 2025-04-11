@@ -81,6 +81,28 @@
             "launchUrl": "scalar/v1",
             "applicationUrl": "http://localhost:5004",
             "console": "internalConsole"
+        },
+        {
+            "name": "Stock API",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-stock",
+            "program": "${workspaceFolder}/src/Stock/Stock.Api/bin/Debug/net9.0/Stock.Api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/Stock/Stock.Api",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(http://\\S+)",
+                "uriFormat": "%s/scalar/v1"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_URLS": "http://localhost:5005"
+            },
+            "launchUrl": "scalar/v1",
+            "applicationUrl": "http://localhost:5005",
+            "console": "internalConsole"
         }
     ],
     "compounds": [
@@ -102,7 +124,11 @@
         },
         {
             "name": "All Services",
-            "configurations": ["Identity API", "Notification Worker", "ProductCatalog API", "Shipping API"]
+            "configurations": ["Identity API", "Notification Worker", "ProductCatalog API", "Shipping API", "Stock API"]
+        },
+        {
+            "name": "Stock API",
+            "configurations": ["Stock API"]
         }
     ]
 }

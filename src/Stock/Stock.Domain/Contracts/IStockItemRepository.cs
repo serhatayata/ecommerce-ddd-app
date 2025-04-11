@@ -21,4 +21,6 @@ public interface IStockItemRepository : IRepository<StockItem>
     Task DeleteTransactionAsync(int id, CancellationToken cancellationToken = default);
     Task<IEnumerable<StockTransaction>> GetTransactionsByStockItemIdAsync(int stockItemId, CancellationToken cancellationToken = default);
     #endregion
+
+    Task<StockItem> GetByIdWithReservationsAsync(int id, CancellationToken cancellationToken);
 }

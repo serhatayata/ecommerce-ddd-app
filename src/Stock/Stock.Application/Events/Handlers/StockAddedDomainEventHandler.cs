@@ -17,8 +17,6 @@ public class StockAddedDomainEventHandler : INotificationHandler<StockAddedDomai
     StockAddedDomainEvent notification, 
     CancellationToken cancellationToken)
     {
-        // Use Stock add command for business here
-
         // Create StockAddedIntegrationEvent here
 
         string queueName = "";
