@@ -21,13 +21,6 @@ builder.Services.AddMassTransit(x =>
         cfg.ReceiveEndpoint(sendVerificationEmailQueueName, e =>
         {
             e.ConfigureConsumer<SendVerificationEmailRequestEventConsumer>(context);
-            
-            var sendVerificationEmailExchangeName = MessageBrokerExtensions.GetExchangeName<SendVerificationEmailRequestEvent>();
-            e.Bind(sendVerificationEmailExchangeName, x =>
-            {
-                x.ExchangeType = "fanout";
-                x.Durable = true;
-            });
         });
         #endregion
     });

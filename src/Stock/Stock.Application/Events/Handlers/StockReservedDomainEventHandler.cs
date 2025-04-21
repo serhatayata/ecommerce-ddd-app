@@ -1,28 +1,28 @@
-using Common.Application.Extensions;
-using MassTransit;
 using MediatR;
 using Stock.Domain.Events;
+using Common.Domain.Events.Stocks;
 
 namespace Stock.Application.Events.Handlers;
 
 public class StockReservedDomainEventHandler : INotificationHandler<StockReservedDomainEvent>
 {
-    private readonly ISendEndpointProvider _sendEndpointProvider;
+    private readonly IMediator _mediator;
 
-    public StockReservedDomainEventHandler(
-    ISendEndpointProvider sendEndpointProvider)
-        => _sendEndpointProvider = sendEndpointProvider;
+    public StockReservedDomainEventHandler(IMediator mediator)
+        => _mediator = mediator;
 
     public async Task Handle(
-    StockReservedDomainEvent notification, 
-    CancellationToken cancellationToken)
+        StockReservedDomainEvent notification, 
+        CancellationToken cancellationToken)
     {
-        // Create StockReservedIntegrationEvent here
+        var integrationEvent = new StockReservedEvent(
+            notification.CorrelationId,
+            notification.StockItemId,
+            notification.OrderId,
+            notification.ReservedQuantity,
+            DateTime.UtcNow
+        );
 
-        var queueName = "";
-
-        ISendEndpoint sendEndpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{queueName}"));
-
-        await sendEndpoint.Send(notification, cancellationToken);
+        await _mediator.Publish(integrationEvent, cancellationToken);
     }
 }

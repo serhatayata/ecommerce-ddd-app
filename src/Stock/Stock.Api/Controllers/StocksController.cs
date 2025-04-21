@@ -1,6 +1,7 @@
 using Common.Api.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Stock.Application.Commands.StockItems.StockAdd;
+using Stock.Application.Commands.StockItems.StockItemCreate;
 using Stock.Application.Commands.StockReservations.StockReserve;
 using Stock.Application.Queries.StockItems.Common;
 using Stock.Application.Queries.StockItems.Details;
@@ -25,6 +26,12 @@ public class StocksController : ApiController
     [Route("reserve")]
     public async Task<ActionResult<StockReserveResponse>> ReserveStock(
         [FromBody] StockReserveCommand command)
+        => await Send(command);
+
+    [HttpPost]
+    [Route("create")]
+    public async Task<ActionResult<StockItemCreateResponse>> CreateStockItem(
+        [FromBody] StockItemCreateCommand command)
         => await Send(command);
 
     [HttpGet("{id}")]

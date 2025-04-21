@@ -1,13 +1,15 @@
+using MassTransit;
 using MediatR;
 using Stock.Domain.Contracts;
 
 namespace Stock.Application.Commands.StockReservations.StockReserve;
 
-public class StockReserveCommand : IRequest<StockReserveResponse>
+public class StockReserveCommand : IRequest<StockReserveResponse>, CorrelatedBy<Guid?>
 {
     public int StockItemId { get; set; }
     public int ReservedQuantity { get; set; }
     public int OrderId { get; set; }
+    public Guid? CorrelationId { get; set; }
 
     public class StockReserveCommandHandler : IRequestHandler<StockReserveCommand, StockReserveResponse>
     {
@@ -20,6 +22,8 @@ public class StockReserveCommand : IRequest<StockReserveResponse>
 
         public async Task<StockReserveResponse> Handle(StockReserveCommand request, CancellationToken cancellationToken)
         {
+            BURADA Integration event atıcaz
+
             var stockItem = await _stockItemRepository.GetByIdAsync(request.StockItemId, cancellationToken);
 
             if (stockItem == null)

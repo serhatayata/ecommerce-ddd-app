@@ -3,11 +3,11 @@ namespace Common.Domain.Events.Stocks;
 public sealed record StockAddedEvent : IntegrationEvent
 {
     public StockAddedEvent(
-        Guid correlationId,
+        Guid? correlationId,
         int stockItemId,
         int quantity,
         DateTime addedDate) 
-        : base(correlationId, DateTime.UtcNow)
+        : base(correlationId, addedDate)
     {
         StockItemId = stockItemId;
         Quantity = quantity;

@@ -1,6 +1,9 @@
+using MassTransit;
+using MediatR;
+
 namespace Common.Domain.Events;
 
-public abstract record IntegrationEvent
+public abstract record IntegrationEvent : INotification, CorrelatedBy<Guid>
 {
     protected IntegrationEvent()
     {
@@ -9,10 +12,10 @@ public abstract record IntegrationEvent
     }
 
     protected IntegrationEvent(
-    Guid correlationId, 
+    Guid? correlationId, 
     DateTime createDate)
     {
-        CorrelationId = correlationId;
+        CorrelationId = correlationId ?? Guid.NewGuid();
         CreationDate = createDate;
     }
 

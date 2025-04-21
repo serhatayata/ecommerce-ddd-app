@@ -1,5 +1,4 @@
-using Common.Application.Extensions;
-using MassTransit;
+using Common.Domain.Events.Stocks;
 using MediatR;
 using Stock.Domain.Events;
 
@@ -7,22 +6,22 @@ namespace Stock.Application.Events.Handlers;
 
 public class StockAddedDomainEventHandler : INotificationHandler<StockAddedDomainEvent>
 {
-    private readonly ISendEndpointProvider _sendEndpointProvider;
+    private readonly IMediator _mediator;
 
     public StockAddedDomainEventHandler(
-    ISendEndpointProvider sendEndpointProvider)
-        => _sendEndpointProvider = sendEndpointProvider;
+    IMediator mediator)
+        => _mediator = mediator;
 
     public async Task Handle(
     StockAddedDomainEvent notification, 
     CancellationToken cancellationToken)
     {
-        // Create StockAddedIntegrationEvent here
+        var stockAddedEvent = new StockAddedEvent(
+            notification.CorrelationId,
+            notification.StockItemId,
+            notification.AddedQuantity,
+            notification.OccurredOn);
 
-        string queueName = "";
-
-        ISendEndpoint sendEndpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{queueName}"));
-
-        await sendEndpoint.Send(notification, cancellationToken);
+        await _mediator.Publish(stockAddedEvent, cancellationToken);
     }
 }

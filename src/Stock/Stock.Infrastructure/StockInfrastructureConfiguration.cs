@@ -71,54 +71,7 @@ public static class StockInfrastructureConfiguration
         {
             m.UsingRabbitMq((context, cfg) =>
             {
-                #region StockAddedEvent
-                var stockAddedEventName = MessageBrokerExtensions.GetQueueName<StockAddedEvent>();
-                cfg.ReceiveEndpoint(stockAddedEventName, e =>
-                {
-                    var exchangeName = MessageBrokerExtensions.GetExchangeName<StockAddedEvent>();
-                    e.Bind(exchangeName, x =>
-                    {
-                        x.ExchangeType = "fanout";
-                        x.Durable = true;
-                    });
-                });
-                #endregion
-                #region StockRemovedEvent
-                var stockRemovedEventName = MessageBrokerExtensions.GetQueueName<StockRemovedEvent>();
-                cfg.ReceiveEndpoint(stockRemovedEventName, e =>
-                {
-                    var exchangeName = MessageBrokerExtensions.GetExchangeName<StockRemovedEvent>();
-                    e.Bind(exchangeName, x =>
-                    {
-                        x.ExchangeType = "fanout";
-                        x.Durable = true;
-                    });
-                });
-                #endregion
-                #region StockReservedEvent
-                var stockReservedEventName = MessageBrokerExtensions.GetQueueName<StockReservedEvent>();
-                cfg.ReceiveEndpoint(stockReservedEventName, e =>
-                {
-                    var exchangeName = MessageBrokerExtensions.GetExchangeName<StockReservedEvent>();
-                    e.Bind(exchangeName, x =>
-                    {
-                        x.ExchangeType = "fanout";
-                        x.Durable = true;
-                    });
-                });
-                #endregion
-                #region StockItemCreatedEvent
-                var stockItemCreatedEventName = MessageBrokerExtensions.GetQueueName<StockItemCreatedEvent>();
-                cfg.ReceiveEndpoint(stockItemCreatedEventName, e =>
-                {
-                    var exchangeName = MessageBrokerExtensions.GetExchangeName<StockItemCreatedEvent>();
-                    e.Bind(exchangeName, x =>
-                    {
-                        x.ExchangeType = "fanout";
-                        x.Durable = true;
-                    });
-                });
-                #endregion
+
             });
         });
     }
