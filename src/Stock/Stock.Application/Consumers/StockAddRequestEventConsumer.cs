@@ -30,14 +30,7 @@ public class StockAddRequestEventConsumer : IConsumer<StockAddRequestEvent>
 
         try
         {
-            var result = await _mediator.Send(new StockAddCommand() { StockItemId = message.StockItemId });
-
-            if (result != null)
-                await _publishEndpoint.Publish(new StockAddedEvent(
-                    message.CorrelationId,
-                    message.StockItemId,
-                    message.AddedQuantity,
-                    DateTime.Now));
+            _ = await _mediator.Send(new StockAddCommand() { StockItemId = message.StockItemId });
         }
         catch (Exception ex)
         {

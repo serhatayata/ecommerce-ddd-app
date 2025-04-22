@@ -30,20 +30,12 @@ public class StockReserveRequestEventConsumer : IConsumer<StockReserveRequestEve
 
         try
         {
-            var result = await _mediator.Send(new StockReserveCommand() 
+            _ = await _mediator.Send(new StockReserveCommand() 
             {  
                 StockItemId = message.StockItemId, 
                 ReservedQuantity = message.ReservedQuantity, 
                 OrderId = message.OrderId
             });
-
-            if (result != null)
-                await _publishEndpoint.Publish(new StockReservedEvent(
-                    message.CorrelationId,
-                    message.StockItemId,
-                    message.OrderId,
-                    message.ReservedQuantity,
-                    message.CreationDate));
         }
         catch (Exception ex)
         {

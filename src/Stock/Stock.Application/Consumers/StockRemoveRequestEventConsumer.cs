@@ -29,18 +29,11 @@ public class StockRemoveRequestEventConsumer : IConsumer<StockRemoveRequestEvent
 
         try
         {
-            var result = await _mediator.Send(new StockRemoveCommand()
+            _ = await _mediator.Send(new StockRemoveCommand()
             {
                 StockItemId = message.StockItemId,
                 RemovedQuantity = message.RemovedQuantity
             });
-
-            if (result != null)
-                await _publishEndpoint.Publish(new StockRemovedEvent(
-                    message.CorrelationId,
-                    message.StockItemId,
-                    message.RemovedQuantity,
-                    message.CreationDate));
         }
         catch (Exception ex)
         {

@@ -29,7 +29,7 @@ public class StockItemCreateRequestEventConsumer : IConsumer<StockItemCreateRequ
 
         try
         {
-            var result = await _mediator.Send(new StockItemCreateCommand() 
+            _ = await _mediator.Send(new StockItemCreateCommand() 
             { 
                 ProductId = message.ProductId,
                 InitialQuantity = message.Quantity,
@@ -39,17 +39,6 @@ public class StockItemCreateRequestEventConsumer : IConsumer<StockItemCreateRequ
                 Bin = message.Bin,
                 CreatedDate = message.CreationDate
             });
-
-            if (result?.Id != null)
-                await _publishEndpoint.Publish(new StockItemCreatedEvent(
-                    message.CorrelationId,
-                    message.ProductId,
-                    message.Quantity,
-                    message.Warehouse,
-                    message.Aisle,
-                    message.Shelf,
-                    message.Bin,
-                    message.CreationDate));
         }
         catch (Exception ex)
         {
