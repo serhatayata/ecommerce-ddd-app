@@ -1,4 +1,4 @@
-using Common.Domain.Models;
+using Common.Domain.ValueObjects;
 
 namespace Stock.Domain.Models.Stocks;
 

@@ -1,4 +1,5 @@
 using Common.Domain.Models;
+using Common.Domain.ValueObjects;
 using ProductCatalog.Domain.Events;
 using ProductCatalog.Domain.Models.Brands;
 using ProductCatalog.Domain.Models.Categories;

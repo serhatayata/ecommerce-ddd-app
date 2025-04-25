@@ -1,8 +1,8 @@
 using Common.Application.Models;
+using Common.Domain.ValueObjects;
 using MediatR;
 using ProductCatalog.Application.Models.Products;
 using ProductCatalog.Domain.Contracts;
-using ProductCatalog.Domain.Models.Products;
 
 namespace ProductCatalog.Application.Commands.Products.Update;
 

@@ -1,6 +1,4 @@
-using Common.Domain.Models;
-
-namespace ProductCatalog.Domain.Models.Products;
+namespace Common.Domain.ValueObjects;
 
 public sealed class Money : ValueObject
 {
@@ -10,7 +8,7 @@ public sealed class Money : ValueObject
     {
         if (amount < 0)
             throw new ArgumentException("Price cannot be negative", nameof(amount));
-            
+
         Amount = amount;
     }
 

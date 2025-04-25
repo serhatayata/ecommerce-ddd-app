@@ -1,3 +1,4 @@
+using Common.Domain.ValueObjects;
 using MediatR;
 using ProductCatalog.Application.Models.Products;
 using ProductCatalog.Domain.Contracts;

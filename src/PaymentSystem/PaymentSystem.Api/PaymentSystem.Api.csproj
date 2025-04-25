@@ -10,6 +10,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Common\Common.Api\Common.Api.csproj" />
-    <ProjectReference Include="..\Payment.Application\Payment.Application.csproj" />
+    <ProjectReference Include="..\PaymentSystem.Application\PaymentSystem.Application.csproj" />
   </ItemGroup>
 </Project>

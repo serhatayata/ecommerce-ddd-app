@@ -1,7 +1,7 @@
 using System.Reflection;
 using Common.Domain.SharedKernel;
 
-namespace Common.Domain.Models;
+namespace Common.Domain.ValueObjects;
 
 public abstract class ValueObject : IEquatable<ValueObject>
 {

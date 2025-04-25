@@ -1,4 +1,5 @@
 using Common.Domain.Models;
+using Common.Domain.ValueObjects;
 
 namespace ProductCatalog.Domain.Models.Suppliers;
 
