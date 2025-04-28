@@ -5,8 +5,16 @@ namespace PaymentSystem.Domain.Models;
 
 public class Payment : Entity, IAggregateRoot
 {
-    public Payment(decimal amount, PaymentMethod method)
+    public Payment()
     {
+    }
+
+    public Payment(
+    int orderId, 
+    decimal amount, 
+    PaymentMethod method)
+    {
+        OrderId = orderId;
         Amount = Money.From(amount);
         Method = method;
         Status = PaymentStatus.Pending;
@@ -14,6 +22,7 @@ public class Payment : Entity, IAggregateRoot
         Transactions = new List<PaymentTransaction>();
     }
 
+    public int OrderId { get; private set; }
     public Money Amount { get; private set; }
     public PaymentMethod Method { get; private set; }
     public PaymentStatus Status { get; private set; }

@@ -19,15 +19,15 @@ public class PaymentSystemDbInitializer : DbInitializer
 
         if (!_dbContext.Payments.Any())
         {
-            var payment1 = new Payment(100.00m, PaymentMethod.CreditCard);
+            var payment1 = new Payment(1, 100.00m, PaymentMethod.CreditCard);
             payment1.MarkAsCompleted();
             payment1.Transactions.Add(new PaymentTransaction(100.00m, DateTime.UtcNow, "TXN1001"));
 
-            var payment2 = new Payment(250.50m, PaymentMethod.PayPal);
+            var payment2 = new Payment(2, 250.50m, PaymentMethod.PayPal);
             payment2.MarkAsFailed();
             payment2.Transactions.Add(new PaymentTransaction(250.50m, DateTime.UtcNow, "TXN1002"));
 
-            var payment3 = new Payment(75.25m, PaymentMethod.BankTransfer);
+            var payment3 = new Payment(3, 75.25m, PaymentMethod.BankTransfer);
             
             payment3.Transactions.Add(new PaymentTransaction(75.25m, DateTime.UtcNow, "TXN1003"));
 

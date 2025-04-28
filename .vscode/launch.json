@@ -103,6 +103,29 @@
             "launchUrl": "scalar/v1",
             "applicationUrl": "http://localhost:5005",
             "console": "internalConsole"
+        },
+        // PaymentSystem API configuration
+        {
+            "name": "PaymentSystem API",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-payment-system",
+            "program": "${workspaceFolder}/src/PaymentSystem/PaymentSystem.Api/bin/Debug/net9.0/PaymentSystem.Api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/PaymentSystem/PaymentSystem.Api",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(http://\\S+)",
+                "uriFormat": "%s/scalar/v1"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_URLS": "http://localhost:5002"
+            },
+            "launchUrl": "scalar/v1",
+            "applicationUrl": "http://localhost:5002",
+            "console": "internalConsole"
         }
     ],
     "compounds": [
@@ -129,6 +152,11 @@
         {
             "name": "Stock API",
             "configurations": ["Stock API"]
+        },
+        // PaymentSystem API compound
+        {
+            "name": "PaymentSystem API",
+            "configurations": ["PaymentSystem API"]
         }
     ]
 }

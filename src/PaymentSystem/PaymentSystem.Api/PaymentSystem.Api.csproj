@@ -9,6 +9,7 @@
     <PackageReference Include="Scalar.AspNetCore" Version="2.0.14"/>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PaymentSystem.IoC\PaymentSystem.IoC.csproj" />
     <ProjectReference Include="..\..\Common\Common.Api\Common.Api.csproj" />
     <ProjectReference Include="..\PaymentSystem.Application\PaymentSystem.Application.csproj" />
   </ItemGroup>
