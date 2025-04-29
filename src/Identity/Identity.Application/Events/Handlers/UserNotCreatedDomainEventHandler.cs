@@ -1,4 +1,4 @@
-using Common.Application.Extensions;
+using Common.Domain.Events.Identity;
 using Identity.Domain.Events;
 using MassTransit;
 using MediatR;
@@ -7,21 +7,22 @@ namespace Identity.Application.Events.Handlers;
 
 public class UserNotCreatedDomainEventHandler : INotificationHandler<UserNotCreatedDomainEvent>
 {
-    private readonly ISendEndpointProvider _sendEndpointProvider;
+    private readonly IPublishEndpoint _publishEndpoint;
 
     public UserNotCreatedDomainEventHandler(
-    ISendEndpointProvider sendEndpointProvider)
-        => _sendEndpointProvider = sendEndpointProvider;
+    IPublishEndpoint publishEndpoint)
+        => _publishEndpoint = publishEndpoint;
 
     public async Task Handle(
     UserNotCreatedDomainEvent notification, 
     CancellationToken cancellationToken)
     {
-        var eventType = notification.GetType();
-        var queueName = MessageBrokerExtensions.GetQueueName(eventType);
+        var userNotCreatedEvent = new UserNotCreatedEvent(
+            notification.CorrelationId,
+            notification.Reason,
+            notification.Email
+        );
 
-        ISendEndpoint sendEndpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{queueName}"));
-
-        await sendEndpoint.Send(notification, cancellationToken);
+        await _publishEndpoint.Publish(userNotCreatedEvent, cancellationToken);
     }
 }

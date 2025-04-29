@@ -1,6 +1,6 @@
 using MassTransit;
-using Identity.Domain.Events;
 using Common.Domain.Events.Notification;
+using Common.Domain.Events.Identity;
 
 namespace Identity.Application.Sagas.UserRegistration;
 
@@ -10,11 +10,9 @@ public class UserRegistrationSaga : MassTransitStateMachine<UserRegistrationStat
     public State Failed { get; private set; }
     public State Completed { get; private set; }
 
-    // Domain Events
-    public Event<UserCreatedDomainEvent> UserCreatedDomainEvent { get; private set; }
-    public Event<UserNotCreatedDomainEvent> UserNotCreatedDomainEvent { get; private set; }
-
     //Integration Events
+    public Event<UserCreatedEvent> UserCreatedEvent { get; private set; }
+    public Event<UserNotCreatedEvent> UserNotCreatedEvent { get; private set; }
     public Event<EmailVerifiedEvent> EmailVerifiedEvent { get; private set; }
 
     public UserRegistrationSaga()
@@ -22,14 +20,14 @@ public class UserRegistrationSaga : MassTransitStateMachine<UserRegistrationStat
         InstanceState(x => x.CurrentState);
 
         //Domain events
-        Event(() => UserCreatedDomainEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
-        Event(() => UserNotCreatedDomainEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
+        Event(() => UserCreatedEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
+        Event(() => UserNotCreatedEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
 
         //Integration event
         Event(() => EmailVerifiedEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
 
         Initially(
-            When(UserCreatedDomainEvent)
+            When(UserCreatedEvent)
                 .Then(context =>
                 {
                     context.Saga.UserId = context.Message.UserId;
@@ -43,7 +41,7 @@ public class UserRegistrationSaga : MassTransitStateMachine<UserRegistrationStat
                     context.Saga.Email);
                 }),
             
-            When(UserNotCreatedDomainEvent)
+            When(UserNotCreatedEvent)
                 .Then(context =>
                 {
                     context.Saga.Email = context.Message.Email;
