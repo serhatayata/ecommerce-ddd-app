@@ -1,4 +1,4 @@
-namespace PaymentSystem.Domain.Models;
+namespace Common.Domain.ValueObjects;
 
 public enum PaymentMethod
 {

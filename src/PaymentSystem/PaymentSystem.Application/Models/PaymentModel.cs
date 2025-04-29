@@ -1,5 +1,6 @@
 using AutoMapper;
 using Common.Application.Mapping;
+using Common.Domain.ValueObjects;
 using PaymentSystem.Domain.Models;
 
 namespace PaymentSystem.Application.Models;

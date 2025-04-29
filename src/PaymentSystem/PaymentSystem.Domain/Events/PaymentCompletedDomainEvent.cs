@@ -1,27 +1,35 @@
+using System.Text.Json.Serialization;
 using Common.Domain.Events;
-using PaymentSystem.Domain.Models;
+using Common.Domain.ValueObjects;
 
 namespace PaymentSystem.Domain.Events;
 
 public sealed record PaymentCompletedDomainEvent : DomainEvent
 {
-    public Guid PaymentId { get; }
+    public int OrderId { get; }
+    public int PaymentId { get; }
     public decimal Amount { get; }
     public PaymentMethod Method { get; }
-    public Guid UserId { get; }
     public string TransactionId { get; }
 
+    [JsonConstructor]
+    public PaymentCompletedDomainEvent()
+    {
+    }
+
     public PaymentCompletedDomainEvent(
-        Guid paymentId,
+        int orderId,
+        int paymentId,
         decimal amount,
         PaymentMethod method,
-        Guid userId,
-        string transactionId)
+        string transactionId,
+        Guid? correlationId)
+        : base(correlationId)
     {
+        OrderId = orderId;
         PaymentId = paymentId;
         Amount = amount;
         Method = method;
-        UserId = userId;
         TransactionId = transactionId;
     }
 }
