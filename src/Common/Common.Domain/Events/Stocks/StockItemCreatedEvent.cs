@@ -3,16 +3,18 @@ namespace Common.Domain.Events.Stocks;
 public sealed record StockItemCreatedEvent : IntegrationEvent
 {
     public StockItemCreatedEvent(
-        Guid correlationId,
+        int stockItemId,
         int productId,
         int initialQuantity,
         string warehouse,
         string aisle,
         string shelf,
         string bin,
-        DateTime createdDate) 
+        DateTime createdDate,
+        Guid correlationId) 
         : base(correlationId, DateTime.UtcNow)
     {
+        StockItemId = stockItemId;
         ProductId = productId;
         InitialQuantity = initialQuantity;
         Warehouse = warehouse;
@@ -22,6 +24,7 @@ public sealed record StockItemCreatedEvent : IntegrationEvent
         CreatedDate = createdDate;
     }
 
+    public int StockItemId { get; set; }
     public int ProductId { get; set; }
     public int InitialQuantity { get; set; }
     public string Warehouse { get; set; }

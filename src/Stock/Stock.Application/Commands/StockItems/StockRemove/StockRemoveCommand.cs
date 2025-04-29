@@ -2,6 +2,7 @@ using Common.Domain.Events.Stocks;
 using MassTransit;
 using MediatR;
 using Stock.Domain.Contracts;
+using Stock.Domain.Events;
 
 namespace Stock.Application.Commands.StockItems.StockRemove;
 
@@ -14,11 +15,9 @@ public class StockRemoveCommand : IRequest<StockRemoveResponse>, CorrelatedBy<Gu
     public class StockRemoveCommandHandler : IRequestHandler<StockRemoveCommand, StockRemoveResponse>
     {
         private readonly IStockItemRepository _stockItemRepository;
-        private readonly IPublishEndpoint _publishEndpoint;
 
         public StockRemoveCommandHandler(
-            IStockItemRepository stockItemRepository,
-            IPublishEndpoint publishEndpoint)
+            IStockItemRepository stockItemRepository)
         {
             _stockItemRepository = stockItemRepository;
         }
@@ -32,17 +31,13 @@ public class StockRemoveCommand : IRequest<StockRemoveResponse>, CorrelatedBy<Gu
             if (stockItem == null)
                 return null;
 
-            stockItem.RemoveStock(request.RemovedQuantity, "Stock removed via command.");
-            await _stockItemRepository.SaveAsync(stockItem, cancellationToken);
-
-            var stockRemovedEvent = new StockRemovedEvent(
-                request.CorrelationId ?? Guid.NewGuid(),
-                request.StockItemId,
-                stockItem.Quantity,
-                DateTime.UtcNow);
+            stockItem.RemoveStock(
+                request.RemovedQuantity, 
+                "Stock removed via command.",
+                request.CorrelationId);
                 
-            await _publishEndpoint.Publish(stockRemovedEvent, cancellationToken);
-
+            await _stockItemRepository.SaveAsync(stockItem, cancellationToken);
+                
             return new StockRemoveResponse
             {
                 StockItemId = stockItem.Id,

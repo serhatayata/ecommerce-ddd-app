@@ -4,12 +4,19 @@ namespace Stock.Domain.Events;
 
 public sealed record StockRemovedDomainEvent : DomainEvent
 {
-    public int StockItemId { get; }
-    public int RemovedQuantity { get; }
-
-    public StockRemovedDomainEvent(int stockItemId, int removedQuantity)
+    public StockRemovedDomainEvent(
+        int stockItemId,
+        int quantity,
+        DateTime removedDate,
+        Guid? correlationId) 
+        : base(correlationId)
     {
         StockItemId = stockItemId;
-        RemovedQuantity = removedQuantity;
+        Quantity = quantity;
+        RemovedDate = removedDate;
     }
+
+    public int StockItemId { get; set; }
+    public int Quantity { get; set; }
+    public DateTime RemovedDate { get; set; }
 }

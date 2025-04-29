@@ -1,31 +1,33 @@
 using MediatR;
 using Stock.Domain.Events;
 using Common.Domain.Events.Stocks;
+using MassTransit; // Add this
 
 namespace Stock.Application.Events.Handlers;
 
 public class StockItemCreatedDomainEventHandler : INotificationHandler<StockItemCreatedDomainEvent>
 {
-    private readonly IMediator _mediator;
+    private readonly IPublishEndpoint _publishEndpoint; // Use MassTransit
 
-    public StockItemCreatedDomainEventHandler(IMediator mediator)
-        => _mediator = mediator;
+    public StockItemCreatedDomainEventHandler(IPublishEndpoint publishEndpoint)
+        => _publishEndpoint = publishEndpoint;
 
     public async Task Handle(
         StockItemCreatedDomainEvent notification,
         CancellationToken cancellationToken)
     {
         var integrationEvent = new StockItemCreatedEvent(
-            notification.CorrelationId,
+            notification.StockItemId,
             notification.ProductId,
             notification.InitialQuantity,
-            warehouse: "", // Gerekirse doldurun
-            aisle: "",
-            shelf: "",
-            bin: "",
-            createdDate: DateTime.UtcNow
+            warehouse: notification.Warehouse,
+            aisle: notification.Aisle,
+            shelf: notification.Shelf,
+            bin: notification.Bin,
+            createdDate: notification.CreatedDate,
+            notification.CorrelationId
         );
 
-        await _mediator.Publish(integrationEvent, cancellationToken);
+        await _publishEndpoint.Publish(integrationEvent, cancellationToken);
     }
 }

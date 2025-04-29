@@ -1,4 +1,3 @@
-using Common.Domain.Events.Stocks;
 using MassTransit;
 using MediatR;
 using Stock.Domain.Contracts;
@@ -20,14 +19,11 @@ public class StockItemCreateCommand : IRequest<StockItemCreateResponse>, Correla
     public class StockItemCreateCommandHandler : IRequestHandler<StockItemCreateCommand, StockItemCreateResponse>
     {
         private readonly IStockItemRepository _stockItemRepository;
-        private readonly IPublishEndpoint _publishEndpoint;
 
         public StockItemCreateCommandHandler(
-            IStockItemRepository stockItemRepository,
-            IPublishEndpoint publishEndpoint)
+            IStockItemRepository stockItemRepository)
         {
             _stockItemRepository = stockItemRepository;
-            _publishEndpoint = publishEndpoint;
         }
 
         public async Task<StockItemCreateResponse> Handle(
@@ -41,22 +37,10 @@ public class StockItemCreateCommand : IRequest<StockItemCreateResponse>, Correla
                     request.Warehouse,
                     request.Aisle,
                     request.Shelf,
-                    request.Bin));
+                    request.Bin),
+                request.CorrelationId);
 
             await _stockItemRepository.SaveAsync(stockItem, cancellationToken);
-
-            var stockItemCreatedEvent = new StockItemCreatedEvent(
-                request.CorrelationId ?? Guid.NewGuid(),
-                stockItem.ProductId,
-                stockItem.Quantity,
-                stockItem.Location.Warehouse,
-                stockItem.Location.Aisle,
-                stockItem.Location.Shelf,
-                stockItem.Location.Bin,
-                request.CreatedDate
-            );
-
-            await _publishEndpoint.Publish(stockItemCreatedEvent, cancellationToken);
 
             return new StockItemCreateResponse(stockItem.Id, stockItem.ProductId, stockItem.Quantity);
         }

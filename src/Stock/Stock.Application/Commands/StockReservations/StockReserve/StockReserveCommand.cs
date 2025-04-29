@@ -1,7 +1,7 @@
 using MassTransit;
 using MediatR;
 using Stock.Domain.Contracts;
-using Common.Domain.Events.Stocks;
+using Stock.Domain.Events;
 
 namespace Stock.Application.Commands.StockReservations.StockReserve;
 
@@ -15,14 +15,11 @@ public class StockReserveCommand : IRequest<StockReserveResponse>, CorrelatedBy<
     public class StockReserveCommandHandler : IRequestHandler<StockReserveCommand, StockReserveResponse>
     {
         private readonly IStockItemRepository _stockItemRepository;
-        private readonly IPublishEndpoint _publishEndpoint;
 
         public StockReserveCommandHandler(
-            IStockItemRepository stockItemRepository,
-            IPublishEndpoint publishEndpoint)
+            IStockItemRepository stockItemRepository)
         {
             _stockItemRepository = stockItemRepository;
-            _publishEndpoint = publishEndpoint;
         }
 
         public async Task<StockReserveResponse> Handle(StockReserveCommand request, CancellationToken cancellationToken)
@@ -32,18 +29,11 @@ public class StockReserveCommand : IRequest<StockReserveResponse>, CorrelatedBy<
             if (stockItem == null)
                 return null;
 
-            stockItem.ReserveStock(request.ReservedQuantity, request.OrderId);
-            await _stockItemRepository.UpdateAsync(stockItem, cancellationToken);
-
-            var stockReservedEvent = new StockReservedEvent(
-                request.CorrelationId ?? Guid.NewGuid(),
-                request.StockItemId,
+            stockItem.ReserveStock(
+                request.ReservedQuantity, 
                 request.OrderId,
-                request.ReservedQuantity,
-                DateTime.UtcNow
-            );
-
-            await _publishEndpoint.Publish(stockReservedEvent, cancellationToken);
+                request.CorrelationId);
+            await _stockItemRepository.UpdateAsync(stockItem, cancellationToken);
 
             return new StockReserveResponse(request.StockItemId, request.ReservedQuantity, request.OrderId);
         }

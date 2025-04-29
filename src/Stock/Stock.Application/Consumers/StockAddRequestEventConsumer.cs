@@ -10,16 +10,13 @@ public class StockAddRequestEventConsumer : IConsumer<StockAddRequestEvent>
 {
     private readonly ILogger<StockAddRequestEventConsumer> _logger;
     private readonly IMediator _mediator;
-    private readonly IPublishEndpoint _publishEndpoint;
 
     public StockAddRequestEventConsumer(
         ILogger<StockAddRequestEventConsumer> logger, 
-        IMediator mediator, 
-        IPublishEndpoint publishEndpoint)
+        IMediator mediator)
     {
         _logger = logger;
         _mediator = mediator;
-        _publishEndpoint = publishEndpoint;
     }
 
 

@@ -10,16 +10,13 @@ public class StockItemCreateRequestEventConsumer : IConsumer<StockItemCreateRequ
 {
     private readonly ILogger<StockItemCreateRequestEventConsumer> _logger;
     private readonly IMediator _mediator;
-    private readonly IPublishEndpoint _publishEndpoint;
 
     public StockItemCreateRequestEventConsumer(
         ILogger<StockItemCreateRequestEventConsumer> logger, 
-        IMediator mediator, 
-        IPublishEndpoint publishEndpoint)
+        IMediator mediator)
     {
         _logger = logger;
         _mediator = mediator;
-        _publishEndpoint = publishEndpoint;
     }
 
     public async Task Consume(ConsumeContext<StockItemCreateRequestEvent> context)

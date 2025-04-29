@@ -9,17 +9,14 @@ namespace Stock.Application.Consumers;
 public class StockReserveRequestEventConsumer : IConsumer<StockReserveRequestEvent>
 {
     private readonly ILogger<StockReserveRequestEventConsumer> _logger;
-    private readonly IPublishEndpoint _publishEndpoint;
     private readonly IMediator _mediator;
 
     public StockReserveRequestEventConsumer(
         ILogger<StockReserveRequestEventConsumer> logger, 
-        IMediator mediator, 
-        IPublishEndpoint publishEndpoint)
+        IMediator mediator)
     {
         _logger = logger;
         _mediator = mediator;
-        _publishEndpoint = publishEndpoint;
     }
 
     public async Task Consume(ConsumeContext<StockReserveRequestEvent> context)

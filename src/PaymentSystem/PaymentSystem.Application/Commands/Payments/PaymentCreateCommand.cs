@@ -17,14 +17,14 @@ public class PaymentCreateCommand : IRequest<PaymentCreateResponse>, CorrelatedB
     public class PaymentCreateCommandHandler : IRequestHandler<PaymentCreateCommand, PaymentCreateResponse>
     {
         private readonly IPaymentRepository _paymentRepository;
-        private readonly IPublishEndpoint _publishEndpoint;
+        private readonly IMediator _mediator;
 
         public PaymentCreateCommandHandler(
             IPaymentRepository paymentRepository,
-            IPublishEndpoint publishEndpoint)
+            IMediator mediator)
         {
             _paymentRepository = paymentRepository;
-            _publishEndpoint = publishEndpoint;
+            _mediator = mediator;
         }
 
         public async Task<PaymentCreateResponse> Handle(
@@ -67,7 +67,7 @@ public class PaymentCreateCommand : IRequest<PaymentCreateResponse>, CorrelatedB
                     request.CorrelationId
                 );
 
-                await _publishEndpoint.Publish(paymentFailedEvent, cancellationToken);
+                await _mediator.Publish(paymentFailedEvent, cancellationToken);
             }
             else if (transaction.Status == PaymentStatus.Completed)
             {
@@ -80,7 +80,7 @@ public class PaymentCreateCommand : IRequest<PaymentCreateResponse>, CorrelatedB
                     request.CorrelationId
                 );
 
-                await _publishEndpoint.Publish(paymentCompletedEvent, cancellationToken);
+                await _mediator.Publish(paymentCompletedEvent, cancellationToken);
             }
 
             return new PaymentCreateResponse

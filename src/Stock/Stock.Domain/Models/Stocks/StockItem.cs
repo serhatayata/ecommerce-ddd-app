@@ -13,7 +13,8 @@ public class StockItem : Entity, IAggregateRoot
     public StockItem(
         int productId,
         int quantity,
-        Location location)
+        Location location,
+        Guid? correlationId = null)
     {
         ProductId = productId;
         Quantity = quantity;
@@ -21,7 +22,7 @@ public class StockItem : Entity, IAggregateRoot
         Status = StockStatus.Available;
         LastUpdated = DateTime.UtcNow;
 
-        AddEvent(new StockItemCreatedDomainEvent(Id, ProductId, Quantity));
+        AddEvent(new StockItemCreatedDomainEvent(Id, ProductId, Quantity, Location.Warehouse, Location.Aisle, Location.Shelf, Location.Bin, LastUpdated, correlationId));
     }
 
     public int ProductId { get; private set; }
@@ -33,7 +34,10 @@ public class StockItem : Entity, IAggregateRoot
     public ICollection<StockTransaction> Transactions => _transactions.AsReadOnly();
     public ICollection<StockReservation> Reservations => _reservations.AsReadOnly();
 
-    public void AddStock(int quantity, string reason)
+    public void AddStock(
+    int quantity, 
+    string reason, 
+    Guid? correlationId = null)
     {
         if (quantity <= 0)
             throw new ArgumentException("Quantity must be positive", nameof(quantity));
@@ -44,10 +48,13 @@ public class StockItem : Entity, IAggregateRoot
         var transaction = new StockTransaction(Id, quantity, StockTransactionType.Addition, reason);
         _transactions.Add(transaction);
 
-        AddEvent(new StockAddedDomainEvent(Id, quantity));
+        AddEvent(new StockAddedDomainEvent(Id, quantity, correlationId));
     }
 
-    public void RemoveStock(int quantity, string reason)
+    public void RemoveStock(
+    int quantity, 
+    string reason,
+    Guid? correlationId = null)
     {
         if (quantity <= 0)
             throw new ArgumentException("Quantity must be positive", nameof(quantity));
@@ -61,10 +68,13 @@ public class StockItem : Entity, IAggregateRoot
         var transaction = new StockTransaction(Id, quantity, StockTransactionType.Removal, reason);
         _transactions.Add(transaction);
 
-        AddEvent(new StockRemovedDomainEvent(Id, quantity));
+        AddEvent(new StockRemovedDomainEvent(Id, quantity, DateTime.UtcNow, correlationId));
     }
 
-    public void ReserveStock(int quantity, int orderId)
+    public void ReserveStock(
+    int quantity, 
+    int orderId,
+    Guid? correlationId = null)
     {
         if (GetAvailableQuantity() < quantity)
             throw new InvalidOperationException("Insufficient stock for reservation");
@@ -72,7 +82,7 @@ public class StockItem : Entity, IAggregateRoot
         var reservation = new StockReservation(Id, orderId, quantity);
         _reservations.Add(reservation);
 
-        AddEvent(new StockReservedDomainEvent(Id, quantity, orderId));
+        AddEvent(new StockReservedDomainEvent(Id, quantity, orderId, DateTime.UtcNow, correlationId));
     }
 
     public int GetAvailableQuantity()

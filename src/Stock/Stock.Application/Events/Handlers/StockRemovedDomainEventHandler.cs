@@ -1,16 +1,16 @@
 using MediatR;
 using Stock.Domain.Events;
 using Common.Domain.Events.Stocks;
+using MassTransit;
 
 namespace Stock.Application.Events.Handlers;
 
 public class StockRemovedDomainEventHandler : INotificationHandler<StockRemovedDomainEvent>
 {
-    private readonly IMediator _mediator;
+    private readonly IPublishEndpoint _publishEndpoint;
 
-    public StockRemovedDomainEventHandler(
-        IMediator mediator)
-        => _mediator = mediator;
+    public StockRemovedDomainEventHandler(IPublishEndpoint publishEndpoint)
+        => _publishEndpoint = publishEndpoint;
 
     public async Task Handle(
         StockRemovedDomainEvent notification, 
@@ -19,10 +19,10 @@ public class StockRemovedDomainEventHandler : INotificationHandler<StockRemovedD
         var integrationEvent = new StockRemovedEvent(
             notification.CorrelationId,
             notification.StockItemId,
-            notification.RemovedQuantity,
-            DateTime.UtcNow
+            notification.Quantity,
+            notification.RemovedDate
         );
 
-        await _mediator.Publish(integrationEvent, cancellationToken);
+        await _publishEndpoint.Publish(integrationEvent, cancellationToken);
     }
 }
