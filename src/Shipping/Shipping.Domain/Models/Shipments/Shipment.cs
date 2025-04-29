@@ -1,4 +1,5 @@
 using Common.Domain.Models;
+using Shipping.Domain.Events;
 
 namespace Shipping.Domain.Models.Shipments;
 
@@ -42,17 +43,31 @@ public class Shipment : Entity, IAggregateRoot
         ShippedAt = DateTime.UtcNow;
     }
     
-    public void UpdateStatus(ShipmentStatus newStatus)
+    public void UpdateStatus(
+    ShipmentStatus newStatus, 
+    Guid? correlationId = null)
     {
         Status = newStatus;
-        
+
         switch (newStatus)
         {
             case ShipmentStatus.Shipped:
                 ShippedAt = DateTime.UtcNow;
+                AddEvent(new ShipmentShippedDomainEvent(
+                    Id,
+                    TrackingNumber,
+                    ShippedAt.Value,
+                    correlationId
+                ));
                 break;
             case ShipmentStatus.Delivered:
                 DeliveredAt = DateTime.UtcNow;
+                AddEvent(new ShipmentDeliveredDomainEvent(
+                    Id,
+                    TrackingNumber,
+                    DeliveredAt.Value,
+                    correlationId
+                ));
                 break;
         }
     }

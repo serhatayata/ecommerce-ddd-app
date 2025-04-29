@@ -8,6 +8,8 @@ namespace Shipping.Application.Commands.Shipments.Ship;
 public class ShipShipmentCommand : IRequest<Result>
 {
     public int ShipmentId { get; set; }
+    public Guid? CorrelationId { get; set; }
+
 
     public class ShipShipmentCommandHandler : IRequestHandler<ShipShipmentCommand, Result>
     {
@@ -25,7 +27,7 @@ public class ShipShipmentCommand : IRequest<Result>
             if (shipment == null)
                 return Result.Failure(null);
 
-            shipment.UpdateStatus(ShipmentStatus.Shipped);
+            shipment.UpdateStatus(ShipmentStatus.Shipped, request.CorrelationId);
 
             await _shipmentRepository.SaveAsync(shipment, cancellationToken);
 

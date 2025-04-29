@@ -30,14 +30,7 @@ public class DeliverShipmentRequestEventConsumer : IConsumer<DeliverShipmentRequ
 
         try
         {
-            var result = await _mediator.Send(new DeliverShipmentCommand(){ ShipmentId = message.ShipmentId });
-
-            if (result.Succeeded)
-                await _publishEndpoint.Publish(new ShipmentDeliveredEvent(
-                    message.CorrelationId,
-                    message.ShipmentId,
-                    message.TrackingNumber,
-                    message.DeliveredDate));
+            _ = await _mediator.Send(new DeliverShipmentCommand(){ ShipmentId = message.ShipmentId });
         }
         catch (Exception ex)
         {
