@@ -1,4 +1,5 @@
 using Common.Domain.Models;
+using Common.Domain.ValueObjects;
 using OrderManagement.Domain.Events;
 
 namespace OrderManagement.Domain.Models.Orders;
@@ -8,10 +9,10 @@ public class Order : Entity, IAggregateRoot
     public HashSet<OrderItem> OrderItems { get; private set; }
 
     public Order(
-    Guid customerId, 
+    int userId, 
     DateTime orderDate)
     {
-        CustomerId = customerId;
+        UserId = userId;
         OrderDate = orderDate;
         OrderItems = new HashSet<OrderItem>();
         Status = OrderStatus.Pending;
@@ -19,7 +20,7 @@ public class Order : Entity, IAggregateRoot
         AddEvent(new OrderAddedDomainEvent());
     }
 
-    public Guid CustomerId { get; private set; }
+    public int UserId { get; private set; }
     public DateTime OrderDate { get; private set; }
     public OrderStatus Status { get; private set; }
 

@@ -4,9 +4,9 @@ namespace OrderManagement.Domain.Models.Orders;
 
 public class OrderItem : Entity
 {
-    internal OrderItem(
-    Guid orderId, 
-    Guid productId, 
+    public OrderItem(
+    int orderId, 
+    int productId, 
     int quantity)
     {
         OrderId = orderId;
@@ -14,11 +14,11 @@ public class OrderItem : Entity
         Quantity = quantity;
     }
 
-    public Guid OrderId { get; private set; }
-    public Guid ProductId { get; private set; }
+    public int OrderId { get; private set; }
+    public int ProductId { get; private set; }
     public int Quantity { get; private set; }
 
-    public OrderItem UpdateProductId(Guid productId)
+    public OrderItem UpdateProductId(int productId)
     {
         ProductId = productId;
         return this;

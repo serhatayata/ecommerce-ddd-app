@@ -1,36 +1,35 @@
 using System.Text.Json.Serialization;
 using Common.Domain.Events;
-using Common.Domain.ValueObjects;
 using MediatR;
 
 namespace OrderManagement.Domain.Events;
 
-public sealed record OrderAddedDomainEvent : DomainEvent, INotification
+public sealed record OrderAddFailedDomainEvent : DomainEvent, INotification
 {
     [JsonConstructor]
-    public OrderAddedDomainEvent()
+    public OrderAddFailedDomainEvent()
     {
     }
 
-    public OrderAddedDomainEvent(
-        int orderId,
+    public OrderAddFailedDomainEvent(
+        int? orderId,
         int userId,
         DateTime orderDate,
-        OrderStatus status,
         decimal totalAmount,
-        Guid? correlationId = null)
+        string errorMessage,
+        Guid? correlationId = null) 
         : base(correlationId)
     {
         OrderId = orderId;
         UserId = userId;
         OrderDate = orderDate;
-        Status = status;
         TotalAmount = totalAmount;
+        ErrorMessage = errorMessage;
     }
 
-    public int OrderId { get; init; }
     public int UserId { get; init; }
+    public int? OrderId { get; init; }
     public DateTime OrderDate { get; init; }
-    public OrderStatus Status { get; init; }
     public decimal TotalAmount { get; init; }
+    public string ErrorMessage { get; init; }
 }

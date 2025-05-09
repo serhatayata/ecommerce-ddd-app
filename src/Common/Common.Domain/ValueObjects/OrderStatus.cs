@@ -1,6 +1,6 @@
 using Common.Domain.Models;
 
-namespace OrderManagement.Domain.Models.Orders;
+namespace Common.Domain.ValueObjects;
 
 public class OrderStatus : Enumeration
 {

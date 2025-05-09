@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using OrderManagement.Domain.Models.Orders;
 
-namespace OrderManagement.Infrastructure.EntityConfigurations;
+namespace OrderManagement.Infrastructure.Persistence.EntityConfigurations;
 
 public class OrderEntityConfiguration : IEntityTypeConfiguration<Order>
 {
@@ -15,7 +15,7 @@ public class OrderEntityConfiguration : IEntityTypeConfiguration<Order>
             .HasColumnName("OrderId")
             .ValueGeneratedNever();
 
-        builder.Property(o => o.CustomerId)
+        builder.Property(o => o.UserId)
             .IsRequired();
 
         builder.Property(o => o.OrderDate)
@@ -23,7 +23,7 @@ public class OrderEntityConfiguration : IEntityTypeConfiguration<Order>
 
         builder.Property(o => o.Status)
             .IsRequired()
-            .HasColumnType("int");  // Explicitly specify int type
+            .HasColumnType("int");
 
         builder.HasMany(o => o.OrderItems)
             .WithOne()

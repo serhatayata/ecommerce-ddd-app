@@ -91,6 +91,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentSystem.Infrastructur
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentSystem.Api", "src\PaymentSystem\PaymentSystem.Api\PaymentSystem.Api.csproj", "{C839E543-A374-4B4C-9189-05540DEF2CF6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OrderManagement", "OrderManagement", "{8B7B0C36-AC77-4E4F-87B7-3713839FF777}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderManagement.IoC", "src\OrderManagement\OrderManagement.IoC\OrderManagement.IoC.csproj", "{D2865E26-B19F-45FF-AD39-90454CCBD09C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -237,6 +241,10 @@ Global
 		{C839E543-A374-4B4C-9189-05540DEF2CF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C839E543-A374-4B4C-9189-05540DEF2CF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C839E543-A374-4B4C-9189-05540DEF2CF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2865E26-B19F-45FF-AD39-90454CCBD09C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2865E26-B19F-45FF-AD39-90454CCBD09C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2865E26-B19F-45FF-AD39-90454CCBD09C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2865E26-B19F-45FF-AD39-90454CCBD09C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -284,5 +292,7 @@ Global
 		{19082C56-3297-4560-B0A5-3EE1EF8E5C16} = {A2B2CA04-2D7E-4711-AE23-E968162086CC}
 		{8CDC424D-CC26-4D40-81A1-BB204B26603A} = {A2B2CA04-2D7E-4711-AE23-E968162086CC}
 		{C839E543-A374-4B4C-9189-05540DEF2CF6} = {A2B2CA04-2D7E-4711-AE23-E968162086CC}
+		{8B7B0C36-AC77-4E4F-87B7-3713839FF777} = {422283F8-3643-4812-ADD9-50DBB7288D74}
+		{D2865E26-B19F-45FF-AD39-90454CCBD09C} = {8B7B0C36-AC77-4E4F-87B7-3713839FF777}
 	EndGlobalSection
 EndGlobal
