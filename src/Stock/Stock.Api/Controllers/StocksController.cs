@@ -14,7 +14,7 @@ namespace Stock.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class StocksController : ApiController
+public class StocksController : BaseApiController
 {
     [HttpPost]
     [Route("add")]

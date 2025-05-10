@@ -11,7 +11,7 @@ namespace Identity.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class IdentityController : ApiController
+public class IdentityController : BaseApiController
 {
     [HttpPost]
     [Route(nameof(Register))]

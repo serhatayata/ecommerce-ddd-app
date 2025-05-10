@@ -11,5 +11,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Common\Common.Api\Common.Api.csproj" />
     <ProjectReference Include="..\OrderManagement.Application\OrderManagement.Application.csproj" />
+    <ProjectReference Include="..\OrderManagement.IoC\OrderManagement.IoC.csproj" />
   </ItemGroup>
 </Project>

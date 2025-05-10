@@ -1,5 +1,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using OrderManagement.Application;
+using OrderManagement.Domain;
+using OrderManagement.Infrastructure;
 
 namespace OrderManagement.IoC;
 

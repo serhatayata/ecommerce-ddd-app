@@ -17,7 +17,7 @@ namespace ProductCatalog.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ProductController : ApiController
+public class ProductController : BaseApiController
 {
     [HttpGet]
     [Route(nameof(GetById))]

@@ -13,7 +13,7 @@ namespace Shipping.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ShipmentController : ApiController
+public class ShipmentController : BaseApiController
 {
     private readonly IPublishEndpoint _publishEndpoint;
 

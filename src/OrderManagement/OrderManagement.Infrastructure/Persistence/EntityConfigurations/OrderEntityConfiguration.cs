@@ -1,3 +1,4 @@
+using Common.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using OrderManagement.Domain.Models.Orders;
 
@@ -12,8 +13,7 @@ public class OrderEntityConfiguration : IEntityTypeConfiguration<Order>
         builder.HasKey(o => o.Id);
 
         builder.Property(o => o.Id)
-            .HasColumnName("OrderId")
-            .ValueGeneratedNever();
+            .ValueGeneratedOnAdd();
 
         builder.Property(o => o.UserId)
             .IsRequired();
@@ -21,9 +21,13 @@ public class OrderEntityConfiguration : IEntityTypeConfiguration<Order>
         builder.Property(o => o.OrderDate)
             .IsRequired();
 
-        builder.Property(o => o.Status)
-            .IsRequired()
-            .HasColumnType("int");
+    builder.Property(o => o.Status)
+        .IsRequired()
+        .HasConversion(
+            v => v.Value,
+            v => OrderStatus.FromValue<OrderStatus>(v)
+        )
+        .HasColumnType("int");
 
         builder.HasMany(o => o.OrderItems)
             .WithOne()

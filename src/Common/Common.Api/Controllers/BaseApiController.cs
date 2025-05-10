@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Common.Api.Controllers;
 
-public abstract class ApiController : ControllerBase
+public abstract class BaseApiController : ControllerBase
 {
     protected const string Id = "{id}";
     protected const string PathSeparator = "/";

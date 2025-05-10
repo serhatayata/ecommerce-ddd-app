@@ -1,4 +1,5 @@
 using Common.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 using OrderManagement.Domain.Contracts;
 using OrderManagement.Domain.Models.Orders;
 using OrderManagement.Infrastructure.Persistence;
@@ -14,4 +15,11 @@ public class OrderRepository : EfRepository<Order, OrderDbContext>, IOrderReposi
     {
         _dbContext = dbContext;
     }
+
+    public async Task<Order> GetByIdWithItemsAsync(
+    int id, 
+    CancellationToken cancellationToken = default)
+        => await _dbContext.Orders
+            .Include(o => o.OrderItems)
+            .FirstOrDefaultAsync(o => o.Id == id, cancellationToken);
 }

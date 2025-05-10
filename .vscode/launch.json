@@ -126,6 +126,28 @@
             "launchUrl": "scalar/v1",
             "applicationUrl": "http://localhost:5002",
             "console": "internalConsole"
+        },
+        {
+            "name": "Order API",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-order",
+            "program": "${workspaceFolder}/src/OrderManagement/OrderManagement.Api/bin/Debug/net9.0/OrderManagement.Api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/OrderManagement/OrderManagement.Api",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(http://\\S+)",
+                "uriFormat": "%s/scalar/v1"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_URLS": "http://localhost:5001"
+            },
+            "launchUrl": "scalar/v1",
+            "applicationUrl": "http://localhost:5001",
+            "console": "internalConsole"
         }
     ],
     "compounds": [

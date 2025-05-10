@@ -1,10 +1,27 @@
+using System.Reflection;
+using Common.Infrastructure.Extensions;
+using FluentValidation;
+using OrderManagement.IoC;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddOpenApi();
+
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
+
+builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
+builder.Services.Register(configuration);
+
+builder.Services.AddMediatR(cfg => {
+    cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
+});
 
 var app = builder.Build();
 
@@ -14,8 +31,13 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
+app.InitializeDB();
+
+app.UseHttpsRedirection();
+
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseHttpsRedirection();
+
+app.MapControllers();
 
 app.Run();

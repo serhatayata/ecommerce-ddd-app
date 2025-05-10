@@ -1,6 +1,7 @@
 using System.Reflection;
 using Common.Domain.Repositories;
 using Common.Infrastructure.Persistence;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,15 +11,15 @@ namespace OrderManagement.Infrastructure;
 
 public static class OrderInfrastructureConfiguration
 {
-    public static IServiceCollection AddOrderInfrastructure(
+    public static IServiceCollection AddOrderManagementInfrastructure(
     this IServiceCollection services,
     IConfiguration configuration)
     {
         services
             .AddDatabase(configuration)
             .AddRepositories()
-            .AddTransient<IDbInitializer, OrderDbInitializer>();
-            // .AddSagaConfigurations(configuration);
+            .AddTransient<IDbInitializer, OrderDbInitializer>()
+            .AddQueueConfigurations();
 
         return services;
     }
@@ -58,20 +59,15 @@ public static class OrderInfrastructureConfiguration
         return services;
     }
 
-    // private static IServiceCollection AddSagaConfigurations(
-    // this IServiceCollection services,
-    // IConfiguration configuration)
-    // {
-    //     services.AddDbContext<OrderSagaDbContext>((srv, cfg) =>
-    //     {
-    //         cfg.UseSqlServer(connectionString: configuration.GetConnectionString("DefaultConnection"),
-    //                          sqlServerOptionsAction: sqlOpt =>
-    //                          {
-    //                              sqlOpt.MigrationsAssembly(Assembly.GetExecutingAssembly().GetName().Name);
-    //                              sqlOpt.MigrationsHistoryTable("__EFMigrationsHistory", "ordersaga");
-    //                          });
-    //     });
+    private static IServiceCollection AddQueueConfigurations(
+    this IServiceCollection services)
+    {
+        return services.AddMassTransit(m =>
+        {
+            m.UsingRabbitMq((context, cfg) =>
+            {
 
-    //     return services;
-    // }
+            });
+        });
+    }
 }

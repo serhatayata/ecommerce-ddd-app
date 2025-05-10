@@ -6,7 +6,7 @@ namespace OrderManagement.Domain;
 
 public static class OrderDomainConfiguration
 {
-    public static IServiceCollection AddIdentityDomain(
+    public static IServiceCollection AddOrderManagementDomain(
     this IServiceCollection services)
     {
         return services

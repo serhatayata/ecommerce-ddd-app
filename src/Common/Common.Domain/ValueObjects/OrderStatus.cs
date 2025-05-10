@@ -9,6 +9,7 @@ public class OrderStatus : Enumeration
     public static readonly OrderStatus Shipped = new(3, nameof(Shipped));
     public static readonly OrderStatus Delivered = new(4, nameof(Delivered));
     public static readonly OrderStatus Cancelled = new(5, nameof(Cancelled));
+    public static readonly OrderStatus Failed = new(6, nameof(Failed));
 
     private OrderStatus(int value, string name)
         : base(value, name)

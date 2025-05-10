@@ -10,7 +10,7 @@ namespace PaymentSystem.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PaymentsController : ApiController
+public class PaymentsController : BaseApiController
 {
     [HttpGet("{id}")]
     public async Task<ActionResult<PaymentResponse>> GetPayment(int id)

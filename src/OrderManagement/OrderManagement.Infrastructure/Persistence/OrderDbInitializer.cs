@@ -27,9 +27,9 @@ public class OrderDbInitializer : DbInitializer
                 orderDate: DateTime.UtcNow.AddDays(-1)
             );
 
-            var item1 = new OrderItem(order1.Id, 1, 2);
-            var item2 = new OrderItem(order1.Id, 2, 1);
-            var item3 = new OrderItem(order2.Id, 3, 5);
+            var item1 = new OrderItem(order1.Id, 1, 2, 10.0M);
+            var item2 = new OrderItem(order1.Id, 2, 1, 20.0M);
+            var item3 = new OrderItem(order2.Id, 3, 5, 30.0M);
 
             order1.OrderItems.Add(item1);
             order1.OrderItems.Add(item2);
