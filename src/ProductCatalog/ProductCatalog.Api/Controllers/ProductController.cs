@@ -29,6 +29,7 @@ public class ProductController : BaseApiController
     public async Task<ActionResult<CreateProductResponse>> Save([FromBody] CreateProductCommand request)
         => await Send(request);
 
+
     #region Brands
     [HttpGet]
     [Route("get-brand-by-id")]

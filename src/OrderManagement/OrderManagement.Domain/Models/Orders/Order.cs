@@ -29,4 +29,9 @@ public class Order : Entity, IAggregateRoot
         Status = status;
         return this;
     }
+
+    public void AddOrderItem(OrderItem orderItem)
+    {
+        OrderItems.Add(orderItem);
+    }
 }

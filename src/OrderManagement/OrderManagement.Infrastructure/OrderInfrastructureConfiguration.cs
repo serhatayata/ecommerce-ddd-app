@@ -5,7 +5,11 @@ using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using OrderManagement.Application.Services.Products;
+using OrderManagement.Domain.Contracts;
 using OrderManagement.Infrastructure.Persistence;
+using OrderManagement.Infrastructure.Repositories;
+using OrderManagement.Infrastructure.Services.Products;
 
 namespace OrderManagement.Infrastructure;
 
@@ -19,6 +23,8 @@ public static class OrderInfrastructureConfiguration
             .AddDatabase(configuration)
             .AddRepositories()
             .AddTransient<IDbInitializer, OrderDbInitializer>()
+            .AddTransient<IOrderRepository, OrderRepository>()
+            .AddTransient<IProductCatalogApiService, ProductCatalogApiService>()
             .AddQueueConfigurations();
 
         return services;

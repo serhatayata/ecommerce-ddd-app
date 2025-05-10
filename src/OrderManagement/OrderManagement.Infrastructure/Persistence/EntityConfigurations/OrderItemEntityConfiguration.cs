@@ -21,6 +21,14 @@ public class OrderItemEntityConfiguration : IEntityTypeConfiguration<OrderItem>
         builder.Property(oi => oi.Quantity)
             .IsRequired();
 
+        builder.OwnsOne(x => x.UnitPrice, priceBuilder =>
+        {
+            priceBuilder.Property(m => m.Amount)
+                .HasColumnName("UnitPrice")
+                .HasColumnType("decimal(18,2)")
+                .IsRequired();
+        });
+
         builder.HasOne<Order>()
             .WithMany(o => o.OrderItems)
             .HasForeignKey(oi => oi.OrderId)

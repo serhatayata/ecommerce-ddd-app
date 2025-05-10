@@ -23,6 +23,10 @@ builder.Services.AddMediatR(cfg => {
     cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
 });
 
+builder.Services.AddHttpClient("product-catalog", client => {
+    client.BaseAddress = new Uri(configuration["Services:ProductCatalog:BaseAddress"]);
+});
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

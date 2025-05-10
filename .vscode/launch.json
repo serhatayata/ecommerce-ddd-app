@@ -175,10 +175,13 @@
             "name": "Stock API",
             "configurations": ["Stock API"]
         },
-        // PaymentSystem API compound
         {
             "name": "PaymentSystem API",
             "configurations": ["PaymentSystem API"]
+        },
+        {
+            "name": "Order + ProductCatalog API",
+            "configurations": ["Order API", "ProductCatalog API"]
         }
     ]
 }
