@@ -15,11 +15,14 @@ public class StockReserveCommand : IRequest<StockReserveResponse>, CorrelatedBy<
     public class StockReserveCommandHandler : IRequestHandler<StockReserveCommand, StockReserveResponse>
     {
         private readonly IStockItemRepository _stockItemRepository;
+        private readonly IMediator _mediator;
 
         public StockReserveCommandHandler(
-            IStockItemRepository stockItemRepository)
+            IStockItemRepository stockItemRepository,
+            IMediator mediator)
         {
             _stockItemRepository = stockItemRepository;
+            _mediator = mediator;
         }
 
         public async Task<StockReserveResponse> Handle(StockReserveCommand request, CancellationToken cancellationToken)
@@ -33,7 +36,21 @@ public class StockReserveCommand : IRequest<StockReserveResponse>, CorrelatedBy<
                 request.ReservedQuantity, 
                 request.OrderId,
                 request.CorrelationId);
-            await _stockItemRepository.UpdateAsync(stockItem, cancellationToken);
+            var isUpdated = await _stockItemRepository.UpdateAsync(stockItem, cancellationToken) > 0;
+
+            if (!isUpdated)
+            {
+                await _mediator.Publish(new StockReserveFailedDomainEvent(
+                    request.StockItemId,
+                    request.OrderId,
+                    request.ReservedQuantity,
+                    DateTime.UtcNow,
+                    "Failed to reserve stock",
+                    request.CorrelationId
+                ), cancellationToken);
+
+                return null;
+            }
 
             return new StockReserveResponse(request.StockItemId, request.ReservedQuantity, request.OrderId);
         }

@@ -21,10 +21,10 @@ where TDbContext : DbContext
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task UpdateAsync(T entity, CancellationToken cancellationToken = default)
+    public async Task<int> UpdateAsync(T entity, CancellationToken cancellationToken = default)
     {
         _dbContext.Entry(entity).State = EntityState.Modified;
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        return await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<T> GetByIdAsync(int id, CancellationToken cancellationToken = default)
