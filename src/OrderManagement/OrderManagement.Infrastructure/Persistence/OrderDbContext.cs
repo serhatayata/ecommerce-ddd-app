@@ -1,13 +1,17 @@
 using System.Reflection;
+using Common.Infrastructure.DbContexts;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using OrderManagement.Domain.Models.Orders;
 
 namespace OrderManagement.Infrastructure.Persistence;
 
-public class OrderDbContext : DbContext
+public class OrderDbContext : BaseDbContext<OrderDbContext>
 {
-    public OrderDbContext(DbContextOptions<OrderDbContext> options)
-        : base(options)
+    public OrderDbContext(
+    DbContextOptions<OrderDbContext> options,
+    IMediator mediator)
+        : base(options, mediator)
     {
     }
 

@@ -21,6 +21,6 @@ public class OrderDbContextFactory: IDesignTimeDbContextFactory<OrderDbContext>
 
         builder.UseSqlServer(connectionString);
 
-        return new OrderDbContext(builder.Options);
+        return new OrderDbContext(builder.Options, null);
     }
 }

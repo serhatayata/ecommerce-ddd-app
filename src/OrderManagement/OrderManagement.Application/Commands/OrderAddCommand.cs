@@ -1,9 +1,9 @@
-using MassTransit;
 using MediatR;
 using OrderManagement.Application.Models;
 using OrderManagement.Application.Services.Products;
 using OrderManagement.Domain.Contracts;
 using OrderManagement.Domain.Models.Orders;
+using OrderManagement.Domain.Events;
 
 namespace OrderManagement.Application.Commands;
 
@@ -17,13 +17,16 @@ public class OrderAddCommand : IRequest<OrderAddResponse>
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IProductCatalogApiService _productCatalogApiService;
+        private readonly IMediator _mediator;
 
         public OrderAddCommandHandler(
         IOrderRepository orderRepository,
-        IProductCatalogApiService productCatalogApiService)
+        IProductCatalogApiService productCatalogApiService,
+        IMediator mediator)
         {
             _orderRepository = orderRepository;
             _productCatalogApiService = productCatalogApiService;
+            _mediator = mediator;
         }
 
         public async Task<OrderAddResponse> Handle(
@@ -55,7 +58,19 @@ public class OrderAddCommand : IRequest<OrderAddResponse>
             foreach (var orderItem in orderItems)
                 order.AddOrderItem(orderItem);
 
-            await _orderRepository.SaveAsync(order, cancellationToken);
+            var isSaved = await _orderRepository.SaveAsync(order, cancellationToken) > 0;
+            if (!isSaved)
+            {
+                var totalAmount = order.OrderItems?.Sum(x => x.UnitPrice?.Amount ?? 0) ?? 0;
+                var domainEvent = new OrderAddFailedDomainEvent(
+                    order.Id,
+                    userId,
+                    order.OrderDate,
+                    totalAmount,
+                    "Order could not be saved."
+                );
+                await _mediator.Publish(domainEvent, cancellationToken);
+            }
 
             return new OrderAddResponse
             {

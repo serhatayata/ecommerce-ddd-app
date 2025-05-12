@@ -16,8 +16,16 @@ public class Order : Entity, IAggregateRoot
         OrderDate = orderDate;
         OrderItems = new HashSet<OrderItem>();
         Status = OrderStatus.Pending;
-        
-        AddEvent(new OrderAddedDomainEvent());
+
+        decimal totalAmount = OrderItems?.Sum(x => x.UnitPrice?.Amount ?? 0) ?? 0;
+
+        AddEvent(new OrderAddedDomainEvent(
+            Id,
+            UserId,
+            OrderDate,
+            Status,
+            totalAmount
+        ));
     }
 
     public int UserId { get; private set; }

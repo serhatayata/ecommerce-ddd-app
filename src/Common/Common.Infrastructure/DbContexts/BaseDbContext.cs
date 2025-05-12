@@ -21,7 +21,7 @@ public abstract class BaseDbContext<TContext> : DbContext where TContext : DbCon
         _savesChangesTracker.Push(new object());
 
         var entitiesWithEvents = ChangeTracker
-            .Entries<IEntity>()
+            .Entries<Entity>()
             .Where(e => e.Entity.Events.Any())
             .Select(e => e.Entity)
             .ToArray();

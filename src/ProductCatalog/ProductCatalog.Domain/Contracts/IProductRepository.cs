@@ -8,6 +8,8 @@ namespace ProductCatalog.Domain.Contracts;
 
 public interface IProductRepository : IRepository<Product>
 {
+    Task<List<Product>> GetProductsByIdsAsync(int[] ids, CancellationToken cancellationToken = default);
+
     #region Brands
     Task<Brand> SaveBrandAsync(Brand brand, CancellationToken cancellationToken = default);
     Task DeleteBrandAsync(int id, CancellationToken cancellationToken = default);

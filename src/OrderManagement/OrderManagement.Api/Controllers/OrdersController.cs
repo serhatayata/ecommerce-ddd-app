@@ -1,5 +1,6 @@
 using Common.Api.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using OrderManagement.Application.Commands;
 using OrderManagement.Application.Queries.Common;
 using OrderManagement.Application.Queries.Details;
 
@@ -14,4 +15,10 @@ public class OrdersController : BaseApiController
     public async Task<ActionResult<OrderResponse>> GetOrderDetails(
     [FromQuery] OrderDetailsQuery query)
         => await Send(query);
+
+    [HttpPost]
+    [Route(nameof(AddOrder))]
+    public async Task<ActionResult<OrderAddResponse>> AddOrder(
+    [FromBody] OrderAddCommand request)
+        => await Send(request);
 }

@@ -39,9 +39,9 @@ where TDbContext : DbContext
         return await query.ToListAsync(cancellationToken);
     }
 
-    public async Task SaveAsync(T entity, CancellationToken cancellationToken = default)
+    public async Task<int> SaveAsync(T entity, CancellationToken cancellationToken = default)
     {
         await _dbContext.Set<T>().AddAsync(entity, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        return await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

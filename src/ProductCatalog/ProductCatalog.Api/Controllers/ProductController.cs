@@ -1,4 +1,5 @@
 using Common.Api.Controllers;
+using Common.Application.Models.Responses.Products;
 using Microsoft.AspNetCore.Mvc;
 using ProductCatalog.Application.Commands.Brands.Create;
 using ProductCatalog.Application.Commands.Categories.Create;
@@ -10,6 +11,7 @@ using ProductCatalog.Application.Queries.Categories.Common;
 using ProductCatalog.Application.Queries.Categories.Details;
 using ProductCatalog.Application.Queries.Products.Common;
 using ProductCatalog.Application.Queries.Products.Details;
+using ProductCatalog.Application.Queries.Products.ProductPrice;
 using ProductCatalog.Application.Queries.Suppliers.Common;
 using ProductCatalog.Application.Queries.Suppliers.Details;
 
@@ -29,6 +31,9 @@ public class ProductController : BaseApiController
     public async Task<ActionResult<CreateProductResponse>> Save([FromBody] CreateProductCommand request)
         => await Send(request);
 
+    [HttpPost("products-price-by-ids")]
+    public async Task<ActionResult<ProductPriceListResponse>> GetProductsPriceByIds([FromBody] GetProductsPriceByIdsQuery request)
+        => await Send(request);
 
     #region Brands
     [HttpGet]

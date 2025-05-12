@@ -20,6 +20,13 @@ public class ProductRepository : EfRepository<Product, ProductCatalogDbContext>,
         _dbContext = dbContext;
     }
 
+    public async Task<List<Product>> GetProductsByIdsAsync(
+    int[] ids, 
+    CancellationToken cancellationToken = default)
+        =>  await _dbContext.Set<Product>()
+                                     .Where(x => ids.Contains(x.Id))
+                                     .ToListAsync(cancellationToken);
+
     #region Brands
     public async Task<Brand> SaveBrandAsync(
     Brand brand, 

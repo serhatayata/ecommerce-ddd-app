@@ -17,8 +17,8 @@ public class ProductCatalogApiService : IProductCatalogApiService
     public async Task<ProductPriceListResponse?> GetProductsPriceByIds(
     int[] ids, 
     CancellationToken cancellationToken)
-        => await _productCatalogApiClient.PostAsync<ProductPriceListResponse, int []>(
+        => await _productCatalogApiClient.PostAsync<ProductPriceListResponse, object>(
             "product/products-price-by-ids", 
-            ids,
+            new { ids = ids },
             cancellationToken);
 }
