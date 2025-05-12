@@ -1,0 +1,21 @@
+version: '3.4'
+
+services:
+  sqlserver:
+    container_name: sqlserver
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    user: root
+    ports:
+      - 1433:1433
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=Standard
+      - SA_PASSWORD=sa.++112233
+      - MSSQL_AGENT_ENABLED=true
+    volumes:
+      - sqlserver_data:/var/opt/mssql/data
+      - sqlserver_log:/var/opt/mssql/log
+
+volumes:
+  sqlserver_data:
+  sqlserver_log:
