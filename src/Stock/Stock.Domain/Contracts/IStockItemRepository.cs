@@ -23,4 +23,5 @@ public interface IStockItemRepository : IRepository<StockItem>
     #endregion
 
     Task<StockItem> GetByIdWithReservationsAsync(int id, CancellationToken cancellationToken);
+    Task<IEnumerable<StockItem>> GetByProductIdsAsync(IEnumerable<int> productIds, CancellationToken cancellationToken = default);
 }

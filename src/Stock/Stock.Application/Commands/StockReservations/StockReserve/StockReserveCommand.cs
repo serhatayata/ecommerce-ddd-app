@@ -1,3 +1,4 @@
+using Common.Domain.Models.DTOs.OrderManagements;
 using MassTransit;
 using MediatR;
 using Stock.Domain.Contracts;
@@ -5,14 +6,13 @@ using Stock.Domain.Events;
 
 namespace Stock.Application.Commands.StockReservations.StockReserve;
 
-public class StockReserveCommand : IRequest<StockReserveResponse>, CorrelatedBy<Guid?>
+public class StockReserveCommand : IRequest<StocksReserveResponse>, CorrelatedBy<Guid?>
 {
-    public int StockItemId { get; set; }
-    public int ReservedQuantity { get; set; }
     public int OrderId { get; set; }
+    public List<OrderItemDto> Items { get; set; }
     public Guid? CorrelationId { get; set; }
 
-    public class StockReserveCommandHandler : IRequestHandler<StockReserveCommand, StockReserveResponse>
+    public class StockReserveCommandHandler : IRequestHandler<StockReserveCommand, StocksReserveResponse>
     {
         private readonly IStockItemRepository _stockItemRepository;
         private readonly IMediator _mediator;
@@ -25,34 +25,52 @@ public class StockReserveCommand : IRequest<StockReserveResponse>, CorrelatedBy<
             _mediator = mediator;
         }
 
-        public async Task<StockReserveResponse> Handle(StockReserveCommand request, CancellationToken cancellationToken)
+        public async Task<StocksReserveResponse> Handle(StockReserveCommand request, CancellationToken cancellationToken)
         {
-            var stockItem = await _stockItemRepository.GetByIdAsync(request.StockItemId, cancellationToken);
+            var orderItems = request.Items;
+            var productIds = orderItems.Select(x => x.ProductId).ToList();
 
-            if (stockItem == null)
-                return null;
+            var stockItems = await _stockItemRepository.GetByProductIdsAsync(
+                productIds, 
+                cancellationToken);
 
-            stockItem.ReserveStock(
-                request.ReservedQuantity, 
-                request.OrderId,
-                request.CorrelationId);
-            var isUpdated = await _stockItemRepository.UpdateAsync(stockItem, cancellationToken) > 0;
+            var reservedItems = new List<(int StockItemId, int Quantity)>();
 
-            if (!isUpdated)
+            foreach (var orderItem in orderItems)
             {
-                await _mediator.Publish(new StockReserveFailedDomainEvent(
-                    request.StockItemId,
+                var stockItem = stockItems.FirstOrDefault(x => x.ProductId == orderItem.ProductId);
+                if (stockItem != null)
+                {
+                    stockItem.ReserveStock(orderItem.Quantity, request.OrderId);
+
+                    var isUpdated = await _stockItemRepository.UpdateAsync(stockItem, cancellationToken) > 0;
+
+                    if (isUpdated)
+                        reservedItems.Add((stockItem.Id, orderItem.Quantity));
+                }
+            }
+
+            if (reservedItems.Any())
+            {
+                await _mediator.Publish(new StocksReservedDomainEvent(
                     request.OrderId,
-                    request.ReservedQuantity,
                     DateTime.UtcNow,
-                    "Failed to reserve stock",
+                    request.CorrelationId
+                ), cancellationToken);
+
+                return new StocksReserveResponse(request.OrderId);
+            }
+            else
+            {
+                await _mediator.Publish(new StocksReserveFailedDomainEvent(
+                    request.OrderId,
+                    DateTime.UtcNow,
+                    "Failed to reserve stock for all items",
                     request.CorrelationId
                 ), cancellationToken);
 
                 return null;
             }
-
-            return new StockReserveResponse(request.StockItemId, request.ReservedQuantity, request.OrderId);
         }
     }
 }

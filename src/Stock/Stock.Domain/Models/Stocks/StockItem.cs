@@ -73,16 +73,13 @@ public class StockItem : Entity, IAggregateRoot
 
     public void ReserveStock(
     int quantity, 
-    int orderId,
-    Guid? correlationId = null)
+    int orderId)
     {
         if (GetAvailableQuantity() < quantity)
             throw new InvalidOperationException("Insufficient stock for reservation");
 
         var reservation = new StockReservation(Id, orderId, quantity);
         _reservations.Add(reservation);
-
-        AddEvent(new StockReservedDomainEvent(Id, quantity, orderId, DateTime.UtcNow, correlationId));
     }
 
     public int GetAvailableQuantity()

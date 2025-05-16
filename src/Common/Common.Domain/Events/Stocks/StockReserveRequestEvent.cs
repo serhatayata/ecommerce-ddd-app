@@ -1,15 +1,19 @@
+using Common.Domain.Models.DTOs.OrderManagements;
+
 namespace Common.Domain.Events.Stocks;
 
 public sealed record StockReserveRequestEvent : IntegrationEvent
 {
-    public int StockItemId { get; }
-    public int ReservedQuantity { get; }
     public int OrderId { get; }
+    public List<OrderItemDto> Items { get; set; }
 
-    public StockReserveRequestEvent(int stockItemId, int reservedQuantity, int orderId)
+    public StockReserveRequestEvent(
+    Guid? correlationId,
+    int orderId,
+    List<OrderItemDto> items)
+    : base(correlationId, DateTime.UtcNow)
     {
-        StockItemId = stockItemId;
-        ReservedQuantity = reservedQuantity;
         OrderId = orderId;
+        Items = items;
     }
 }

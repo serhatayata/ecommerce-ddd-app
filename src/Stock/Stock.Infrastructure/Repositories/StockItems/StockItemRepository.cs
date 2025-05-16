@@ -113,4 +113,13 @@ public class StockItemRepository : EfRepository<StockItem, StockDbContext>, ISto
         => await _dbContext.StockItems
             .Include(x => x.Reservations)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+    public async Task<IEnumerable<StockItem>> GetByProductIdsAsync(
+    IEnumerable<int> productIds, 
+    CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.StockItems
+            .Where(x => productIds.Contains(x.ProductId))
+            .ToListAsync(cancellationToken);
+    }
 }

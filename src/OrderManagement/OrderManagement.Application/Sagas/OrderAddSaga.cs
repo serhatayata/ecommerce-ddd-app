@@ -8,6 +8,7 @@ namespace OrderManagement.Application.Sagas;
 
 public class OrderAddSaga : MassTransitStateMachine<OrderAddState>
 {
+    //States
     public State OrderAdded { get; private set; }
     public State StockReserved { get; private set; }
     public State PaymentCompleted { get; private set; }
@@ -16,19 +17,16 @@ public class OrderAddSaga : MassTransitStateMachine<OrderAddState>
     public State Completed { get; private set; }
 
     // Failed States
-
-    public State Failed { get; private set; }
     public State OrderAddFailed { get; private set; }
     public State StockReserveFailed { get; private set; }
     public State PaymentFailed { get; private set; }
     public State ShipmentShipFailed { get; private set; }
     public State ShipmentDeliverFailed { get; private set; }
 
-
     // Integration Events
     public Event<OrderAddedEvent> OrderAddedEvent { get; private set; }
     public Event<OrderAddFailedEvent> OrderNotAddedEvent { get; private set; }
-    public Event<StockReservedEvent> StockReservedEvent { get; private set; }
+    public Event<StocksReservedEvent> StocksReservedEvent { get; private set; }
     public Event<StockReserveFailedEvent> StockReserveFailedEvent { get; private set; }
     public Event<PaymentCompletedEvent> PaymentCompletedEvent { get; private set; }
     public Event<PaymentFailedEvent> PaymentFailedEvent { get; private set; }
@@ -43,7 +41,7 @@ public class OrderAddSaga : MassTransitStateMachine<OrderAddState>
 
         Event(() => OrderAddedEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
         Event(() => OrderNotAddedEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
-        Event(() => StockReservedEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
+        Event(() => StocksReservedEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
         Event(() => StockReserveFailedEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
         Event(() => PaymentCompletedEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
         Event(() => PaymentFailedEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
@@ -54,12 +52,20 @@ public class OrderAddSaga : MassTransitStateMachine<OrderAddState>
 
         Initially(
             When(OrderAddedEvent)
-                .Then(context =>
+                .ThenAsync(async context =>
                 {
                     context.Saga.OrderId = context.Message.OrderId;
                     context.Saga.UserId = context.Message.UserId;
                     context.Saga.OrderDate = context.Message.OrderDate;
                     context.Saga.CreatedAt = DateTime.UtcNow;
+
+                    var stockReserveRequestEvent = new StockReserveRequestEvent(
+                        context.Message.CorrelationId,
+                        context.Message.OrderId,
+                        context.Message.Items
+                    );
+                    
+                    await context.Publish(stockReserveRequestEvent);
                 })
                 .TransitionTo(OrderAdded),
             When(OrderNotAddedEvent)
@@ -73,7 +79,7 @@ public class OrderAddSaga : MassTransitStateMachine<OrderAddState>
         );
 
         During(OrderAdded,
-            When(StockReservedEvent)
+            When(StocksReservedEvent)
                 .TransitionTo(StockReserved),
             When(StockReserveFailedEvent)
                 .Then(context =>
