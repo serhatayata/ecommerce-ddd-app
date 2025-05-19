@@ -9,4 +9,9 @@ public interface IPaymentRepository : IRepository<Payment>
     Task<bool> ExistsAsync(int id, CancellationToken cancellationToken);
     Task<bool> ExistsByOrderIdAsync(int orderId, CancellationToken cancellationToken);
     Task<List<PaymentTransaction>> GetTransactionsByPaymentIdAsync(int paymentId, CancellationToken cancellationToken);
+
+    #region PaymentInfo
+    Task<PaymentInfo> GetPaymentInfoByOrderIdAsync(int orderId, CancellationToken cancellationToken);
+    Task<int> CreatePaymentInfoAsync(PaymentInfo paymentInfo, CancellationToken cancellationToken);
+    #endregion
 }

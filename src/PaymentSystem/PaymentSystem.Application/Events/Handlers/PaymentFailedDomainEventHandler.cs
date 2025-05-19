@@ -1,7 +1,7 @@
 using Common.Domain.Events.PaymentSystems;
 using MediatR;
 using PaymentSystem.Domain.Events;
-using MassTransit; // Add this using
+using MassTransit;
 
 namespace PaymentSystem.Application.Events.Handlers;
 
@@ -20,7 +20,8 @@ public class PaymentFailedDomainEventHandler : INotificationHandler<PaymentFaile
             notification.CorrelationId,
             notification.OrderId,
             notification.PaymentId,
-            notification.Amount);
+            notification.Amount,
+            "Payment failed");
 
         await _publishEndpoint.Publish(paymentFailedEvent, cancellationToken);
     }

@@ -17,6 +17,7 @@ public class PaymentSystemDbContext : BaseDbContext<PaymentSystemDbContext>
 
     public DbSet<Payment> Payments { get; set; } = null!;
     public DbSet<PaymentTransaction> PaymentTransactions { get; set; } = null!;
+    public DbSet<PaymentInfo> PaymentInfo { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

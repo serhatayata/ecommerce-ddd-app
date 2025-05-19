@@ -72,6 +72,10 @@ public class OrderAddCommand : IRequest<OrderAddResponse>
                 await _mediator.Publish(domainEvent, cancellationToken);
             }
 
+            // PaymentInfo creation
+
+
+
             return new OrderAddResponse
             {
                 Id = order.Id,

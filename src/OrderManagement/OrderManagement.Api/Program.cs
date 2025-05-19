@@ -27,6 +27,11 @@ builder.Services.AddHttpClient("product-catalog", client => {
     client.BaseAddress = new Uri(configuration["Services:ProductCatalog:BaseAddress"]);
 });
 
+builder.Services.AddHttpClient("payment-system", client => {
+    client.BaseAddress = new Uri(configuration["Services:PaymentSystem:BaseAddress"]);
+});
+
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
