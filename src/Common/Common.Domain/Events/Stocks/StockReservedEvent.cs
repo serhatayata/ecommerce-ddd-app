@@ -1,3 +1,5 @@
+using Common.Domain.ValueObjects;
+
 namespace Common.Domain.Events.Stocks;
 
 public sealed record StockReservedEvent : IntegrationEvent

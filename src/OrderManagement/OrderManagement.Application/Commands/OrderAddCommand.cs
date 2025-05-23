@@ -62,7 +62,7 @@ public class OrderAddCommand : IRequest<OrderAddResponse>
                         item.UpdateUnitPrice(productPrice.Price);
                 });
 
-            var order = new Order(userId, DateTime.UtcNow);
+            var order = Order.Create(userId, DateTime.UtcNow);
             
             foreach (var orderItem in orderItems)
                 order.AddOrderItem(orderItem);

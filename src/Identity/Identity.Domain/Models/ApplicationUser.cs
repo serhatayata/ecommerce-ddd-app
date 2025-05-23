@@ -27,8 +27,7 @@ public class ApplicationUser : IdentityUser<int>, IAggregateRoot, IHasDomainEven
     [NotMapped]
     public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 
-    // Constructor for creating new users
-    public ApplicationUser(
+    private ApplicationUser(
         string email,
         string userName,
         string firstName,
@@ -42,15 +41,13 @@ public class ApplicationUser : IdentityUser<int>, IAggregateRoot, IHasDomainEven
         CreatedOnUtc = DateTime.UtcNow;
     }
 
-    public ApplicationUser(
-        string email)
-        : base()
-    {
-        Email = email;
-        CreatedOnUtc = DateTime.UtcNow;
-    }
+    public static ApplicationUser Create(
+    string email,
+    string userName,
+    string firstName,
+    string lastName)
+        => new ApplicationUser(email, userName, firstName, lastName);
 
-    // Private constructor for EF Core
     private ApplicationUser() { }
 
     // Domain methods

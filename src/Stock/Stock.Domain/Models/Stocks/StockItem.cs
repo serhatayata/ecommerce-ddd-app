@@ -1,4 +1,5 @@
 using Common.Domain.Models;
+using Common.Domain.ValueObjects;
 using Stock.Domain.Events;
 
 namespace Stock.Domain.Models.Stocks;
@@ -8,9 +9,7 @@ public class StockItem : Entity, IAggregateRoot
     private readonly List<StockTransaction> _transactions = new();
     private readonly List<StockReservation> _reservations = new();
 
-    private StockItem() { }
-
-    public StockItem(
+    private StockItem(
         int productId,
         int quantity,
         Location location,
@@ -24,6 +23,13 @@ public class StockItem : Entity, IAggregateRoot
 
         AddEvent(new StockItemCreatedDomainEvent(Id, ProductId, Quantity, Location.Warehouse, Location.Aisle, Location.Shelf, Location.Bin, LastUpdated, correlationId));
     }
+
+    public static StockItem Create(
+        int productId,
+        int quantity,
+        Location location,
+        Guid? correlationId = null)
+        => new StockItem(productId, quantity, location, correlationId);
 
     public int ProductId { get; private set; }
     public int Quantity { get; private set; }
@@ -73,7 +79,7 @@ public class StockItem : Entity, IAggregateRoot
 
     public void ReserveStock(
     int quantity, 
-    int orderId)
+    OrderId orderId)
     {
         if (GetAvailableQuantity() < quantity)
             throw new InvalidOperationException("Insufficient stock for reservation");

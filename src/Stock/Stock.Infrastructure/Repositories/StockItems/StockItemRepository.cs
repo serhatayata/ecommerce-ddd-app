@@ -1,3 +1,4 @@
+using Common.Domain.ValueObjects;
 using Common.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Stock.Domain.Contracts;
@@ -52,7 +53,7 @@ public class StockItemRepository : EfRepository<StockItem, StockDbContext>, ISto
         => await _dbContext.StockReservations.FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
 
     public async Task<IEnumerable<StockReservation>> GetReservationsByOrderIdAsync(
-        int orderId,
+        OrderId orderId,
         CancellationToken cancellationToken = default)
         => await _dbContext.StockReservations
             .Where(s => s.OrderId == orderId)
@@ -67,7 +68,7 @@ public class StockItemRepository : EfRepository<StockItem, StockDbContext>, ISto
 
     public async Task<List<(int StockItemId, int Quantity)>> ReserveProductsStocks(
     Dictionary<int, int> productQuantities,
-    int orderId, 
+    OrderId orderId, 
     CancellationToken cancellationToken = default)
     {
         var productIds = productQuantities.Keys.ToList();
@@ -85,7 +86,7 @@ public class StockItemRepository : EfRepository<StockItem, StockDbContext>, ISto
             }
             else
             {
-                var newStockItem = new StockItem(
+                var newStockItem = StockItem.Create(
                     productId,
                     quantity,
                     new Location(string.Empty, string.Empty, string.Empty)
@@ -103,7 +104,7 @@ public class StockItemRepository : EfRepository<StockItem, StockDbContext>, ISto
     List<(int StockItemId, int Quantity)> reservedItems,
     StockItem stockItem,
     int quantity,
-    int orderId,
+    OrderId orderId,
     CancellationToken cancellationToken)
     {
         stockItem.ReserveStock(quantity, orderId);

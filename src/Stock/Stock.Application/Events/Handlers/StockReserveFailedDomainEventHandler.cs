@@ -18,9 +18,7 @@ public class StockReserveFailedDomainEventHandler : INotificationHandler<StockRe
     {
         var integrationEvent = new StockReserveFailedEvent(
             notification.CorrelationId,
-            notification.StockItemId,
             notification.OrderId,
-            notification.Quantity,
             DateTime.UtcNow,
             notification.ErrorMessage
         );

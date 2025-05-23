@@ -1,3 +1,4 @@
+using Common.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Shipping.Domain.Models.Shipments;
@@ -11,6 +12,7 @@ public class ShipmentEntityConfigurations : IEntityTypeConfiguration<Shipment>
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.OrderId)
+            .HasConversion(p => p.Value, p => OrderId.From(p))
             .IsRequired();
 
         builder.Property(x => x.TrackingNumber)

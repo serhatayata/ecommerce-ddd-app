@@ -1,3 +1,4 @@
+using Common.Domain.ValueObjects;
 using MediatR;
 using Shipping.Domain.Contracts;
 using Shipping.Domain.Models.Shipments;
@@ -35,7 +36,7 @@ public class CreateShipmentCommand : IRequest<CreateShipmentResponse>
                 request.Country,
                 request.ZipCode);
 
-            var shipment = new Shipment(
+            var shipment = Shipment.Create(
                 request.OrderId,
                 address,
                 request.TrackingNumber,

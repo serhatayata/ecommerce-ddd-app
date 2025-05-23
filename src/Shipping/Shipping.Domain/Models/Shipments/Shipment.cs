@@ -1,4 +1,5 @@
 using Common.Domain.Models;
+using Common.Domain.ValueObjects;
 using Shipping.Domain.Events;
 
 namespace Shipping.Domain.Models.Shipments;
@@ -11,8 +12,8 @@ public class Shipment : Entity, IAggregateRoot
     {
     }
 
-    public Shipment(
-        int orderId,
+    private Shipment(
+        OrderId orderId,
         Address shippingAddress,
         string trackingNumber,
         int shipmentCompanyId)
@@ -25,7 +26,17 @@ public class Shipment : Entity, IAggregateRoot
         CreatedAt = DateTime.UtcNow;
     }
 
-    public int OrderId { get; private set; }
+    public static Shipment Create(
+    OrderId orderId,
+    Address shippingAddress,
+    string trackingNumber,
+    int shipmentCompanyId)
+        => new Shipment(orderId,
+                        shippingAddress,
+                        trackingNumber,
+                        shipmentCompanyId);
+
+    public OrderId OrderId { get; private set; }
     public Address ShippingAddress { get; private set; }
     public string TrackingNumber { get; private set; }
     public int ShipmentCompanyId { get; set; }

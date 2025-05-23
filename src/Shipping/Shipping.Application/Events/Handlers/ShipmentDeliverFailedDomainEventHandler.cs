@@ -20,7 +20,6 @@ public class ShipmentDeliverFailedDomainEventHandler : INotificationHandler<Ship
         var shipmentDeliverFailedEvent = new ShipmentDeliverFailedEvent(
             notification.CorrelationId,
             notification.ShipmentId,
-            notification.TrackingNumber,
             notification.CreationDate,
             notification.ErrorMessage);
 

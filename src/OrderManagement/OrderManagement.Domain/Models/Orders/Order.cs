@@ -8,7 +8,7 @@ public class Order : Entity, IAggregateRoot
 {
     public HashSet<OrderItem> OrderItems { get; private set; }
 
-    public Order(
+    private Order(
     int userId,
     DateTime orderDate)
     {
@@ -17,6 +17,11 @@ public class Order : Entity, IAggregateRoot
         OrderItems = new HashSet<OrderItem>();
         Status = OrderStatus.Pending;
     }
+
+    public static Order Create(
+    int userId,
+    DateTime orderDate)
+        => new(userId, orderDate);
 
     public int UserId { get; private set; }
     public DateTime OrderDate { get; private set; }

@@ -14,7 +14,7 @@ public class PaymentInfo : Entity
     public PaymentInfo() { }
 
     public PaymentInfo(
-    int orderId,
+    OrderId orderId,
     string cardNumber,
     string iban,
     string cvv,
@@ -32,7 +32,7 @@ public class PaymentInfo : Entity
         CreatedAt = DateTime.UtcNow;
     }
 
-    public int OrderId { get; private set; }
+    public OrderId OrderId { get; private set; }
     public string CardNumber { get; private set; }
     public string IBAN { get; private set; }
     public string CVV { get; private set; }

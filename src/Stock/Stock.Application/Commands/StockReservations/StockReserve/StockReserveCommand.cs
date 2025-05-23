@@ -6,13 +6,13 @@ using Stock.Domain.Events;
 
 namespace Stock.Application.Commands.StockReservations.StockReserve;
 
-public class StockReserveCommand : IRequest<StocksReserveResponse>, CorrelatedBy<Guid?>
+public class StockReserveCommand : IRequest<StockReserveResponse>, CorrelatedBy<Guid?>
 {
     public int OrderId { get; set; }
     public List<OrderItemDto> Items { get; set; }
     public Guid? CorrelationId { get; set; }
 
-    public class StockReserveCommandHandler : IRequestHandler<StockReserveCommand, StocksReserveResponse>
+    public class StockReserveCommandHandler : IRequestHandler<StockReserveCommand, StockReserveResponse>
     {
         private readonly IStockItemRepository _stockItemRepository;
         private readonly IMediator _mediator;
@@ -25,7 +25,7 @@ public class StockReserveCommand : IRequest<StocksReserveResponse>, CorrelatedBy
             _mediator = mediator;
         }
 
-        public async Task<StocksReserveResponse> Handle(
+        public async Task<StockReserveResponse> Handle(
         StockReserveCommand request,
         CancellationToken cancellationToken)
         {
@@ -44,7 +44,7 @@ public class StockReserveCommand : IRequest<StocksReserveResponse>, CorrelatedBy
                     request.CorrelationId
                 ), cancellationToken);
 
-                return new StocksReserveResponse(request.OrderId);
+                return new StockReserveResponse(request.OrderId);
             }
             else
             {

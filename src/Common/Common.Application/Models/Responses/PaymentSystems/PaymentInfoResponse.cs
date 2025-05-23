@@ -1,3 +1,5 @@
+using Common.Domain.ValueObjects;
+
 namespace Common.Application.Models.Responses.PaymentSystems;
 
 public sealed record PaymentInfoResponse

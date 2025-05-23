@@ -1,4 +1,5 @@
 using Common.Application.Models.Responses.PaymentSystems;
+using Common.Domain.ValueObjects;
 using Common.Infrastructure.Extensions;
 using OrderManagement.Application.Services.PaymentSystems;
 
@@ -16,7 +17,7 @@ public class PaymentSystemApiService : IPaymentSystemApiService
 
     #region PaymentInfo
     public async Task<PaymentInfoCreateResponse> CreatePaymentInfoAsync(
-    int orderId,
+    OrderId orderId,
     string cardNumber,
     string iban,
     string cvv,

@@ -20,9 +20,9 @@ public class StockDbInitializer : DbInitializer
 
         var stockItems = new List<StockItem>
         {
-            new StockItem(1, 100, Location.Create("Warehouse A", "Zone 1", "Shelf A1", "Bin-01")),
-            new StockItem(2, 50, Location.Create("Warehouse A", "Zone 2", "Shelf B3", "Bin-02")),
-            new StockItem(3, 75, Location.Create("Warehouse B", "Zone 1", "Shelf C2", "Bin-03"))
+            StockItem.Create(1, 100, Location.Create("Warehouse A", "Zone 1", "Shelf A1", "Bin-01")),
+            StockItem.Create(2, 50, Location.Create("Warehouse A", "Zone 2", "Shelf B3", "Bin-02")),
+            StockItem.Create(3, 75, Location.Create("Warehouse B", "Zone 1", "Shelf C2", "Bin-03"))
         };
 
         _dbContext.StockItems.AddRange(stockItems);

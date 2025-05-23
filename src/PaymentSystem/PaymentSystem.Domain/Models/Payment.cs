@@ -10,8 +10,8 @@ public class Payment : Entity, IAggregateRoot
     {
     }
 
-    public Payment(
-    int orderId, 
+    private Payment(
+    OrderId orderId, 
     decimal amount, 
     PaymentMethod method)
     {
@@ -22,6 +22,12 @@ public class Payment : Entity, IAggregateRoot
         CreatedAt = DateTime.UtcNow;
         Transactions = new List<PaymentTransaction>();
     }
+
+    public static Payment Create(
+    OrderId orderId,
+    decimal amount,
+    PaymentMethod method)
+        => new Payment(orderId, amount, method);
 
     public int OrderId { get; private set; }
     public Money Amount { get; private set; }

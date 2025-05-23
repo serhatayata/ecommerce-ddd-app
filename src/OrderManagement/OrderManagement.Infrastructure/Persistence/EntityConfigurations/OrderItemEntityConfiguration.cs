@@ -1,3 +1,4 @@
+using Common.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using OrderManagement.Domain.Models.Orders;
@@ -13,6 +14,7 @@ public class OrderItemEntityConfiguration : IEntityTypeConfiguration<OrderItem>
         builder.HasKey(oi => oi.Id);
 
         builder.Property(oi => oi.OrderId)
+            .HasConversion(p => p.Value, p => OrderId.From(p))
             .IsRequired();
 
         builder.Property(oi => oi.ProductId)

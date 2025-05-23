@@ -1,3 +1,4 @@
+using Common.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Stock.Domain.Models.Stocks;
@@ -14,6 +15,7 @@ public class StockReservationEntityConfiguration : IEntityTypeConfiguration<Stoc
             .ValueGeneratedOnAdd();
 
         builder.Property(x => x.OrderId)
+            .HasConversion(p => p.Value, p => OrderId.From(p))
             .IsRequired();
 
         builder.Property(x => x.Quantity)

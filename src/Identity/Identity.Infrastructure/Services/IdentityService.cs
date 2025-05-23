@@ -26,7 +26,7 @@ internal class IdentityService : IIdentityService
 
     public async Task<Result<ApplicationUser>> Register(UserRegisterRequestModel userRequest)
     {
-        var user = new ApplicationUser(userRequest.Email, userRequest.Email, userRequest.FirstName, userRequest.LastName);
+        var user = ApplicationUser.Create(userRequest.Email, userRequest.Email, userRequest.FirstName, userRequest.LastName);
 
         var identityResult = await userManager.CreateAsync(
             user,

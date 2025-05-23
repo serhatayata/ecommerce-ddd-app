@@ -1,8 +1,8 @@
 namespace Stock.Application.Commands.StockReservations.StockReserve;
 
-public sealed record StocksReserveResponse
+public sealed record StockReserveResponse
 {
-    public StocksReserveResponse(
+    public StockReserveResponse(
         int orderId)
     {
         OrderId = orderId;

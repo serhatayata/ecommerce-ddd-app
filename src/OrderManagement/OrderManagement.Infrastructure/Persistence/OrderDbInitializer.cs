@@ -19,11 +19,11 @@ public class OrderDbInitializer : DbInitializer
     {
         if (!_db.Set<Order>().Any())
         {
-            var order1 = new Order(
+            var order1 = Order.Create(
                 userId: 1,
                 orderDate: DateTime.UtcNow.AddDays(-2)
             );
-            var order2 = new Order(
+            var order2 = Order.Create(
                 userId: 2,
                 orderDate: DateTime.UtcNow.AddDays(-1)
             );

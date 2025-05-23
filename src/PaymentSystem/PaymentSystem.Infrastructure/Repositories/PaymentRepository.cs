@@ -1,3 +1,4 @@
+using Common.Domain.ValueObjects;
 using Common.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using PaymentSystem.Domain.Contracts;
@@ -22,12 +23,12 @@ public class PaymentRepository : EfRepository<Payment, PaymentSystemDbContext>, 
         => await _dbContext.Payments.AnyAsync(s => s.Id == id, cancellationToken);
 
     public async Task<bool> ExistsByOrderIdAsync(
-    int orderId,
+    OrderId orderId,
     CancellationToken cancellationToken)
         => await _dbContext.Payments.AnyAsync(s => s.OrderId == orderId, cancellationToken);
 
     public async Task<Payment> GetByOrderIdAsync(
-    int orderId,
+    OrderId orderId,
     CancellationToken cancellationToken)
         => await _dbContext.Payments.FirstOrDefaultAsync(s => s.OrderId == orderId, cancellationToken);
 
@@ -39,11 +40,15 @@ public class PaymentRepository : EfRepository<Payment, PaymentSystemDbContext>, 
             .ToListAsync(cancellationToken);
 
     #region PaymentInfo
-    public async Task<PaymentInfo> GetPaymentInfoByOrderIdAsync(int orderId, CancellationToken cancellationToken)
+    public async Task<PaymentInfo> GetPaymentInfoByOrderIdAsync(
+    OrderId orderId,
+    CancellationToken cancellationToken)
         => await _dbContext.PaymentInfo
             .FirstOrDefaultAsync(s => s.OrderId == orderId, cancellationToken);
 
-    public async Task<int> CreatePaymentInfoAsync(PaymentInfo paymentInfo, CancellationToken cancellationToken)
+    public async Task<int> CreatePaymentInfoAsync(
+    PaymentInfo paymentInfo,
+    CancellationToken cancellationToken)
     {
         await _dbContext.PaymentInfo.AddAsync(paymentInfo, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);

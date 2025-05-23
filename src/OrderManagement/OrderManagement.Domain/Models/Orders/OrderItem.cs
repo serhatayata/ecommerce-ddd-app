@@ -10,7 +10,7 @@ public class OrderItem : Entity
     }
 
     public OrderItem(
-    int orderId, 
+    OrderId orderId, 
     int productId, 
     int quantity,
     Money unitPrice)
@@ -21,7 +21,7 @@ public class OrderItem : Entity
         UnitPrice = unitPrice;
     }
 
-    public int OrderId { get; private set; }
+    public OrderId OrderId { get; private set; }
     public int ProductId { get; private set; }
     public int Quantity { get; private set; }
     public Money UnitPrice { get; private set; }

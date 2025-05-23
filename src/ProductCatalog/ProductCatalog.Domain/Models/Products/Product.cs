@@ -11,7 +11,7 @@ public class Product : Entity, IAggregateRoot
 {
     public Product() { }
 
-    public Product(
+    private Product(
         string name,
         string description,
         Money price,
@@ -30,6 +30,21 @@ public class Product : Entity, IAggregateRoot
 
         AddEvent(new ProductCreatedDomainEvent(Id, Name));
     }
+
+    public static Product Create(
+    string name,
+    string description,
+    Money price,
+    int brandId,
+    int categoryId,
+    int supplierId)
+        => new Product(
+            name,
+            description,
+            price,
+            brandId,
+            categoryId,
+            supplierId);
 
     public string Name { get; private set; }
     public string Description { get; private set; }
@@ -55,7 +70,7 @@ public class Product : Entity, IAggregateRoot
     {
         var moneyResult = Money.From(price);
 
-        return new Product(
+        return Product.Create(
             name,
             description,
             moneyResult.Amount,

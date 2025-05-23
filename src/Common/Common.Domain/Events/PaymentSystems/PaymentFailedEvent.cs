@@ -1,3 +1,5 @@
+using Common.Domain.ValueObjects;
+
 namespace Common.Domain.Events.PaymentSystems;
 
 public sealed record PaymentFailedEvent : IntegrationEvent

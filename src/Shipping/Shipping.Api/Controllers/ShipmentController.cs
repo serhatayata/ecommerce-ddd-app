@@ -1,6 +1,7 @@
 using Common.Api.Controllers;
 using Common.Application.Models;
 using Common.Domain.Events.Shippings;
+using Common.Domain.ValueObjects;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Shipping.Application.Commands.ShipmentCompanies.Create;
@@ -44,7 +45,7 @@ public class ShipmentController : BaseApiController
         var random = new Random();
         var command = new CreateShipmentCommand()
         {
-            OrderId = random.Next(1, 1000),
+            OrderId = OrderId.From(random.Next(1, 1000)),
             Street = $"Street {random.Next(1, 100)}",
             City = "Random City",
             State = "Random State",

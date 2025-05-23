@@ -30,7 +30,7 @@ public class StockItemCreateCommand : IRequest<StockItemCreateResponse>, Correla
             StockItemCreateCommand request, 
             CancellationToken cancellationToken)
         {
-            var stockItem = new StockItem(
+            var stockItem = StockItem.Create(
                 request.ProductId,
                 request.InitialQuantity,
                 Location.Create(

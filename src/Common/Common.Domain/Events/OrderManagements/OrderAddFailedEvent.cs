@@ -1,3 +1,5 @@
+using Common.Domain.ValueObjects;
+
 namespace Common.Domain.Events.OrderManagements;
 
 public sealed record OrderAddFailedEvent : IntegrationEvent

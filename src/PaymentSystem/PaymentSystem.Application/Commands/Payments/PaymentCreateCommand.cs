@@ -1,3 +1,4 @@
+using Common.Domain.ValueObjects;
 using MassTransit;
 using MediatR;
 using PaymentSystem.Application.Services.OrderManagements;
@@ -42,7 +43,7 @@ public class PaymentCreateCommand : IRequest<PaymentCreateResponse>, CorrelatedB
             // END
 
             var amount = order.OrderItems.Sum(o => o.UnitPrice * o.Quantity);
-            var payment = new Payment(request.OrderId, amount, paymentMethod);
+            var payment = Payment.Create(request.OrderId, amount, paymentMethod);
 
             await _paymentRepository.SaveAsync(payment, cancellationToken);
 

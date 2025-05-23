@@ -1,3 +1,4 @@
+using Common.Domain.ValueObjects;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -15,7 +16,7 @@ public class OrderAddStateMap : SagaClassMap<OrderAddState>
         builder.Property(x => x.CorrelationId).ValueGeneratedNever();
         
         builder.Property(x => x.CurrentState);
-        builder.Property(x => x.OrderId);
+        builder.Property(x => x.OrderId).HasConversion(p => p.Value, p => OrderId.From(p));;
         builder.Property(x => x.UserId);
         builder.Property(x => x.OrderDate);
         builder.Property(x => x.CreatedAt);

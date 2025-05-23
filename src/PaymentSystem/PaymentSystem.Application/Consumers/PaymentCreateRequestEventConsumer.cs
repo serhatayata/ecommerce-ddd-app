@@ -22,7 +22,7 @@ public class PaymentCreateRequestEventConsumer : IConsumer<PaymentCreateRequestE
     public async Task Consume(
     ConsumeContext<PaymentCreateRequestEvent> context)
     {
-            var message = context.Message;
+        var message = context.Message;
         _logger.LogInformation("Received payment create request for: {OrderId}", message.OrderId);
 
         try

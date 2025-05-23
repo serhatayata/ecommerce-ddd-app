@@ -1,3 +1,4 @@
+using Common.Domain.ValueObjects;
 using Common.Infrastructure.Persistence;
 using Shipping.Domain.Models.Shipments;
 
@@ -24,8 +25,8 @@ public class ShippingDbInitializer : DbInitializer
         _dbContext.ShipmentCompanies.AddRange(shipmentCompany1, shipmentCompany2);
         _dbContext.SaveChanges();
 
-        var shipment1 = new Shipment(
-            orderId: 1,
+        var shipment1 = Shipment.Create(
+            orderId: OrderId.From(1),
             shippingAddress: new Address("Cicek Sk", "Istanbul", "IST", "Turkiye", "34755"),
             trackingNumber: "TRACK001",
             shipmentCompanyId: shipmentCompany1.Id
@@ -34,8 +35,8 @@ public class ShippingDbInitializer : DbInitializer
         shipment1.AddItem(2, 1);
         shipment1.Ship();
 
-        var shipment2 = new Shipment(
-            orderId: 2,
+        var shipment2 = Shipment.Create(
+            orderId: OrderId.From(2),
             shippingAddress: new Address("Guzel Sk", "Kocaeli", "KOA", "Turkiye", "41756"),
             trackingNumber: "TRACK002",
             shipmentCompanyId: shipmentCompany2.Id

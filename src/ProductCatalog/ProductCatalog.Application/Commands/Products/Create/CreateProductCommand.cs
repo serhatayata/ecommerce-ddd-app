@@ -31,7 +31,7 @@ public class CreateProductCommand : IRequest<CreateProductResponse>
         CreateProductCommand request, 
         CancellationToken cancellationToken)
         {
-            var product = new Product(
+            var product = Product.Create(
                 request.Name,
                 request.Description,
                 Money.From(request.Price.Amount),

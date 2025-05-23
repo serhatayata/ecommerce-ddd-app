@@ -1,4 +1,5 @@
 using Common.Domain.Models;
+using Common.Domain.ValueObjects;
 
 namespace Stock.Domain.Models.Stocks;
 
@@ -14,7 +15,7 @@ public class StockReservation : Entity
 
     public StockReservation(
         int stockItemId,
-        int orderId,
+        OrderId orderId,
         int quantity)
     {
         StockItemId = stockItemId;
@@ -25,7 +26,7 @@ public class StockReservation : Entity
     }
 
     public int StockItemId { get; private set; }
-    public int OrderId { get; private set; }
+    public OrderId OrderId { get; private set; }
     public int Quantity { get; private set; }
     public DateTime ReservationDate { get; private set; }
     public ReservationStatus Status { get; private set; }
