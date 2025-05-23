@@ -45,7 +45,7 @@ public class ShipmentController : BaseApiController
         var random = new Random();
         var command = new CreateShipmentCommand()
         {
-            OrderId = OrderId.From(random.Next(1, 1000)),
+            OrderId = random.Next(1, 1000),
             Street = $"Street {random.Next(1, 100)}",
             City = "Random City",
             State = "Random State",

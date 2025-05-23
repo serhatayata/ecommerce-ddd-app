@@ -14,8 +14,5 @@ public sealed class OrderId : ValueObject
 
     public static OrderId From(int value) => new(value);
 
-    public static implicit operator int(OrderId orderId) => orderId.Value;
-    public static implicit operator OrderId(int value) => From(value);
-
     public override string ToString() => Value.ToString();
 }

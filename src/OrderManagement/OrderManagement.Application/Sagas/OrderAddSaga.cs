@@ -3,6 +3,7 @@ using Common.Domain.Events.PaymentSystems;
 using Common.Domain.Events.Stocks;
 using MassTransit;
 using Common.Domain.Events.Shippings;
+using Common.Domain.ValueObjects;
 
 namespace OrderManagement.Application.Sagas;
 
@@ -54,8 +55,8 @@ public class OrderAddSaga : MassTransitStateMachine<OrderAddState>
             When(OrderAddedEvent)
                 .ThenAsync(async context =>
                 {
-                    context.Saga.OrderId = context.Message.OrderId;
-                    context.Saga.UserId = context.Message.UserId;
+                    context.Saga.OrderId = OrderId.From(context.Message.OrderId);
+                    context.Saga.UserId = UserId.From(context.Message.UserId);
                     context.Saga.OrderDate = context.Message.OrderDate;
                     context.Saga.CreatedAt = DateTime.UtcNow;
 
@@ -71,7 +72,7 @@ public class OrderAddSaga : MassTransitStateMachine<OrderAddState>
             When(OrderNotAddedEvent)
                 .Then(context =>
                 {
-                    context.Saga.UserId = context.Message.UserId;
+                    context.Saga.UserId = UserId.From(context.Message.UserId);
                     context.Saga.FailureReason = context.Message.ErrorMessage;
                     context.Saga.CreatedAt = DateTime.UtcNow;
                 })
@@ -82,7 +83,7 @@ public class OrderAddSaga : MassTransitStateMachine<OrderAddState>
             When(StockReservedEvent)
                 .ThenAsync(async context =>
                 {
-                    context.Saga.OrderId = context.Message.OrderId;
+                    context.Saga.OrderId = OrderId.From(context.Message.OrderId);
                     context.Saga.CreatedAt = DateTime.UtcNow;
 
                     var paymentCreateRequestEvent = new PaymentCreateRequestEvent(

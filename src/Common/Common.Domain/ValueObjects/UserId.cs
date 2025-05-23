@@ -14,8 +14,5 @@ public sealed class UserId : ValueObject
 
     public static UserId From(int value) => new(value);
 
-    public static implicit operator int(UserId userId) => userId.Value;
-    public static implicit operator UserId(int value) => From(value);
-
     public override string ToString() => Value.ToString();
 }

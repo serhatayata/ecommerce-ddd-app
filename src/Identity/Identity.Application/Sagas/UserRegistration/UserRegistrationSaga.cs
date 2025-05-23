@@ -1,6 +1,7 @@
 using MassTransit;
 using Common.Domain.Events.Notification;
 using Common.Domain.Events.Identity;
+using Common.Domain.ValueObjects;
 
 namespace Identity.Application.Sagas.UserRegistration;
 
@@ -30,7 +31,7 @@ public class UserRegistrationSaga : MassTransitStateMachine<UserRegistrationStat
             When(UserCreatedEvent)
                 .Then(context =>
                 {
-                    context.Saga.UserId = context.Message.UserId;
+                    context.Saga.UserId = UserId.From(context.Message.UserId);
                     context.Saga.Email = context.Message.Email;
                     context.Saga.CreatedAt = DateTime.UtcNow;
                 })

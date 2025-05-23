@@ -67,7 +67,7 @@ public class StockItemRepository : EfRepository<StockItem, StockDbContext>, ISto
             .ToListAsync(cancellationToken);
 
     public async Task<List<(int StockItemId, int Quantity)>> ReserveProductsStocks(
-    Dictionary<int, int> productQuantities,
+    Dictionary<ProductId, int> productQuantities,
     OrderId orderId, 
     CancellationToken cancellationToken = default)
     {
@@ -165,7 +165,7 @@ public class StockItemRepository : EfRepository<StockItem, StockDbContext>, ISto
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
     public async Task<IEnumerable<StockItem>> GetByProductIdsAsync(
-    IEnumerable<int> productIds, 
+    IEnumerable<ProductId> productIds, 
     CancellationToken cancellationToken = default)
     {
         return await _dbContext.StockItems

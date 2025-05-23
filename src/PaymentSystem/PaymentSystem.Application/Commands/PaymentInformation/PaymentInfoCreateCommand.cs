@@ -32,7 +32,7 @@ public class PaymentInfoCreateCommand : IRequest<PaymentInfoCreateResponse>, Cor
         CancellationToken cancellationToken)
         {
             var paymentInfo = new Domain.Models.PaymentInfo(
-                request.OrderId,
+                Common.Domain.ValueObjects.OrderId.From(request.OrderId),
                 request.CardNumber,
                 request.IBAN,
                 request.CVV,
@@ -46,7 +46,7 @@ public class PaymentInfoCreateCommand : IRequest<PaymentInfoCreateResponse>, Cor
             return new PaymentInfoCreateResponse
             {
                 Id = id,
-                OrderId = paymentInfo.OrderId,
+                OrderId = paymentInfo.OrderId.Value,
                 CardNumber = paymentInfo.CardNumber,
                 IBAN = paymentInfo.IBAN,
                 CVV = paymentInfo.CVV,

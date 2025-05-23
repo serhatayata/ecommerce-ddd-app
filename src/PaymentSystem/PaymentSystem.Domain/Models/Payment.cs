@@ -29,7 +29,7 @@ public class Payment : Entity, IAggregateRoot
     PaymentMethod method)
         => new Payment(orderId, amount, method);
 
-    public int OrderId { get; private set; }
+    public OrderId OrderId { get; private set; }
     public Money Amount { get; private set; }
     public PaymentMethod Method { get; private set; }
     public PaymentStatus Status { get; private set; }
@@ -41,7 +41,7 @@ public class Payment : Entity, IAggregateRoot
         Status = PaymentStatus.Completed;
 
         var paymentCompletedEvent = new PaymentCompletedDomainEvent(
-            OrderId,
+            OrderId.Value,
             Id,
             Amount.Amount,
             Method,
@@ -56,7 +56,7 @@ public class Payment : Entity, IAggregateRoot
         Status = PaymentStatus.Failed;
 
         var paymentFailedEvent = new PaymentFailedDomainEvent(
-            OrderId,
+            OrderId.Value,
             Id,
             Amount.Amount,
             Method,

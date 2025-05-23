@@ -9,7 +9,7 @@ public class Order : Entity, IAggregateRoot
     public HashSet<OrderItem> OrderItems { get; private set; }
 
     private Order(
-    int userId,
+    UserId userId,
     DateTime orderDate)
     {
         UserId = userId;
@@ -19,11 +19,11 @@ public class Order : Entity, IAggregateRoot
     }
 
     public static Order Create(
-    int userId,
+    UserId userId,
     DateTime orderDate)
         => new(userId, orderDate);
 
-    public int UserId { get; private set; }
+    public UserId UserId { get; private set; }
     public DateTime OrderDate { get; private set; }
     public OrderStatus Status { get; private set; }
 
@@ -44,7 +44,7 @@ public class Order : Entity, IAggregateRoot
 
         AddEvent(new OrderAddedDomainEvent(
             Id,
-            UserId,
+            UserId.Value,
             OrderDate,
             Status,
             totalAmount
@@ -57,7 +57,7 @@ public class Order : Entity, IAggregateRoot
 
         AddEvent(new OrderAddFailedDomainEvent(
             Id,
-            UserId,
+            UserId.Value,
             OrderDate,
             totalAmount,
             errorMessage

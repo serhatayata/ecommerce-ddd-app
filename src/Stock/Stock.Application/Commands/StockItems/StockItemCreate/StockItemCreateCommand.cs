@@ -2,6 +2,7 @@ using MassTransit;
 using MediatR;
 using Stock.Domain.Contracts;
 using Stock.Domain.Models.Stocks;
+using ValueObjects = Common.Domain.ValueObjects;
 
 namespace Stock.Application.Commands.StockItems.StockItemCreate;
 
@@ -12,7 +13,7 @@ public class StockItemCreateCommand : IRequest<StockItemCreateResponse>, Correla
     public string Warehouse { get; set; }
     public string Aisle { get; set; }
     public string Shelf { get; set; }
-    public string Bin { get; set; }   
+    public string Bin { get; set; }
     public DateTime CreatedDate { get; set; }
     public Guid? CorrelationId { get; set; }
 
@@ -27,11 +28,13 @@ public class StockItemCreateCommand : IRequest<StockItemCreateResponse>, Correla
         }
 
         public async Task<StockItemCreateResponse> Handle(
-            StockItemCreateCommand request, 
+            StockItemCreateCommand request,
             CancellationToken cancellationToken)
         {
+            var productId = ValueObjects.ProductId.From(request.ProductId);
+
             var stockItem = StockItem.Create(
-                request.ProductId,
+                productId,
                 request.InitialQuantity,
                 Location.Create(
                     request.Warehouse,
@@ -42,7 +45,7 @@ public class StockItemCreateCommand : IRequest<StockItemCreateResponse>, Correla
 
             await _stockItemRepository.SaveAsync(stockItem, cancellationToken);
 
-            return new StockItemCreateResponse(stockItem.Id, stockItem.ProductId, stockItem.Quantity);
+            return new StockItemCreateResponse(stockItem.Id, request.ProductId, stockItem.Quantity);
         }
     }
 }

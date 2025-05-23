@@ -1,3 +1,4 @@
+using Common.Domain.ValueObjects;
 using Identity.Application.Commands.Common;
 using Identity.Application.ServiceContracts;
 using MediatR;
@@ -21,7 +22,7 @@ public class UserDetailsQuery : IRequest<UserDetailResponseModel>
             UserDetailsQuery request,
             CancellationToken cancellationToken)
         {
-            var model = await _identityService.GetUserDetails(request.Id);
+            var model = await _identityService.GetUserDetails(UserId.From(request.Id));
 
             return model.Data;
         }

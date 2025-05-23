@@ -13,7 +13,7 @@ public interface IStockItemRepository : IRepository<StockItem>
     Task UpdateReservationAsync(StockReservation reservation, CancellationToken cancellationToken = default);
     Task<IEnumerable<StockReservation>> GetReservationsByStockItemIdAsync(int stockItemId, CancellationToken cancellationToken = default);
     Task<IEnumerable<StockReservation>> GetReservationsByOrderIdAsync(OrderId orderId, CancellationToken cancellationToken = default);
-    Task<List<(int StockItemId, int Quantity)>> ReserveProductsStocks(Dictionary<int, int> productQuantities, OrderId orderId, CancellationToken cancellationToken = default);
+    Task<List<(int StockItemId, int Quantity)>> ReserveProductsStocks(Dictionary<ProductId, int> productQuantities, OrderId orderId, CancellationToken cancellationToken = default);
     #endregion
 
     #region StockTransaction
@@ -25,5 +25,5 @@ public interface IStockItemRepository : IRepository<StockItem>
     #endregion
 
     Task<StockItem> GetByIdWithReservationsAsync(int id, CancellationToken cancellationToken);
-    Task<IEnumerable<StockItem>> GetByProductIdsAsync(IEnumerable<int> productIds, CancellationToken cancellationToken = default);
+    Task<IEnumerable<StockItem>> GetByProductIdsAsync(IEnumerable<ProductId> productIds, CancellationToken cancellationToken = default);
 }

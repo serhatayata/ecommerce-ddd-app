@@ -1,4 +1,5 @@
 using Common.Domain.Models.DTOs.OrderManagements;
+using Common.Domain.ValueObjects;
 using MassTransit;
 using MediatR;
 using Stock.Domain.Contracts;
@@ -32,8 +33,8 @@ public class StockReserveCommand : IRequest<StockReserveResponse>, CorrelatedBy<
             var orderItems = request.Items;
 
             var reservedItems = await _stockItemRepository.ReserveProductsStocks(
-                orderItems.ToDictionary(x => x.ProductId, x => x.Quantity),
-                request.OrderId,
+                orderItems.ToDictionary(x => ProductId.From(x.ProductId), x => x.Quantity),
+                Common.Domain.ValueObjects.OrderId.From(request.OrderId),
                 cancellationToken);
 
             if (reservedItems.Any())

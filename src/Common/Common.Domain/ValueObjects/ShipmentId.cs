@@ -14,8 +14,5 @@ public sealed class ShipmentId : ValueObject
 
     public static ShipmentId From(int value) => new(value);
 
-    public static implicit operator int(ShipmentId shipmentId) => shipmentId.Value;
-    public static implicit operator ShipmentId(int value) => From(value);
-
     public override string ToString() => Value.ToString();
 }

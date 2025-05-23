@@ -31,8 +31,8 @@ public class ShippingDbInitializer : DbInitializer
             trackingNumber: "TRACK001",
             shipmentCompanyId: shipmentCompany1.Id
         );
-        shipment1.AddItem(1, 2);
-        shipment1.AddItem(2, 1);
+        shipment1.AddItem(ProductId.From(1), 2);
+        shipment1.AddItem(ProductId.From(2), 1);
         shipment1.Ship();
 
         var shipment2 = Shipment.Create(
@@ -41,8 +41,8 @@ public class ShippingDbInitializer : DbInitializer
             trackingNumber: "TRACK002",
             shipmentCompanyId: shipmentCompany2.Id
         );
-        shipment2.AddItem(3, 1);
-        shipment2.AddItem(4, 3);
+        shipment2.AddItem(ProductId.From(3), 1);
+        shipment2.AddItem(ProductId.From(4), 3);
 
         _dbContext.Shipments.AddRange(shipment1, shipment2);
         _dbContext.SaveChanges();

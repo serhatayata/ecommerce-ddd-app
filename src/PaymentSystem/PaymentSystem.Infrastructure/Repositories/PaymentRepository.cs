@@ -18,9 +18,9 @@ public class PaymentRepository : EfRepository<Payment, PaymentSystemDbContext>, 
     }
 
     public async Task<bool> ExistsAsync(
-    int id,
+    PaymentId id,
     CancellationToken cancellationToken)
-        => await _dbContext.Payments.AnyAsync(s => s.Id == id, cancellationToken);
+        => await _dbContext.Payments.AnyAsync(s => s.Id == id.Value, cancellationToken);
 
     public async Task<bool> ExistsByOrderIdAsync(
     OrderId orderId,
@@ -33,7 +33,7 @@ public class PaymentRepository : EfRepository<Payment, PaymentSystemDbContext>, 
         => await _dbContext.Payments.FirstOrDefaultAsync(s => s.OrderId == orderId, cancellationToken);
 
     public async Task<List<PaymentTransaction>> GetTransactionsByPaymentIdAsync(
-    int paymentId,
+    PaymentId paymentId,
     CancellationToken cancellationToken)
         => await _dbContext.PaymentTransactions
             .Where(s => s.PaymentId == paymentId)

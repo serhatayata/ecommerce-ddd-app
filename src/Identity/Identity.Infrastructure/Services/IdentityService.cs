@@ -1,4 +1,5 @@
 using Common.Application.Models;
+using Common.Domain.ValueObjects;
 using Identity.Application.Commands.ChangePassword;
 using Identity.Application.Commands.Common;
 using Identity.Application.Commands.RegisterUser;
@@ -83,7 +84,7 @@ internal class IdentityService : IIdentityService
             : Result.Failure(errors);
     }
 
-    public async Task<Result<UserDetailResponseModel>> GetUserDetails(int userId)
+    public async Task<Result<UserDetailResponseModel>> GetUserDetails(UserId userId)
     {
         var user = await userManager.FindByIdAsync(userId.ToString());
 

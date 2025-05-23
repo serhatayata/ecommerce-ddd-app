@@ -1,3 +1,4 @@
+using Common.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PaymentSystem.Domain.Models;
@@ -11,6 +12,12 @@ public class PaymentTransactionEntityConfiguration : IEntityTypeConfiguration<Pa
         builder.HasKey(pt => pt.Id);
 
         builder.Property(pt => pt.Amount).IsRequired();
+
+        builder.Property(pt => pt.PaymentId)
+            .HasConversion(
+                paymentId => paymentId.Value,
+                value => PaymentId.From(value))
+            .IsRequired();
 
         builder.Property(pt => pt.Date).IsRequired();
 

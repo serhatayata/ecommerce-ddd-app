@@ -1,4 +1,3 @@
-using Common.Domain.ValueObjects;
 using MassTransit;
 using MediatR;
 using PaymentSystem.Application.Services.OrderManagements;
@@ -29,11 +28,12 @@ public class PaymentCreateCommand : IRequest<PaymentCreateResponse>, CorrelatedB
             PaymentCreateCommand request,
             CancellationToken cancellationToken)
         {
-            var order = await _orderManagementApiService.GetOrderDetailById(request.OrderId);
+            var orderId = Common.Domain.ValueObjects.OrderId.From(request.OrderId);
+            var order = await _orderManagementApiService.GetOrderDetailById(orderId);
             if (order == null)
                 return null;
 
-            var paymentInfo = await _paymentRepository.GetPaymentInfoByOrderIdAsync(request.OrderId, cancellationToken);
+            var paymentInfo = await _paymentRepository.GetPaymentInfoByOrderIdAsync(orderId, cancellationToken);
             if (paymentInfo == null)
                 return null;
 
@@ -43,7 +43,7 @@ public class PaymentCreateCommand : IRequest<PaymentCreateResponse>, CorrelatedB
             // END
 
             var amount = order.OrderItems.Sum(o => o.UnitPrice * o.Quantity);
-            var payment = Payment.Create(request.OrderId, amount, paymentMethod);
+            var payment = Payment.Create(orderId, amount, paymentMethod);
 
             await _paymentRepository.SaveAsync(payment, cancellationToken);
 
@@ -72,7 +72,7 @@ public class PaymentCreateCommand : IRequest<PaymentCreateResponse>, CorrelatedB
 
             return new PaymentCreateResponse
             {
-                OrderId = payment.OrderId,
+                OrderId = payment.OrderId.Value,
                 PaymentId = payment.Id,
             };
         }

@@ -1,5 +1,6 @@
 using AutoMapper;
 using Common.Application.Models.Responses.PaymentSystems;
+using Common.Domain.ValueObjects;
 using MediatR;
 using PaymentSystem.Domain.Contracts;
 
@@ -26,7 +27,8 @@ public class PaymentInfoDetailsQuery : IRequest<PaymentInfoResponse>
         PaymentInfoDetailsQuery request,
         CancellationToken cancellationToken)
         {
-            var paymentInfo = await _paymentRepository.GetPaymentInfoByOrderIdAsync(request.OrderId, cancellationToken);
+            var orderId = Common.Domain.ValueObjects.OrderId.From(request.OrderId);
+            var paymentInfo = await _paymentRepository.GetPaymentInfoByOrderIdAsync(orderId, cancellationToken);
 
             return _mapper.Map<PaymentInfoResponse>(paymentInfo);
         }

@@ -5,6 +5,7 @@ using OrderManagement.Domain.Contracts;
 using OrderManagement.Domain.Models.Orders;
 using OrderManagement.Domain.Events;
 using OrderManagement.Application.Services.PaymentSystems;
+using Common.Domain.ValueObjects;
 
 namespace OrderManagement.Application.Commands;
 
@@ -62,7 +63,7 @@ public class OrderAddCommand : IRequest<OrderAddResponse>
                         item.UpdateUnitPrice(productPrice.Price);
                 });
 
-            var order = Order.Create(userId, DateTime.UtcNow);
+            var order = Order.Create(Common.Domain.ValueObjects.UserId.From(userId), DateTime.UtcNow);
             
             foreach (var orderItem in orderItems)
                 order.AddOrderItem(orderItem);
@@ -75,7 +76,7 @@ public class OrderAddCommand : IRequest<OrderAddResponse>
                 order.RaiseOrderAddFailedEvent("Failed to save order");
 
             var paymentInfoResponse = await _paymentSystemApiService.CreatePaymentInfoAsync(
-                order.Id,
+                OrderId.From(order.Id),
                 request.CardNumber,
                 request.IBAN,
                 request.CVV,

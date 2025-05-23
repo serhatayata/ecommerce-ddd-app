@@ -10,7 +10,7 @@ public class StockItem : Entity, IAggregateRoot
     private readonly List<StockReservation> _reservations = new();
 
     private StockItem(
-        int productId,
+        ProductId productId,
         int quantity,
         Location location,
         Guid? correlationId = null)
@@ -21,17 +21,17 @@ public class StockItem : Entity, IAggregateRoot
         Status = StockStatus.Available;
         LastUpdated = DateTime.UtcNow;
 
-        AddEvent(new StockItemCreatedDomainEvent(Id, ProductId, Quantity, Location.Warehouse, Location.Aisle, Location.Shelf, Location.Bin, LastUpdated, correlationId));
+        AddEvent(new StockItemCreatedDomainEvent(Id, ProductId.Value, Quantity, Location.Warehouse, Location.Aisle, Location.Shelf, Location.Bin, LastUpdated, correlationId));
     }
 
     public static StockItem Create(
-        int productId,
+        ProductId productId,
         int quantity,
         Location location,
         Guid? correlationId = null)
         => new StockItem(productId, quantity, location, correlationId);
 
-    public int ProductId { get; private set; }
+    public ProductId ProductId { get; private set; }
     public int Quantity { get; private set; }
     public Location Location { get; private set; }
     public StockStatus Status { get; private set; }

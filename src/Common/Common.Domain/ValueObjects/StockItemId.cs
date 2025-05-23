@@ -14,8 +14,5 @@ public sealed class StockItemId : ValueObject
 
     public static StockItemId From(int value) => new(value);
 
-    public static implicit operator int(StockItemId stockItemId) => stockItemId.Value;
-    public static implicit operator StockItemId(int value) => From(value);
-
     public override string ToString() => Value.ToString();
 }

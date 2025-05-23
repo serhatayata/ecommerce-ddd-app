@@ -1,3 +1,4 @@
+using Common.Domain.ValueObjects;
 using Common.Infrastructure.Persistence;
 using Stock.Domain.Models.Stocks;
 
@@ -20,9 +21,9 @@ public class StockDbInitializer : DbInitializer
 
         var stockItems = new List<StockItem>
         {
-            StockItem.Create(1, 100, Location.Create("Warehouse A", "Zone 1", "Shelf A1", "Bin-01")),
-            StockItem.Create(2, 50, Location.Create("Warehouse A", "Zone 2", "Shelf B3", "Bin-02")),
-            StockItem.Create(3, 75, Location.Create("Warehouse B", "Zone 1", "Shelf C2", "Bin-03"))
+            StockItem.Create(ProductId.From(1), 100, Location.Create("Warehouse A", "Zone 1", "Shelf A1", "Bin-01")),
+            StockItem.Create(ProductId.From(2), 50, Location.Create("Warehouse A", "Zone 2", "Shelf B3", "Bin-02")),
+            StockItem.Create(ProductId.From(3), 75, Location.Create("Warehouse B", "Zone 1", "Shelf C2", "Bin-03"))
         };
 
         _dbContext.StockItems.AddRange(stockItems);
@@ -35,8 +36,8 @@ public class StockDbInitializer : DbInitializer
         stockItems[2].RemoveStock(10, "Damaged goods removal");
 
         // Add some reservations
-        stockItems[0].ReserveStock(10, 1001);
-        stockItems[1].ReserveStock(5, 1002);
+        stockItems[0].ReserveStock(10, OrderId.From(1001));
+        stockItems[1].ReserveStock(5, OrderId.From(1002));
 
         _dbContext.SaveChanges();
     }

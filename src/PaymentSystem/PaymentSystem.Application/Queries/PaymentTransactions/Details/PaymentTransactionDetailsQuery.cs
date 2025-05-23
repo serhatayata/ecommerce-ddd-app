@@ -1,8 +1,8 @@
 using AutoMapper;
 using MediatR;
-using PaymentSystem.Application.Queries.Payments.Common;
 using PaymentSystem.Application.Queries.PaymentTransactions.Common;
 using PaymentSystem.Domain.Contracts;
+using ValueObjects = Common.Domain.ValueObjects;
 
 namespace PaymentSystem.Application.Queries.PaymentTransactions.Details;
 
@@ -27,7 +27,8 @@ public class PaymentTransactionDetailsQuery : IRequest<List<PaymentTransactionRe
         PaymentTransactionDetailsQuery request,
         CancellationToken cancellationToken)
         {
-            var paymentTransactions = await _paymentRepository.GetTransactionsByPaymentIdAsync(request.PaymentId, cancellationToken);
+            var paymentId = ValueObjects.PaymentId.From(request.PaymentId);
+            var paymentTransactions = await _paymentRepository.GetTransactionsByPaymentIdAsync(paymentId, cancellationToken);
             
             return _mapper.Map<List<PaymentTransactionResponse>>(paymentTransactions);
         }

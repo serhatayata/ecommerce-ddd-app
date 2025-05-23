@@ -1,3 +1,4 @@
+using Common.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Stock.Domain.Models.Stocks;
@@ -14,8 +15,9 @@ public class StockItemEntityConfiguration : IEntityTypeConfiguration<StockItem>
 
         builder.Property(x => x.Id)
             .ValueGeneratedOnAdd();
-        
+
         builder.Property(x => x.ProductId)
+            .HasConversion(p => p.Value, p => ProductId.From(p))
             .IsRequired();
 
         builder.Property(x => x.Quantity)

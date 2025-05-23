@@ -20,17 +20,17 @@ public class OrderDbInitializer : DbInitializer
         if (!_db.Set<Order>().Any())
         {
             var order1 = Order.Create(
-                userId: 1,
+                userId: UserId.From(1),
                 orderDate: DateTime.UtcNow.AddDays(-2)
             );
             var order2 = Order.Create(
-                userId: 2,
+                userId: UserId.From(2),
                 orderDate: DateTime.UtcNow.AddDays(-1)
             );
 
-            var item1 = new OrderItem(order1.Id, 1, 2, Money.From(10.0M));
-            var item2 = new OrderItem(order1.Id, 2, 1, Money.From(20.0M));
-            var item3 = new OrderItem(order2.Id, 3, 5, Money.From(5.0M));
+            var item1 = new OrderItem(OrderId.From(order1.Id), 1, 2, Money.From(10.0M));
+            var item2 = new OrderItem(OrderId.From(order1.Id), 2, 1, Money.From(20.0M));
+            var item3 = new OrderItem(OrderId.From(order2.Id), 3, 5, Money.From(5.0M));
 
             order1.OrderItems.Add(item1);
             order1.OrderItems.Add(item2);

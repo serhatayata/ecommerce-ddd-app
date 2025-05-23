@@ -37,7 +37,7 @@ public class CreateShipmentCommand : IRequest<CreateShipmentResponse>
                 request.ZipCode);
 
             var shipment = Shipment.Create(
-                request.OrderId,
+                Common.Domain.ValueObjects.OrderId.From(request.OrderId),
                 address,
                 request.TrackingNumber,
                 request.ShipmentCompanyId);
