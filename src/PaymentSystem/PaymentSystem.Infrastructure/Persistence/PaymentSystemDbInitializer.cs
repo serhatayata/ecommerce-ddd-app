@@ -21,11 +21,11 @@ public class PaymentSystemDbInitializer : DbInitializer
         if (!_dbContext.Payments.Any())
         {
             var payment1 = Payment.Create(OrderId.From(1), 100.00m, PaymentMethod.CreditCard);
-            payment1.MarkAsCompleted();
+            payment1.RaisePaymentCompletedEvent();
             payment1.Transactions.Add(new PaymentTransaction(100.00m, DateTime.UtcNow, "TXN1001", PaymentStatus.Completed));
 
             var payment2 = Payment.Create(OrderId.From(2), 250.50m, PaymentMethod.PayPal);
-            payment2.MarkAsFailed();
+            payment2.RaisePaymentCompletedEvent();
             payment2.Transactions.Add(new PaymentTransaction(250.50m, DateTime.UtcNow, "TXN1002", PaymentStatus.Failed));
 
             var payment3 = Payment.Create(OrderId.From(3), 75.25m, PaymentMethod.BankTransfer);

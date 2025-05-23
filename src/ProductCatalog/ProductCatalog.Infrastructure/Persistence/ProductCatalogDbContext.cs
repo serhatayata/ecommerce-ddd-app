@@ -13,8 +13,8 @@ public class ProductCatalogDbContext : BaseDbContext<ProductCatalogDbContext>
 {
     public ProductCatalogDbContext(
     DbContextOptions<ProductCatalogDbContext> options,
-    IMediator mediator)
-    : base(options, mediator)
+    IPublisher publisher)
+    : base(options, publisher)
     {
     }
 

@@ -3,7 +3,6 @@ using OrderManagement.Application.Models;
 using OrderManagement.Application.Services.Products;
 using OrderManagement.Domain.Contracts;
 using OrderManagement.Domain.Models.Orders;
-using OrderManagement.Domain.Events;
 using OrderManagement.Application.Services.PaymentSystems;
 using Common.Domain.ValueObjects;
 
@@ -68,12 +67,9 @@ public class OrderAddCommand : IRequest<OrderAddResponse>
             foreach (var orderItem in orderItems)
                 order.AddOrderItem(orderItem);
 
-            var isSaved = await _orderRepository.SaveAsync(order, cancellationToken) > 0;
+            order.RaiseOrderCreatedEvent();
 
-            if (isSaved)
-                order.RaiseOrderCreatedEvent();
-            else
-                order.RaiseOrderAddFailedEvent("Failed to save order");
+            _ = await _orderRepository.SaveAsync(order, cancellationToken) > 0;         
 
             var paymentInfoResponse = await _paymentSystemApiService.CreatePaymentInfoAsync(
                 OrderId.From(order.Id),
@@ -84,9 +80,6 @@ public class OrderAddCommand : IRequest<OrderAddResponse>
                 request.ExpirationDate,
                 cancellationToken
             );
-
-            foreach (var domainEvent in order.Events)
-                await _mediator.Publish(domainEvent, cancellationToken);
 
             return new OrderAddResponse
             {

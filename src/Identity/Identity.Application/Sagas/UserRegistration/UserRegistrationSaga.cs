@@ -13,7 +13,6 @@ public class UserRegistrationSaga : MassTransitStateMachine<UserRegistrationStat
 
     //Integration Events
     public Event<UserCreatedEvent> UserCreatedEvent { get; private set; }
-    public Event<UserNotCreatedEvent> UserNotCreatedEvent { get; private set; }
     public Event<EmailVerifiedEvent> EmailVerifiedEvent { get; private set; }
 
     public UserRegistrationSaga()
@@ -22,7 +21,6 @@ public class UserRegistrationSaga : MassTransitStateMachine<UserRegistrationStat
 
         //Domain events
         Event(() => UserCreatedEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
-        Event(() => UserNotCreatedEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
 
         //Integration event
         Event(() => EmailVerifiedEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
@@ -40,16 +38,7 @@ public class UserRegistrationSaga : MassTransitStateMachine<UserRegistrationStat
                     return new SendVerificationEmailRequestEvent(
                     context.Saga.CorrelationId, 
                     context.Saga.Email);
-                }),
-            
-            When(UserNotCreatedEvent)
-                .Then(context =>
-                {
-                    context.Saga.Email = context.Message.Email;
-                    context.Saga.FailureReason = context.Message.Reason;
-                    context.Saga.CreatedAt = DateTime.UtcNow;
                 })
-                .TransitionTo(Failed)
         );
 
         During(EmailVerificationPending,

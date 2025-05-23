@@ -15,12 +15,10 @@ public class ShipShipmentCommand : IRequest<Result>
     public class ShipShipmentCommandHandler : IRequestHandler<ShipShipmentCommand, Result>
     {
         private readonly IShipmentRepository _shipmentRepository;
-        private readonly IMediator _mediator;
 
-        public ShipShipmentCommandHandler(IShipmentRepository shipmentRepository, IMediator mediator)
+        public ShipShipmentCommandHandler(IShipmentRepository shipmentRepository)
         {
             _shipmentRepository = shipmentRepository;
-            _mediator = mediator;
         }
 
         public async Task<Result> Handle(ShipShipmentCommand request, CancellationToken cancellationToken)
@@ -32,15 +30,7 @@ public class ShipShipmentCommand : IRequest<Result>
 
             shipment.UpdateStatus(ShipmentStatus.Shipped, request.CorrelationId);
 
-            var isReserved = await _shipmentRepository.SaveAsync(shipment, cancellationToken) > 0;
-
-            if (!isReserved)
-                await _mediator.Publish(new ShipmentShipFailedDomainEvent(
-                    request.ShipmentId,
-                    DateTime.UtcNow,
-                    "Failed to ship shipment", 
-                    request.CorrelationId), 
-                    cancellationToken);
+            _ = await _shipmentRepository.SaveAsync(shipment, cancellationToken) > 0;
 
             return Result.Success;
         }

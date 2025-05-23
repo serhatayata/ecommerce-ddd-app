@@ -26,30 +26,20 @@ public class OrderAddSaga : MassTransitStateMachine<OrderAddState>
 
     // Integration Events
     public Event<OrderAddedEvent> OrderAddedEvent { get; private set; }
-    public Event<OrderAddFailedEvent> OrderNotAddedEvent { get; private set; }
     public Event<StockReservedEvent> StockReservedEvent { get; private set; }
-    public Event<StockReserveFailedEvent> StockReserveFailedEvent { get; private set; }
     public Event<PaymentCompletedEvent> PaymentCompletedEvent { get; private set; }
-    public Event<PaymentFailedEvent> PaymentFailedEvent { get; private set; }
     public Event<ShipmentShippedEvent> ShipmentShippedEvent { get; private set; }
     public Event<ShipmentDeliveredEvent> ShipmentDeliveredEvent { get; private set; }
-    public Event<ShipmentShipFailedEvent> ShipmentShipFailedEvent { get; private set; }
-    public Event<ShipmentDeliverFailedEvent> ShipmentDeliverFailedEvent { get; private set; }
 
     public OrderAddSaga()
     {
         InstanceState(x => x.CurrentState);
 
         Event(() => OrderAddedEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
-        Event(() => OrderNotAddedEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
         Event(() => StockReservedEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
-        Event(() => StockReserveFailedEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
         Event(() => PaymentCompletedEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
-        Event(() => PaymentFailedEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
         Event(() => ShipmentShippedEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
         Event(() => ShipmentDeliveredEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
-        Event(() => ShipmentShipFailedEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
-        Event(() => ShipmentDeliverFailedEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
 
         Initially(
             When(OrderAddedEvent)
@@ -68,15 +58,7 @@ public class OrderAddSaga : MassTransitStateMachine<OrderAddState>
                     
                     await context.Publish(stockReserveRequestEvent);
                 })
-                .TransitionTo(OrderAdded),
-            When(OrderNotAddedEvent)
-                .Then(context =>
-                {
-                    context.Saga.UserId = UserId.From(context.Message.UserId);
-                    context.Saga.FailureReason = context.Message.ErrorMessage;
-                    context.Saga.CreatedAt = DateTime.UtcNow;
-                })
-                .TransitionTo(OrderAddFailed)
+                .TransitionTo(OrderAdded)
         );
 
         During(OrderAdded,
@@ -93,35 +75,17 @@ public class OrderAddSaga : MassTransitStateMachine<OrderAddState>
                     
                     await context.Publish(paymentCreateRequestEvent);
                 })
-                .TransitionTo(StockReserved),
-            When(StockReserveFailedEvent)
-                .Then(context =>
-                {
-                    context.Saga.FailureReason = context.Message.ErrorMessage;
-                })
-                .TransitionTo(StockReserveFailed)
+                .TransitionTo(StockReserved)
         );
 
         During(StockReserved,
             When(PaymentCompletedEvent)
-                .TransitionTo(PaymentCompleted),
-            When(PaymentFailedEvent)
-                .Then(context =>
-                {
-                    context.Saga.FailureReason = context.Message.ErrorMessage;
-                })
-                .TransitionTo(PaymentFailed)
+                .TransitionTo(PaymentCompleted)
         );
 
         During(PaymentCompleted,
             When(ShipmentShippedEvent)
-                .TransitionTo(ShipmentShipped),
-            When(ShipmentShipFailedEvent)
-                .Then(context =>
-                {
-                    context.Saga.FailureReason = context.Message.ErrorMessage;
-                })
-                .TransitionTo(ShipmentShipFailed)
+                .TransitionTo(ShipmentShipped)
         );
 
         During(ShipmentShipped,
@@ -130,13 +94,7 @@ public class OrderAddSaga : MassTransitStateMachine<OrderAddState>
                 {
                     context.Saga.CompletedAt = DateTime.UtcNow;
                 })
-                .TransitionTo(Completed),
-            When(ShipmentDeliverFailedEvent)
-                .Then(context =>
-                {
-                    context.Saga.FailureReason = context.Message.ErrorMessage;
-                })
-                .TransitionTo(ShipmentDeliverFailed)
+                .TransitionTo(Completed)
         );
     }
 }

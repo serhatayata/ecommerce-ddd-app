@@ -10,8 +10,8 @@ public class OrderDbContext : BaseDbContext<OrderDbContext>
 {
     public OrderDbContext(
     DbContextOptions<OrderDbContext> options,
-    IMediator mediator)
-        : base(options, mediator)
+    IPublisher publisher)
+        : base(options, publisher)
     {
     }
 

@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 using Common.Domain.Models;
-using Common.Domain.Events;
 
 namespace Identity.Domain.Models;
 
@@ -16,7 +15,6 @@ public class ApplicationRole : IdentityRole<int>, IAggregateRoot
 
     public IReadOnlyCollection<ApplicationRoleClaim> Claims => _claims.AsReadOnly();
 
-    // Domain methods with events
     public void UpdateName(string newName)
     {
         var oldName = Name;

@@ -1,12 +1,13 @@
 using Common.Domain.Events;
 using Common.Domain.Models;
+using Identity.Domain.Events;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Identity.Domain.Models;
 
-public class ApplicationUser : IdentityUser<int>, IAggregateRoot, IHasDomainEvents
+public class ApplicationUser : IdentityUser<int>, IAggregateRoot
 {
     private readonly List<ApplicationUserClaim> _claims = new();
     private readonly List<ApplicationUserRole> _userRoles = new();
@@ -86,10 +87,8 @@ public class ApplicationUser : IdentityUser<int>, IAggregateRoot, IHasDomainEven
         _userRoles.Add(userRole);
     }
 
-    public void AddDomainEvent(IDomainEvent domainEvent)
-    {
-        _domainEvents.Add(domainEvent);
-    }
+    public void RaiseUserCreatedDomainEvent()
+        => _domainEvents.Add(new UserCreatedDomainEvent(Id, Email));
 
     public void ClearDomainEvents()
     {

@@ -10,8 +10,8 @@ public class ShippingDbContext : BaseDbContext<ShippingDbContext>
 {
     public ShippingDbContext(
     DbContextOptions<ShippingDbContext> options,
-    IMediator mediator)
-    : base(options, mediator)
+    IPublisher publisher)
+    : base(options, publisher)
     {
     }
 

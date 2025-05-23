@@ -50,17 +50,4 @@ public class Order : Entity, IAggregateRoot
             totalAmount
         ));
     }
-    
-    public void RaiseOrderAddFailedEvent(string errorMessage)
-    {
-        decimal totalAmount = OrderItems?.Sum(x => x.UnitPrice?.Amount ?? 0) ?? 0;
-
-        AddEvent(new OrderAddFailedDomainEvent(
-            Id,
-            UserId.Value,
-            OrderDate,
-            totalAmount,
-            errorMessage
-        ));
-    }
 }

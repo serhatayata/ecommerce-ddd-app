@@ -10,8 +10,8 @@ public class StockDbContext : BaseDbContext<StockDbContext>
 {
     public StockDbContext(
         DbContextOptions<StockDbContext> options,
-        IMediator mediator)
-        : base(options, mediator)
+        IPublisher publisher)
+        : base(options, publisher)
     {
     }
 

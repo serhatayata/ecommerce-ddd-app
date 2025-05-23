@@ -32,11 +32,9 @@ internal class IdentityService : IIdentityService
         var identityResult = await userManager.CreateAsync(
             user,
             userRequest.Password);
-        
+
         if (identityResult.Succeeded)
-            user.AddDomainEvent(new UserCreatedDomainEvent(user.Id, user.Email));
-        else
-            user.AddDomainEvent(new UserNotCreatedDomainEvent(user.Email, string.Empty));
+            user.RaiseUserCreatedDomainEvent();
 
         return Result<ApplicationUser>.SuccessWith(user);
     }

@@ -1,6 +1,5 @@
 using Common.Domain.Models;
 using Common.Domain.ValueObjects;
-using ProductCatalog.Domain.Events;
 using ProductCatalog.Domain.Models.Brands;
 using ProductCatalog.Domain.Models.Categories;
 using ProductCatalog.Domain.Models.Suppliers;
@@ -9,8 +8,6 @@ namespace ProductCatalog.Domain.Models.Products;
 
 public class Product : Entity, IAggregateRoot
 {
-    public Product() { }
-
     private Product(
         string name,
         string description,
@@ -27,24 +24,7 @@ public class Product : Entity, IAggregateRoot
         SupplierId = supplierId;
         Status = ProductStatus.Draft;
         CreatedAt = DateTime.UtcNow;
-
-        AddEvent(new ProductCreatedDomainEvent(Id, Name));
     }
-
-    public static Product Create(
-    string name,
-    string description,
-    Money price,
-    int brandId,
-    int categoryId,
-    int supplierId)
-        => new Product(
-            name,
-            description,
-            price,
-            brandId,
-            categoryId,
-            supplierId);
 
     public string Name { get; private set; }
     public string Description { get; private set; }
@@ -61,23 +41,19 @@ public class Product : Entity, IAggregateRoot
     public virtual Supplier Supplier { get; private set; }
 
     public static Product Create(
-        string name,
-        string description,
-        decimal price,
-        int brandId,
-        int categoryId,
-        int supplierId)
-    {
-        var moneyResult = Money.From(price);
-
-        return Product.Create(
+    string name,
+    string description,
+    Money price,
+    int brandId,
+    int categoryId,
+    int supplierId)
+        => new Product(
             name,
             description,
-            moneyResult.Amount,
+            price,
             brandId,
             categoryId,
             supplierId);
-    }
 
     public Product Update(
         string name,

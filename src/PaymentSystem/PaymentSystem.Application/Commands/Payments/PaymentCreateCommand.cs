@@ -45,6 +45,8 @@ public class PaymentCreateCommand : IRequest<PaymentCreateResponse>, CorrelatedB
             var amount = order.OrderItems.Sum(o => o.UnitPrice * o.Quantity);
             var payment = Payment.Create(orderId, amount, paymentMethod);
 
+            payment.RaisePaymentCompletedEvent(correlationId: request.CorrelationId);
+
             await _paymentRepository.SaveAsync(payment, cancellationToken);
 
             var statuses = Enum.GetValues(typeof(PaymentStatus));
@@ -63,12 +65,7 @@ public class PaymentCreateCommand : IRequest<PaymentCreateResponse>, CorrelatedB
 
             await _paymentRepository.UpdateAsync(payment, cancellationToken);
 
-            // EVENTS 
-
-            if (transaction.Status == PaymentStatus.Failed)
-                payment.MarkAsFailed(correlationId: request.CorrelationId);
-            else if (transaction.Status == PaymentStatus.Completed)
-                payment.MarkAsCompleted(correlationId: request.CorrelationId);
+            // EVENTS                 
 
             return new PaymentCreateResponse
             {

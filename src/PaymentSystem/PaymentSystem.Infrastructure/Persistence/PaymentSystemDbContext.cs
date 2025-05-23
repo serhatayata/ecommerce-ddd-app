@@ -10,8 +10,8 @@ public class PaymentSystemDbContext : BaseDbContext<PaymentSystemDbContext>
 {
     public PaymentSystemDbContext(
         DbContextOptions<PaymentSystemDbContext> options,
-        IMediator mediator)
-        : base(options, mediator)
+        IPublisher publisher)
+        : base(options, publisher)
     {
     }
 

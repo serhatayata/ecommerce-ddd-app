@@ -36,7 +36,7 @@ public class Payment : Entity, IAggregateRoot
     public DateTime CreatedAt { get; private set; }
     public virtual ICollection<PaymentTransaction> Transactions { get; private set; }
 
-    public void MarkAsCompleted(Guid? correlationId = null)
+    public void RaisePaymentCompletedEvent(Guid? correlationId = null)
     {
         Status = PaymentStatus.Completed;
 
@@ -49,21 +49,5 @@ public class Payment : Entity, IAggregateRoot
         );
 
         AddEvent(paymentCompletedEvent);
-    }
-
-    public void MarkAsFailed(Guid? correlationId = null)
-    {
-        Status = PaymentStatus.Failed;
-
-        var paymentFailedEvent = new PaymentFailedDomainEvent(
-            OrderId.Value,
-            Id,
-            Amount.Amount,
-            Method,
-            "Payment failed",
-            correlationId
-        );
-
-        AddEvent(paymentFailedEvent);
     }
 }

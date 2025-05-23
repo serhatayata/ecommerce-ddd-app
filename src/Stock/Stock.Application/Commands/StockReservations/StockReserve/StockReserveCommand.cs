@@ -38,26 +38,13 @@ public class StockReserveCommand : IRequest<StockReserveResponse>, CorrelatedBy<
                 cancellationToken);
 
             if (reservedItems.Any())
-            {
                 await _mediator.Publish(new StockReservedDomainEvent(
                     request.OrderId,
                     DateTime.UtcNow,
                     request.CorrelationId
                 ), cancellationToken);
 
-                return new StockReserveResponse(request.OrderId);
-            }
-            else
-            {
-                await _mediator.Publish(new StockReserveFailedDomainEvent(
-                    request.OrderId,
-                    DateTime.UtcNow,
-                    "Failed to reserve stock for all items",
-                    request.CorrelationId
-                ), cancellationToken);
-
-                return null;
-            }
+            return new StockReserveResponse(request.OrderId);
         }
     }
 }
