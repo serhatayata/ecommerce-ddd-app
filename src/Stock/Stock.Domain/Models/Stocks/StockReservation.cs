@@ -14,7 +14,7 @@ public class StockReservation : Entity
     private StockReservation() { }
 
     public StockReservation(
-        int stockItemId,
+        StockItemId stockItemId,
         OrderId orderId,
         int quantity)
     {
@@ -25,7 +25,7 @@ public class StockReservation : Entity
         Status = ReservationStatus.Active;
     }
 
-    public int StockItemId { get; private set; }
+    public StockItemId StockItemId { get; private set; }
     public OrderId OrderId { get; private set; }
     public int Quantity { get; private set; }
     public DateTime ReservationDate { get; private set; }

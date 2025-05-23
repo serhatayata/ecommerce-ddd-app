@@ -1,6 +1,7 @@
 using MediatR;
 using Stock.Domain.Contracts;
 using Stock.Domain.Models.Stocks;
+using ValueObjects = Common.Domain.ValueObjects;
 
 namespace Stock.Application.Queries.StockTransactions.Details;
 
@@ -22,7 +23,7 @@ public class StockTransactionsQuery : IRequest<IEnumerable<StockTransaction>>
             CancellationToken cancellationToken)
         {
             return await _stockItemRepository.GetTransactionsByStockItemIdAsync(
-                request.StockItemId, 
+                ValueObjects.StockItemId.From(request.StockItemId),
                 cancellationToken);
         }
     }

@@ -11,7 +11,7 @@ public interface IStockItemRepository : IRepository<StockItem>
     Task<StockReservation> CreateReservationAsync(StockReservation reservation, CancellationToken cancellationToken = default);
     Task DeleteReservationAsync(int id, CancellationToken cancellationToken = default);
     Task UpdateReservationAsync(StockReservation reservation, CancellationToken cancellationToken = default);
-    Task<IEnumerable<StockReservation>> GetReservationsByStockItemIdAsync(int stockItemId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<StockReservation>> GetReservationsByStockItemIdAsync(StockItemId stockItemId, CancellationToken cancellationToken = default);
     Task<IEnumerable<StockReservation>> GetReservationsByOrderIdAsync(OrderId orderId, CancellationToken cancellationToken = default);
     Task<List<(int StockItemId, int Quantity)>> ReserveProductsStocks(Dictionary<ProductId, int> productQuantities, OrderId orderId, CancellationToken cancellationToken = default);
     #endregion
@@ -21,9 +21,9 @@ public interface IStockItemRepository : IRepository<StockItem>
     Task<StockTransaction> CreateTransactionAsync(StockTransaction transaction, CancellationToken cancellationToken = default);
     Task UpdateTransactionAsync(StockTransaction transaction, CancellationToken cancellationToken = default);
     Task DeleteTransactionAsync(int id, CancellationToken cancellationToken = default);
-    Task<IEnumerable<StockTransaction>> GetTransactionsByStockItemIdAsync(int stockItemId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<StockTransaction>> GetTransactionsByStockItemIdAsync(StockItemId stockItemId, CancellationToken cancellationToken = default);
     #endregion
 
-    Task<StockItem> GetByIdWithReservationsAsync(int id, CancellationToken cancellationToken);
+    Task<StockItem> GetByIdWithReservationsAsync(StockItemId id, CancellationToken cancellationToken);
     Task<IEnumerable<StockItem>> GetByProductIdsAsync(IEnumerable<ProductId> productIds, CancellationToken cancellationToken = default);
 }

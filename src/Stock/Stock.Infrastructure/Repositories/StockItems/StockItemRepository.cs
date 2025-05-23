@@ -60,7 +60,7 @@ public class StockItemRepository : EfRepository<StockItem, StockDbContext>, ISto
             .ToListAsync(cancellationToken);
 
     public async Task<IEnumerable<StockReservation>> GetReservationsByStockItemIdAsync(
-        int stockItemId,
+        StockItemId stockItemId,
         CancellationToken cancellationToken = default)
         => await _dbContext.StockReservations
             .Where(s => s.StockItemId == stockItemId)
@@ -147,7 +147,7 @@ public class StockItemRepository : EfRepository<StockItem, StockDbContext>, ISto
     }
 
     public async Task<IEnumerable<StockTransaction>> GetTransactionsByStockItemIdAsync(
-        int stockItemId,
+        StockItemId stockItemId,
         CancellationToken cancellationToken = default)
         => await _dbContext.StockTransactions
             .Where(s => s.StockItemId == stockItemId)
@@ -159,10 +159,10 @@ public class StockItemRepository : EfRepository<StockItem, StockDbContext>, ISto
         => await _dbContext.StockTransactions.FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
     #endregion
 
-    public async Task<StockItem> GetByIdWithReservationsAsync(int id, CancellationToken cancellationToken)
+    public async Task<StockItem> GetByIdWithReservationsAsync(StockItemId id, CancellationToken cancellationToken)
         => await _dbContext.StockItems
             .Include(x => x.Reservations)
-            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+            .FirstOrDefaultAsync(x => x.Id == id.Value, cancellationToken);
 
     public async Task<IEnumerable<StockItem>> GetByProductIdsAsync(
     IEnumerable<ProductId> productIds, 

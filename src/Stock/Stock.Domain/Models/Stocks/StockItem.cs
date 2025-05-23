@@ -51,7 +51,7 @@ public class StockItem : Entity, IAggregateRoot
         Quantity += quantity;
         LastUpdated = DateTime.UtcNow;
 
-        var transaction = new StockTransaction(Id, quantity, StockTransactionType.Addition, reason);
+        var transaction = new StockTransaction(StockItemId.From(Id), quantity, StockTransactionType.Addition, reason);
         _transactions.Add(transaction);
 
         AddEvent(new StockAddedDomainEvent(Id, quantity, correlationId));
@@ -71,7 +71,7 @@ public class StockItem : Entity, IAggregateRoot
         Quantity -= quantity;
         LastUpdated = DateTime.UtcNow;
 
-        var transaction = new StockTransaction(Id, quantity, StockTransactionType.Removal, reason);
+        var transaction = new StockTransaction(StockItemId.From(Id), quantity, StockTransactionType.Removal, reason);
         _transactions.Add(transaction);
 
         AddEvent(new StockRemovedDomainEvent(Id, quantity, DateTime.UtcNow, correlationId));
@@ -84,7 +84,7 @@ public class StockItem : Entity, IAggregateRoot
         if (GetAvailableQuantity() < quantity)
             throw new InvalidOperationException("Insufficient stock for reservation");
 
-        var reservation = new StockReservation(Id, orderId, quantity);
+        var reservation = new StockReservation(StockItemId.From(Id), orderId, quantity);
         _reservations.Add(reservation);
     }
 

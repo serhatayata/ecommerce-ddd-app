@@ -1,4 +1,5 @@
 using AutoMapper;
+using Common.Domain.ValueObjects;
 using MediatR;
 using Stock.Application.Queries.StockItems.Common;
 using Stock.Domain.Contracts;
@@ -26,7 +27,7 @@ public class StockItemDetailsQuery : IRequest<StockItemResponse>
             StockItemDetailsQuery request,
             CancellationToken cancellationToken)
         {
-            var stockItem = await _stockItemRepository.GetByIdWithReservationsAsync(request.Id, cancellationToken);
+            var stockItem = await _stockItemRepository.GetByIdWithReservationsAsync(StockItemId.From(request.Id), cancellationToken);
             
             return _mapper.Map<StockItemResponse>(stockItem);
         }

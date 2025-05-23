@@ -1,4 +1,5 @@
 using AutoMapper;
+using Common.Domain.ValueObjects;
 using MediatR;
 using Stock.Application.Queries.StockReservations.Common;
 using Stock.Domain.Contracts;
@@ -26,7 +27,7 @@ public class StockReservationsQuery : IRequest<IEnumerable<StockReservationRespo
             StockReservationsQuery request,
             CancellationToken cancellationToken)
         {
-            var stockReservation = await _stockItemRepository.GetReservationsByStockItemIdAsync(request.StockId, cancellationToken);
+            var stockReservation = await _stockItemRepository.GetReservationsByStockItemIdAsync(StockItemId.From(request.StockId), cancellationToken);
 
             return _mapper.Map<IEnumerable<StockReservationResponse>>(stockReservation);
         }
