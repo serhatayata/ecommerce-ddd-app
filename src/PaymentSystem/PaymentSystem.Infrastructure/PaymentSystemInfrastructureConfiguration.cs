@@ -5,9 +5,11 @@ using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PaymentSystem.Application.Services.OrderManagements;
 using PaymentSystem.Domain.Contracts;
 using PaymentSystem.Infrastructure.Persistence;
 using PaymentSystem.Infrastructure.Repositories;
+using PaymentSystem.Infrastructure.Services.OrderManagements;
 
 namespace PaymentSystem.Infrastructure;
 
@@ -22,6 +24,7 @@ public static class PaymentSystemInfrastructureConfiguration
             .AddRepositories()
             .AddTransient<IDbInitializer, PaymentSystemDbInitializer>()
             .AddTransient<IPaymentRepository, PaymentRepository>()
+            .AddTransient<IOrderManagementApiService, OrderManagementApiService>()
             .AddQueueConfigurations();
 
         return services;

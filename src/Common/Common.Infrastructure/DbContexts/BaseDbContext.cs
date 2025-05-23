@@ -18,32 +18,35 @@ public abstract class BaseDbContext<TContext> : DbContext where TContext : DbCon
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
+        if (_savesChangesTracker.Any())
+            return await base.SaveChangesAsync(cancellationToken);
+
         _savesChangesTracker.Push(new object());
 
-        var entitiesWithEvents = ChangeTracker
-            .Entries<Entity>()
-            .Where(e => e.Entity.Events.Any())
-            .Select(e => e.Entity)
-            .ToArray();
-
-        foreach (var entity in entitiesWithEvents)
+        try
         {
-            var events = entity.Events.ToArray();
-            entity.ClearEvents();
+            var entitiesWithEvents = ChangeTracker
+                .Entries<Entity>()
+                .Where(e => e.Entity.Events.Any())
+                .Select(e => e.Entity)
+                .ToArray();
 
-            foreach (var domainEvent in events)
+            var changes = await base.SaveChangesAsync(cancellationToken);
+
+            foreach (var entity in entitiesWithEvents)
             {
-                await _mediator.Publish(domainEvent);
+                var events = entity.Events.ToArray();
+                entity.ClearEvents();
+
+                foreach (var domainEvent in events)
+                    await _mediator.Publish(domainEvent, cancellationToken);
             }
+
+            return changes;
         }
-
-        _savesChangesTracker.Pop();
-
-        if (!_savesChangesTracker.Any())
+        finally
         {
-            return await base.SaveChangesAsync(cancellationToken);
+            _savesChangesTracker.Pop();
         }
-
-        return 0;
     }
 }

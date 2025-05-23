@@ -26,7 +26,7 @@ public class OrderAddSaga : MassTransitStateMachine<OrderAddState>
     // Integration Events
     public Event<OrderAddedEvent> OrderAddedEvent { get; private set; }
     public Event<OrderAddFailedEvent> OrderNotAddedEvent { get; private set; }
-    public Event<StocksReservedEvent> StocksReservedEvent { get; private set; }
+    public Event<StockReservedEvent> StockReservedEvent { get; private set; }
     public Event<StockReserveFailedEvent> StockReserveFailedEvent { get; private set; }
     public Event<PaymentCompletedEvent> PaymentCompletedEvent { get; private set; }
     public Event<PaymentFailedEvent> PaymentFailedEvent { get; private set; }
@@ -41,7 +41,7 @@ public class OrderAddSaga : MassTransitStateMachine<OrderAddState>
 
         Event(() => OrderAddedEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
         Event(() => OrderNotAddedEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
-        Event(() => StocksReservedEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
+        Event(() => StockReservedEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
         Event(() => StockReserveFailedEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
         Event(() => PaymentCompletedEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
         Event(() => PaymentFailedEvent, x => x.CorrelateById(context => context.Message.CorrelationId));
@@ -79,7 +79,19 @@ public class OrderAddSaga : MassTransitStateMachine<OrderAddState>
         );
 
         During(OrderAdded,
-            When(StocksReservedEvent)
+            When(StockReservedEvent)
+                .ThenAsync(async context =>
+                {
+                    context.Saga.OrderId = context.Message.OrderId;
+                    context.Saga.CreatedAt = DateTime.UtcNow;
+
+                    var paymentCreateRequestEvent = new PaymentCreateRequestEvent(
+                        context.Message.CorrelationId,
+                        context.Message.OrderId
+                    );
+                    
+                    await context.Publish(paymentCreateRequestEvent);
+                })
                 .TransitionTo(StockReserved),
             When(StockReserveFailedEvent)
                 .Then(context =>

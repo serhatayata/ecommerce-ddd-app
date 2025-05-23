@@ -1,4 +1,6 @@
-namespace PaymentSystem.Application.Commands.PaymentInformation;
+using Common.Domain.ValueObjects;
+
+namespace Common.Application.Models.Responses.PaymentSystems;
 
 public class PaymentInfoCreateResponse
 {
@@ -8,5 +10,7 @@ public class PaymentInfoCreateResponse
     public string IBAN { get; set; }
     public string CVV { get; set; }
     public string HolderName { get; set; }
+    public string ExpirationDate { get; set; }
+    public PaymentMethod Method { get; set; }
     public DateTime CreatedAt { get; set; }
 }

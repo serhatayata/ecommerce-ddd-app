@@ -2,18 +2,21 @@ using Common.Domain.Events;
 
 namespace Stock.Domain.Events;
 
-public sealed record StocksReservedDomainEvent : DomainEvent
+public sealed record StockReserveFailedDomainEvent : DomainEvent
 {
-    public StocksReservedDomainEvent(
+    public StockReserveFailedDomainEvent(
         int orderId,
         DateTime reservedDate,
-        Guid? correlationId) 
+        string errorMessage,
+        Guid? correlationId)
         : base(correlationId)
     {
         OrderId = orderId;
         ReservedDate = reservedDate;
+        ErrorMessage = errorMessage;
     }
 
     public int OrderId { get; set; }
     public DateTime ReservedDate { get; set; }
+    public string ErrorMessage { get; set; }
 }

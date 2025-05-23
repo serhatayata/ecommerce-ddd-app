@@ -22,21 +22,20 @@ public class StockReserveRequestEventConsumer : IConsumer<StockReserveRequestEve
     public async Task Consume(ConsumeContext<StockReserveRequestEvent> context)
     {
         var message = context.Message;
-        _logger.LogInformation("Received stock reserve request for: Order : {OrderId} - {StockItemId}", 
-        message.StockItemId, message.OrderId);   
+        _logger.LogInformation("Received stock reserve request for: Order : {OrderId}", message.OrderId);   
 
         try
         {
-            _ = await _mediator.Send(new StockReserveCommand() 
-            {  
-                StockItemId = message.StockItemId, 
-                ReservedQuantity = message.ReservedQuantity, 
-                OrderId = message.OrderId
+            _ = await _mediator.Send(new StockReserveCommand()
+            {
+                OrderId = message.OrderId,
+                Items = message.Items,
+                CorrelationId = message.CorrelationId
             });
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error processing stock reserve request for item ID: {StockItemId}", message.StockItemId);
+            _logger.LogError(ex, "Error processing stock reserve request for item ID: {OrderId}", message.OrderId);
         }
     }
 }

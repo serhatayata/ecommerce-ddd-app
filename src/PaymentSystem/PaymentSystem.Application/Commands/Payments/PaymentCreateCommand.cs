@@ -1,8 +1,7 @@
-using Common.Domain.ValueObjects;
 using MassTransit;
 using MediatR;
+using PaymentSystem.Application.Services.OrderManagements;
 using PaymentSystem.Domain.Contracts;
-using PaymentSystem.Domain.Events;
 using PaymentSystem.Domain.Models;
 
 namespace PaymentSystem.Application.Commands.Payments;
@@ -10,30 +9,40 @@ namespace PaymentSystem.Application.Commands.Payments;
 public class PaymentCreateCommand : IRequest<PaymentCreateResponse>, CorrelatedBy<Guid?>
 {
     public int OrderId { get; set; }
-    public decimal Amount { get; set; }
-    public PaymentMethod Method { get; set; }
     public Guid? CorrelationId { get; set; }
 
     public class PaymentCreateCommandHandler : IRequestHandler<PaymentCreateCommand, PaymentCreateResponse>
     {
         private readonly IPaymentRepository _paymentRepository;
-        private readonly IMediator _mediator;
+        private readonly IOrderManagementApiService _orderManagementApiService;
 
         public PaymentCreateCommandHandler(
             IPaymentRepository paymentRepository,
-            IMediator mediator)
+            IOrderManagementApiService orderManagementApiService)
         {
             _paymentRepository = paymentRepository;
-            _mediator = mediator;
+            _orderManagementApiService = orderManagementApiService;
         }
 
         public async Task<PaymentCreateResponse> Handle(
             PaymentCreateCommand request,
             CancellationToken cancellationToken)
         {
-            // PAYMENT PROCESS ----
+            var order = await _orderManagementApiService.GetOrderDetailById(request.OrderId);
+            if (order == null)
+                return null;
 
-            var payment = new Payment(request.OrderId, request.Amount, request.Method);
+            var paymentInfo = await _paymentRepository.GetPaymentInfoByOrderIdAsync(request.OrderId, cancellationToken);
+            if (paymentInfo == null)
+                return null;
+
+            var paymentMethod = paymentInfo.Method;
+
+            // PAYMENT PROCESS HANDLED HERE - DEMO ----
+            // END
+
+            var amount = order.OrderItems.Sum(o => o.UnitPrice * o.Quantity);
+            var payment = new Payment(request.OrderId, amount, paymentMethod);
 
             await _paymentRepository.SaveAsync(payment, cancellationToken);
 
@@ -43,7 +52,7 @@ public class PaymentCreateCommand : IRequest<PaymentCreateResponse>, CorrelatedB
 
             var transactionId = Guid.NewGuid().ToString();
             var transaction = new PaymentTransaction(
-                request.Amount,
+                amount,
                 DateTime.UtcNow,
                 transactionId,
                 randomStatus
@@ -56,32 +65,9 @@ public class PaymentCreateCommand : IRequest<PaymentCreateResponse>, CorrelatedB
             // EVENTS 
 
             if (transaction.Status == PaymentStatus.Failed)
-            {
-                var paymentFailedEvent = new PaymentFailedDomainEvent(
-                    request.OrderId,
-                    payment.Id,
-                    request.Amount,
-                    request.Method,
-                    transaction.TransactionId,
-                    "Payment failed",
-                    request.CorrelationId
-                );
-
-                await _mediator.Publish(paymentFailedEvent, cancellationToken);
-            }
+                payment.MarkAsFailed(correlationId: request.CorrelationId);
             else if (transaction.Status == PaymentStatus.Completed)
-            {
-                var paymentCompletedEvent = new PaymentCompletedDomainEvent(
-                    request.OrderId,
-                    payment.Id,
-                    request.Amount,
-                    payment.Method,
-                    transaction.TransactionId,
-                    request.CorrelationId
-                );
-
-                await _mediator.Publish(paymentCompletedEvent, cancellationToken);
-            }
+                payment.MarkAsCompleted(correlationId: request.CorrelationId);
 
             return new PaymentCreateResponse
             {

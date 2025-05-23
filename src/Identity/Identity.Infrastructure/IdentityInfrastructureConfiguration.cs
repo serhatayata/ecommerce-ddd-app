@@ -136,21 +136,6 @@ public static class IdentityInfrastructureConfiguration
                     e.ConfigureSaga<UserRegistrationState>(context);
                 });
                 #endregion
-                /// DomainEvents
-                #region UserCreatedDomainEvent
-                var userCreatedDomainEventName = MessageBrokerExtensions.GetQueueName<UserCreatedDomainEvent>();
-                cfg.ReceiveEndpoint(userCreatedDomainEventName, e =>
-                {
-                    e.ConfigureSaga<UserRegistrationState>(context);
-                });
-                #endregion
-                #region UserNotCreatedDomainEvent
-                var userNotCreatedDomainEventName = MessageBrokerExtensions.GetQueueName<UserNotCreatedDomainEvent>();
-                cfg.ReceiveEndpoint(userNotCreatedDomainEventName, e =>
-                {
-                    e.ConfigureSaga<UserRegistrationState>(context);
-                });
-                #endregion
             });
         });
     }

@@ -1,3 +1,5 @@
+using Common.Application.Models.Responses.PaymentSystems;
+using Common.Domain.ValueObjects;
 using MassTransit;
 using MediatR;
 using PaymentSystem.Domain.Contracts;
@@ -11,19 +13,18 @@ public class PaymentInfoCreateCommand : IRequest<PaymentInfoCreateResponse>, Cor
     public string IBAN { get; set; }
     public string CVV { get; set; }
     public string HolderName { get; set; }
+    public string ExpirationDate { get; set; }
+    public PaymentMethod Method { get; set; }
     public Guid? CorrelationId { get; set; }
 
     public class PaymentCreateCommandHandler : IRequestHandler<PaymentInfoCreateCommand, PaymentInfoCreateResponse>
     {
         private readonly IPaymentRepository _paymentRepository;
-        private readonly IMediator _mediator;
 
         public PaymentCreateCommandHandler(
-        IPaymentRepository paymentRepository,
-        IMediator mediator)
+        IPaymentRepository paymentRepository)
         {
             _paymentRepository = paymentRepository;
-            _mediator = mediator;
         }
         
         public async Task<PaymentInfoCreateResponse> Handle(
@@ -35,7 +36,9 @@ public class PaymentInfoCreateCommand : IRequest<PaymentInfoCreateResponse>, Cor
                 request.CardNumber,
                 request.IBAN,
                 request.CVV,
-                request.HolderName
+                request.HolderName,
+                request.ExpirationDate,
+                request.Method
             );
 
             var id = await _paymentRepository.CreatePaymentInfoAsync(paymentInfo, cancellationToken);
@@ -48,6 +51,8 @@ public class PaymentInfoCreateCommand : IRequest<PaymentInfoCreateResponse>, Cor
                 IBAN = paymentInfo.IBAN,
                 CVV = paymentInfo.CVV,
                 HolderName = paymentInfo.HolderName,
+                Method = paymentInfo.Method,
+                ExpirationDate = paymentInfo.ExpirationDate,
                 CreatedAt = paymentInfo.CreatedAt
             };
         }

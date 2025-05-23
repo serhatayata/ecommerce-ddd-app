@@ -10,7 +10,6 @@ public sealed record PaymentFailedDomainEvent : DomainEvent
     public int PaymentId { get; }
     public decimal Amount { get; }
     public PaymentMethod Method { get; }
-    public string TransactionId { get; set; }
     public string ErrorMessage { get; }
 
     [JsonConstructor]
@@ -23,7 +22,6 @@ public sealed record PaymentFailedDomainEvent : DomainEvent
         int paymentId,
         decimal amount,
         PaymentMethod method,
-        string transactionId,
         string errorMessage,
         Guid? correlationId)
         : base(correlationId)
@@ -32,7 +30,6 @@ public sealed record PaymentFailedDomainEvent : DomainEvent
         PaymentId = paymentId;
         Amount = amount;
         Method = method;
-        TransactionId = transactionId;
         ErrorMessage = errorMessage;
     }
 }

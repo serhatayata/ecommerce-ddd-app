@@ -30,8 +30,6 @@ public class PaymentCreateRequestEventConsumer : IConsumer<PaymentCreateRequestE
             _ = await _mediator.Send(new PaymentCreateCommand() 
             {
                 OrderId = message.OrderId,
-                Amount = message.Amount,
-                Method = message.Method,
                 CorrelationId = message.CorrelationId
             });
         }

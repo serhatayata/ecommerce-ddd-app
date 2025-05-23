@@ -9,23 +9,13 @@ public class Order : Entity, IAggregateRoot
     public HashSet<OrderItem> OrderItems { get; private set; }
 
     public Order(
-    int userId, 
+    int userId,
     DateTime orderDate)
     {
         UserId = userId;
         OrderDate = orderDate;
         OrderItems = new HashSet<OrderItem>();
         Status = OrderStatus.Pending;
-
-        decimal totalAmount = OrderItems?.Sum(x => x.UnitPrice?.Amount ?? 0) ?? 0;
-
-        AddEvent(new OrderAddedDomainEvent(
-            Id,
-            UserId,
-            OrderDate,
-            Status,
-            totalAmount
-        ));
     }
 
     public int UserId { get; private set; }
@@ -41,5 +31,31 @@ public class Order : Entity, IAggregateRoot
     public void AddOrderItem(OrderItem orderItem)
     {
         OrderItems.Add(orderItem);
+    }
+
+    public void RaiseOrderCreatedEvent()
+    {
+        decimal totalAmount = OrderItems?.Sum(x => x.UnitPrice?.Amount ?? 0) ?? 0;
+
+        AddEvent(new OrderAddedDomainEvent(
+            Id,
+            UserId,
+            OrderDate,
+            Status,
+            totalAmount
+        ));
+    }
+    
+    public void RaiseOrderAddFailedEvent(string errorMessage)
+    {
+        decimal totalAmount = OrderItems?.Sum(x => x.UnitPrice?.Amount ?? 0) ?? 0;
+
+        AddEvent(new OrderAddFailedDomainEvent(
+            Id,
+            UserId,
+            OrderDate,
+            totalAmount,
+            errorMessage
+        ));
     }
 }

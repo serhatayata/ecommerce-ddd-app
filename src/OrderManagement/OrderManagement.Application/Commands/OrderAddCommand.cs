@@ -4,12 +4,18 @@ using OrderManagement.Application.Services.Products;
 using OrderManagement.Domain.Contracts;
 using OrderManagement.Domain.Models.Orders;
 using OrderManagement.Domain.Events;
+using OrderManagement.Application.Services.PaymentSystems;
 
 namespace OrderManagement.Application.Commands;
 
 public class OrderAddCommand : IRequest<OrderAddResponse>
 {
     public int UserId { get; set; }
+    public string CardNumber { get; set; }
+    public string IBAN { get; set; }
+    public string CVV { get; set; }
+    public string ExpirationDate { get; set; }
+    public string HolderName { get; set; }
 
     public HashSet<OrderItemAddModel> OrderItems { get; set; }
 
@@ -17,15 +23,18 @@ public class OrderAddCommand : IRequest<OrderAddResponse>
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IProductCatalogApiService _productCatalogApiService;
+        private readonly IPaymentSystemApiService _paymentSystemApiService;
         private readonly IMediator _mediator;
 
         public OrderAddCommandHandler(
         IOrderRepository orderRepository,
         IProductCatalogApiService productCatalogApiService,
+        IPaymentSystemApiService paymentSystemApiService,
         IMediator mediator)
         {
             _orderRepository = orderRepository;
             _productCatalogApiService = productCatalogApiService;
+            _paymentSystemApiService = paymentSystemApiService;
             _mediator = mediator;
         }
 
@@ -59,26 +68,29 @@ public class OrderAddCommand : IRequest<OrderAddResponse>
                 order.AddOrderItem(orderItem);
 
             var isSaved = await _orderRepository.SaveAsync(order, cancellationToken) > 0;
-            if (!isSaved)
-            {
-                var totalAmount = order.OrderItems?.Sum(x => x.UnitPrice?.Amount ?? 0) ?? 0;
-                var domainEvent = new OrderAddFailedDomainEvent(
-                    order.Id,
-                    userId,
-                    order.OrderDate,
-                    totalAmount,
-                    "Order could not be saved."
-                );
+
+            if (isSaved)
+                order.RaiseOrderCreatedEvent();
+            else
+                order.RaiseOrderAddFailedEvent("Failed to save order");
+
+            var paymentInfoResponse = await _paymentSystemApiService.CreatePaymentInfoAsync(
+                order.Id,
+                request.CardNumber,
+                request.IBAN,
+                request.CVV,
+                request.HolderName,
+                request.ExpirationDate,
+                cancellationToken
+            );
+
+            foreach (var domainEvent in order.Events)
                 await _mediator.Publish(domainEvent, cancellationToken);
-            }
-
-            // PaymentInfo creation
-
-
 
             return new OrderAddResponse
             {
                 Id = order.Id,
+                PaymentInfoId = paymentInfoResponse.Id,
                 OrderDate = order.OrderDate
             };
         }

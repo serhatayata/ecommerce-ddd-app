@@ -182,6 +182,10 @@
         {
             "name": "Order + ProductCatalog API",
             "configurations": ["Order API", "ProductCatalog API"]
+        },
+        {
+            "name": "Order + ProductCatalog + Payment APIs",
+            "configurations": ["Order API", "ProductCatalog API", "PaymentSystem API"]
         }
     ]
 }

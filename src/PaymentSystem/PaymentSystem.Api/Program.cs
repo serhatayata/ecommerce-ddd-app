@@ -17,6 +17,10 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
+builder.Services.AddHttpClient("order-management", client => {
+    client.BaseAddress = new Uri(configuration["Services:OrderManagement:BaseAddress"]);
+});
+
 builder.Services.Register(configuration);
 
 builder.Services.AddMediatR(cfg => {

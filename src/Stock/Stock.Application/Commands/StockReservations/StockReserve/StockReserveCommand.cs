@@ -25,34 +25,20 @@ public class StockReserveCommand : IRequest<StocksReserveResponse>, CorrelatedBy
             _mediator = mediator;
         }
 
-        public async Task<StocksReserveResponse> Handle(StockReserveCommand request, CancellationToken cancellationToken)
+        public async Task<StocksReserveResponse> Handle(
+        StockReserveCommand request,
+        CancellationToken cancellationToken)
         {
             var orderItems = request.Items;
-            var productIds = orderItems.Select(x => x.ProductId).ToList();
 
-            var stockItems = await _stockItemRepository.GetByProductIdsAsync(
-                productIds, 
+            var reservedItems = await _stockItemRepository.ReserveProductsStocks(
+                orderItems.ToDictionary(x => x.ProductId, x => x.Quantity),
+                request.OrderId,
                 cancellationToken);
-
-            var reservedItems = new List<(int StockItemId, int Quantity)>();
-
-            foreach (var orderItem in orderItems)
-            {
-                var stockItem = stockItems.FirstOrDefault(x => x.ProductId == orderItem.ProductId);
-                if (stockItem != null)
-                {
-                    stockItem.ReserveStock(orderItem.Quantity, request.OrderId);
-
-                    var isUpdated = await _stockItemRepository.UpdateAsync(stockItem, cancellationToken) > 0;
-
-                    if (isUpdated)
-                        reservedItems.Add((stockItem.Id, orderItem.Quantity));
-                }
-            }
 
             if (reservedItems.Any())
             {
-                await _mediator.Publish(new StocksReservedDomainEvent(
+                await _mediator.Publish(new StockReservedDomainEvent(
                     request.OrderId,
                     DateTime.UtcNow,
                     request.CorrelationId
@@ -62,7 +48,7 @@ public class StockReserveCommand : IRequest<StocksReserveResponse>, CorrelatedBy
             }
             else
             {
-                await _mediator.Publish(new StocksReserveFailedDomainEvent(
+                await _mediator.Publish(new StockReserveFailedDomainEvent(
                     request.OrderId,
                     DateTime.UtcNow,
                     "Failed to reserve stock for all items",

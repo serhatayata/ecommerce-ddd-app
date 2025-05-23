@@ -1,4 +1,5 @@
 using Common.Domain.Models;
+using Common.Domain.ValueObjects;
 
 namespace PaymentSystem.Domain.Models;
 
@@ -17,13 +18,17 @@ public class PaymentInfo : Entity
     string cardNumber,
     string iban,
     string cvv,
-    string holderName)
+    string holderName,
+    string expirationDate, // Add this
+    PaymentMethod method)
     {
         OrderId = orderId;
         CardNumber = cardNumber;
         IBAN = iban;
         CVV = cvv;
         HolderName = holderName;
+        ExpirationDate = expirationDate; // Add this
+        Method = method;
         CreatedAt = DateTime.UtcNow;
     }
 
@@ -32,5 +37,7 @@ public class PaymentInfo : Entity
     public string IBAN { get; private set; }
     public string CVV { get; private set; }
     public string HolderName { get; private set; }
+    public string ExpirationDate { get; private set; }
+    public PaymentMethod Method { get; private set; }
     public DateTime CreatedAt { get; private set; }
 }

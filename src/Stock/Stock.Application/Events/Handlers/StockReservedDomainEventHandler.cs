@@ -5,7 +5,7 @@ using MassTransit;
 
 namespace Stock.Application.Events.Handlers;
 
-public class StockReservedDomainEventHandler : INotificationHandler<StocksReservedDomainEvent>
+public class StockReservedDomainEventHandler : INotificationHandler<StockReservedDomainEvent>
 {
     private readonly IPublishEndpoint _publishEndpoint;
 
@@ -13,10 +13,10 @@ public class StockReservedDomainEventHandler : INotificationHandler<StocksReserv
         => _publishEndpoint = publishEndpoint;
 
     public async Task Handle(
-        StocksReservedDomainEvent notification, 
+        StockReservedDomainEvent notification, 
         CancellationToken cancellationToken)
     {
-        var integrationEvent = new StocksReservedEvent(
+        var integrationEvent = new StockReservedEvent(
             notification.CorrelationId,
             notification.OrderId,
             DateTime.UtcNow

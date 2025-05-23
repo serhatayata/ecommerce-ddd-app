@@ -64,6 +64,55 @@ public class StockItemRepository : EfRepository<StockItem, StockDbContext>, ISto
         => await _dbContext.StockReservations
             .Where(s => s.StockItemId == stockItemId)
             .ToListAsync(cancellationToken);
+
+    public async Task<List<(int StockItemId, int Quantity)>> ReserveProductsStocks(
+    Dictionary<int, int> productQuantities,
+    int orderId, 
+    CancellationToken cancellationToken = default)
+    {
+        var productIds = productQuantities.Keys.ToList();
+        var stockItems = await GetByProductIdsAsync(productIds, cancellationToken);
+
+        var reservedItems = new List<(int StockItemId, int Quantity)>();
+        foreach (var productQuantity in productQuantities)
+        {
+            var productId = productQuantity.Key;
+            var quantity = productQuantity.Value;
+            var stockItem = stockItems.FirstOrDefault(x => x.ProductId == productId);
+            if (stockItem != null)
+            {
+                await ReserveStock(reservedItems, stockItem, quantity, orderId, cancellationToken);
+            }
+            else
+            {
+                var newStockItem = new StockItem(
+                    productId,
+                    quantity,
+                    new Location(string.Empty, string.Empty, string.Empty)
+                );
+
+                _ = await SaveAsync(newStockItem, cancellationToken);
+                await ReserveStock(reservedItems, newStockItem, quantity, orderId, cancellationToken);
+            }
+        }
+
+        return reservedItems;
+    }
+
+    private async Task<List<(int StockItemId, int Quantity)>> ReserveStock(
+    List<(int StockItemId, int Quantity)> reservedItems,
+    StockItem stockItem,
+    int quantity,
+    int orderId,
+    CancellationToken cancellationToken)
+    {
+        stockItem.ReserveStock(quantity, orderId);
+        var isUpdated = await UpdateAsync(stockItem, cancellationToken) > 0;
+        if (isUpdated)
+            reservedItems.Add((stockItem.Id, quantity));
+            
+        return reservedItems;
+    }
     #endregion
 
     #region Stock Transaction
@@ -119,6 +168,7 @@ public class StockItemRepository : EfRepository<StockItem, StockDbContext>, ISto
     CancellationToken cancellationToken = default)
     {
         return await _dbContext.StockItems
+            .Include(x => x.Reservations)
             .Where(x => productIds.Contains(x.ProductId))
             .ToListAsync(cancellationToken);
     }

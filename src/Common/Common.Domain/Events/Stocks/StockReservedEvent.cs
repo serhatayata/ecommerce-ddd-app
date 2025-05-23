@@ -1,8 +1,8 @@
 namespace Common.Domain.Events.Stocks;
 
-public sealed record StocksReservedEvent : IntegrationEvent
+public sealed record StockReservedEvent : IntegrationEvent
 {
-    public StocksReservedEvent(
+    public StockReservedEvent(
         Guid correlationId,
         int orderId,
         DateTime reservedDate) 

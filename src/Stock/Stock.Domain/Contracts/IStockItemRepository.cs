@@ -12,8 +12,9 @@ public interface IStockItemRepository : IRepository<StockItem>
     Task UpdateReservationAsync(StockReservation reservation, CancellationToken cancellationToken = default);
     Task<IEnumerable<StockReservation>> GetReservationsByStockItemIdAsync(int stockItemId, CancellationToken cancellationToken = default);
     Task<IEnumerable<StockReservation>> GetReservationsByOrderIdAsync(int orderId, CancellationToken cancellationToken = default);
+    Task<List<(int StockItemId, int Quantity)>> ReserveProductsStocks(Dictionary<int, int> productQuantities, int orderId, CancellationToken cancellationToken = default);
     #endregion
-    
+
     #region StockTransaction
     Task<StockTransaction> GetTransactionByIdAsync(int id, CancellationToken cancellationToken = default);
     Task<StockTransaction> CreateTransactionAsync(StockTransaction transaction, CancellationToken cancellationToken = default);

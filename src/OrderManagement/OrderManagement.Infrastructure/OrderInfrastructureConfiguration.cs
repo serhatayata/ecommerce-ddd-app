@@ -5,10 +5,13 @@ using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using OrderManagement.Application.Sagas;
+using OrderManagement.Application.Services.PaymentSystems;
 using OrderManagement.Application.Services.Products;
 using OrderManagement.Domain.Contracts;
 using OrderManagement.Infrastructure.Persistence;
 using OrderManagement.Infrastructure.Repositories;
+using OrderManagement.Infrastructure.Services.PaymentSystems;
 using OrderManagement.Infrastructure.Services.Products;
 
 namespace OrderManagement.Infrastructure;
@@ -25,7 +28,8 @@ public static class OrderInfrastructureConfiguration
             .AddTransient<IDbInitializer, OrderDbInitializer>()
             .AddTransient<IOrderRepository, OrderRepository>()
             .AddTransient<IProductCatalogApiService, ProductCatalogApiService>()
-            .AddQueueConfigurations();
+            .AddTransient<IPaymentSystemApiService, PaymentSystemApiService>()
+            .AddSagaConfigurations(configuration);
 
         return services;
     }
@@ -65,14 +69,32 @@ public static class OrderInfrastructureConfiguration
         return services;
     }
 
-    private static IServiceCollection AddQueueConfigurations(
-    this IServiceCollection services)
+    private static IServiceCollection AddSagaConfigurations(
+    this IServiceCollection services,
+    IConfiguration configuration)
     {
+       services.AddDbContext<OrderManagementSagaDbContext>((srv, cfg) =>
+        {
+            cfg.UseSqlServer(connectionString: configuration.GetConnectionString("DefaultConnection"),
+                             sqlServerOptionsAction: sqlOpt =>
+                             {
+                                 sqlOpt.MigrationsAssembly(Assembly.GetExecutingAssembly().GetName().Name);
+                                 sqlOpt.MigrationsHistoryTable("__EFMigrationsHistory", "ordermanagementsaga");
+                             });
+        });
+
         return services.AddMassTransit(m =>
         {
+            m.AddSagaStateMachine<OrderAddSaga, OrderAddState>()
+             .EntityFrameworkRepository(opt =>
+             {
+                 opt.ExistingDbContext<OrderManagementSagaDbContext>();
+             });
+
             m.UsingRabbitMq((context, cfg) =>
             {
-
+                var rabbitMQHost = configuration.GetConnectionString("RabbitMQ");
+                cfg.Host(rabbitMQHost);
             });
         });
     }

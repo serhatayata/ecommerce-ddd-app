@@ -1,5 +1,6 @@
 using Common.Domain.Models;
 using Common.Domain.ValueObjects;
+using PaymentSystem.Domain.Events;
 
 namespace PaymentSystem.Domain.Models;
 
@@ -29,13 +30,34 @@ public class Payment : Entity, IAggregateRoot
     public DateTime CreatedAt { get; private set; }
     public virtual ICollection<PaymentTransaction> Transactions { get; private set; }
 
-    public void MarkAsCompleted()
+    public void MarkAsCompleted(Guid? correlationId = null)
     {
         Status = PaymentStatus.Completed;
+
+        var paymentCompletedEvent = new PaymentCompletedDomainEvent(
+            OrderId,
+            Id,
+            Amount.Amount,
+            Method,
+            correlationId
+        );
+
+        AddEvent(paymentCompletedEvent);
     }
 
-    public void MarkAsFailed()
+    public void MarkAsFailed(Guid? correlationId = null)
     {
         Status = PaymentStatus.Failed;
+
+        var paymentFailedEvent = new PaymentFailedDomainEvent(
+            OrderId,
+            Id,
+            Amount.Amount,
+            Method,
+            "Payment failed",
+            correlationId
+        );
+
+        AddEvent(paymentFailedEvent);
     }
 }
