@@ -23,7 +23,7 @@ public class CreateShipmentCompanyCommand : IRequest<CreateShipmentCompanyRespon
         CreateShipmentCompanyCommand request, 
         CancellationToken cancellationToken)
         {
-            var shipmentCompany = new ShipmentCompany(
+            var shipmentCompany = ShipmentCompany.Create(
                 request.Name,
                 request.Code
             );

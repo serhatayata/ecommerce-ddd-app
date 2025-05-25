@@ -24,7 +24,7 @@ public class CreateBrandCommand : IRequest<CreateBrandResponse>
         CreateBrandCommand request, 
         CancellationToken cancellationToken)
         {
-            var brand = new Brand(
+            var brand = Brand.Create(
                 request.Name,
                 request.Description,
                 request.Website

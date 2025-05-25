@@ -7,7 +7,9 @@ public class Brand : Entity
 {
     private readonly List<Product> _products = new();
 
-    public Brand(
+    private Brand() { }
+
+    private Brand(
         string name,
         string description,
         string website)
@@ -17,6 +19,12 @@ public class Brand : Entity
         Website = website;
         IsActive = true;
     }
+
+    public static Brand Create(
+        string name,
+        string description,
+        string website)
+        => new Brand(name, description, website);
 
     public string Name { get; private set; }
     public string Description { get; private set; }

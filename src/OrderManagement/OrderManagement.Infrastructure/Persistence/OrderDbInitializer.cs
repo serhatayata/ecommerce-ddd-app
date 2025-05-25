@@ -28,9 +28,9 @@ public class OrderDbInitializer : DbInitializer
                 orderDate: DateTime.UtcNow.AddDays(-1)
             );
 
-            var item1 = new OrderItem(OrderId.From(order1.Id), 1, 2, Money.From(10.0M));
-            var item2 = new OrderItem(OrderId.From(order1.Id), 2, 1, Money.From(20.0M));
-            var item3 = new OrderItem(OrderId.From(order2.Id), 3, 5, Money.From(5.0M));
+            var item1 = OrderItem.Create(order1.Id, 1, 2, Money.From(10.0M));
+            var item2 = OrderItem.Create(order1.Id, 2, 1, Money.From(20.0M));
+            var item3 = OrderItem.Create(order2.Id, 3, 5, Money.From(5.0M));
 
             order1.OrderItems.Add(item1);
             order1.OrderItems.Add(item2);

@@ -54,7 +54,7 @@ public class PaymentCreateCommand : IRequest<PaymentCreateResponse>, CorrelatedB
             var randomStatus = (PaymentStatus)statuses.GetValue(random.Next(statuses.Length));
 
             var transactionId = Guid.NewGuid().ToString();
-            var transaction = new PaymentTransaction(
+            var transaction = PaymentTransaction.Create(
                 amount,
                 DateTime.UtcNow,
                 transactionId,

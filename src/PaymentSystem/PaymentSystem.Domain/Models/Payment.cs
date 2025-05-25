@@ -6,7 +6,7 @@ namespace PaymentSystem.Domain.Models;
 
 public class Payment : Entity, IAggregateRoot
 {
-    public Payment()
+    private Payment()
     {
     }
 

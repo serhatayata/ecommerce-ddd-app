@@ -19,8 +19,8 @@ public class ShippingDbInitializer : DbInitializer
         if (_dbContext.Shipments.Any())
             return;
 
-        var shipmentCompany1 = new ShipmentCompany("UPS", "https://ups.com");
-        var shipmentCompany2 = new ShipmentCompany("FedEx", "https://fedex.com");
+        var shipmentCompany1 = ShipmentCompany.Create("UPS", "https://ups.com");
+        var shipmentCompany2 = ShipmentCompany.Create("FedEx", "https://fedex.com");
 
         _dbContext.ShipmentCompanies.AddRange(shipmentCompany1, shipmentCompany2);
         _dbContext.SaveChanges();

@@ -1,4 +1,5 @@
 using System.Reflection;
+using Common.Domain.ValueObjects;
 using Common.Infrastructure.DbContexts;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,8 @@ public class PaymentSystemDbContext : BaseDbContext<PaymentSystemDbContext>
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Ignore<OrderId>();
+
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         modelBuilder.HasDefaultSchema("paymentsystem");

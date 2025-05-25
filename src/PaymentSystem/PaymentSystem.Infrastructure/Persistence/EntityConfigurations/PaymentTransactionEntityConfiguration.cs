@@ -13,11 +13,6 @@ public class PaymentTransactionEntityConfiguration : IEntityTypeConfiguration<Pa
 
         builder.Property(pt => pt.Amount).IsRequired();
 
-        builder.Property(pt => pt.PaymentId)
-            .HasConversion(
-                paymentId => paymentId.Value,
-                value => PaymentId.From(value))
-            .IsRequired();
 
         builder.Property(pt => pt.Date).IsRequired();
 

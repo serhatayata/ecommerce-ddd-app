@@ -5,17 +5,22 @@ namespace Shipping.Domain.Models.Shipments;
 
 public class ShipmentItem : Entity
 {
-    public ShipmentItem()
+    private ShipmentItem()
     {
     }
 
-    public ShipmentItem(
+    private ShipmentItem(
     ProductId productId,
     int quantity)
     {
         ProductId = productId;
         Quantity = quantity;
     }
+
+    public static ShipmentItem Create(
+    ProductId productId,
+    int quantity)
+        => new ShipmentItem(productId, quantity);
 
     public ProductId ProductId { get; private set; }
     public int Quantity { get; private set; }

@@ -1,3 +1,4 @@
+using Common.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PaymentSystem.Domain.Models;
@@ -13,6 +14,10 @@ public class PaymentEntityConfiguration : IEntityTypeConfiguration<Payment>
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id).ValueGeneratedOnAdd();
+
+        builder.Property(o => o.OrderId)
+            .HasConversion(p => p.Value, p => OrderId.From(p))
+            .IsRequired();
 
         builder.OwnsOne(x => x.Amount, amountBuilder =>
         {

@@ -8,6 +8,10 @@ namespace ProductCatalog.Domain.Models.Products;
 
 public class Product : Entity, IAggregateRoot
 {
+    private Product()
+    {
+    }
+
     private Product(
         string name,
         string description,

@@ -36,7 +36,7 @@ public class PaymentRepository : EfRepository<Payment, PaymentSystemDbContext>, 
     PaymentId paymentId,
     CancellationToken cancellationToken)
         => await _dbContext.PaymentTransactions
-            .Where(s => s.PaymentId == paymentId)
+            .Where(s => s.PaymentId == paymentId.Value)
             .ToListAsync(cancellationToken);
 
     #region PaymentInfo

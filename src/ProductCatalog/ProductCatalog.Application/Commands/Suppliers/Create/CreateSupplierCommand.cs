@@ -30,7 +30,7 @@ public class CreateSupplierCommand : IRequest<CreateSupplierResponse>
         CreateSupplierCommand request, 
         CancellationToken cancellationToken)
         {
-            var supplier = new Supplier(
+            var supplier = Supplier.Create(
                 request.Name,
                 request.ContactName,
                 request.Email,

@@ -11,9 +11,9 @@ namespace PaymentSystem.Domain.Models;
 /// </summary>
 public class PaymentInfo : Entity
 {
-    public PaymentInfo() { }
+    private PaymentInfo() { }
 
-    public PaymentInfo(
+    private PaymentInfo(
     OrderId orderId,
     string cardNumber,
     string iban,
@@ -31,6 +31,16 @@ public class PaymentInfo : Entity
         Method = method;
         CreatedAt = DateTime.UtcNow;
     }
+
+    public static PaymentInfo Create(
+        OrderId orderId,
+        string cardNumber,
+        string iban,
+        string cvv,
+        string holderName,
+        string expirationDate, // Add this
+        PaymentMethod method)
+        => new PaymentInfo(orderId, cardNumber, iban, cvv, holderName, expirationDate, method);
 
     public OrderId OrderId { get; private set; }
     public string CardNumber { get; private set; }

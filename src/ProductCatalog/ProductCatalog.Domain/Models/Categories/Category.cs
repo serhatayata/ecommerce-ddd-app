@@ -7,7 +7,9 @@ public class Category : Entity
 {
     private readonly List<Product> _products = new();
 
-    public Category(
+    private Category() { }
+
+    private Category(
         string name,
         string description,
         int? parentId = null)
@@ -17,6 +19,12 @@ public class Category : Entity
         ParentId = parentId;
         IsActive = true;
     }
+
+    public static Category Create(
+        string name,
+        string description,
+        int? parentId = null)
+        => new Category(name, description, parentId);
 
     public string Name { get; private set; }
     public string Description { get; private set; }

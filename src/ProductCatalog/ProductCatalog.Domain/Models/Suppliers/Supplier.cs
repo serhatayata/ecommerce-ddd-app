@@ -7,9 +7,9 @@ public class Supplier : Entity
 {
     private readonly List<Product> _products = new();
 
-    public Supplier() { }
+    private Supplier() { }
 
-    public Supplier(
+    private Supplier(
         string name,
         string contactName,
         string email,
@@ -23,6 +23,14 @@ public class Supplier : Entity
         Address = address;
         IsActive = true;
     }
+
+    public static Supplier Create(
+        string name,
+        string contactName,
+        string email,
+        string phone,
+        Address address)
+        => new Supplier(name, contactName, email, phone, address);
 
     public string Name { get; private set; }
     public string ContactName { get; private set; }

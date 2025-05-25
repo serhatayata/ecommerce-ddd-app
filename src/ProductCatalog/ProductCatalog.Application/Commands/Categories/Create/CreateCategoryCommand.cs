@@ -24,7 +24,7 @@ public class CreateCategoryCommand : IRequest<CreateCategoryResponse>
         CreateCategoryCommand request, 
         CancellationToken cancellationToken)
         {
-            var category = new Category(
+            var category = Category.Create(
                 request.Name, 
                 request.Description, 
                 request.ParentId

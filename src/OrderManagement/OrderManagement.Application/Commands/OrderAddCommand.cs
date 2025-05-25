@@ -43,7 +43,7 @@ public class OrderAddCommand : IRequest<OrderAddResponse>
             CancellationToken cancellationToken)
         {
             var userId = request.UserId;
-            var orderItems = request.OrderItems.Select(o => new OrderItem(
+            var orderItems = request.OrderItems.Select(o => OrderItem.Create(
                 default,
                 o.ProductId,
                 o.Quantity,

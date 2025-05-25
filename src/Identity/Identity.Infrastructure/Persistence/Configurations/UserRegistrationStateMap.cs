@@ -14,8 +14,8 @@ public class UserRegistrationStateMap : SagaClassMap<UserRegistrationState>
 
         builder.HasKey(x => x.CorrelationId);
         builder.Property(x => x.CorrelationId).ValueGeneratedNever();
-        
-        builder.Property(x => x.UserId).HasConversion(p => p.Value, p => UserId.From(p));
+
+        builder.Property(x => x.UserId);
         builder.Property(x => x.Email);
         builder.Property(x => x.CurrentState);
         builder.Property(x => x.CreatedAt);

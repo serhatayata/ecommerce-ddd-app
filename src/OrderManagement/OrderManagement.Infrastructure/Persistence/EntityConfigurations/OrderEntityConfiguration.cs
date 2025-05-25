@@ -15,19 +15,18 @@ public class OrderEntityConfiguration : IEntityTypeConfiguration<Order>
         builder.Property(o => o.Id)
             .ValueGeneratedOnAdd();
 
-        builder.Property(o => o.UserId)
-            .IsRequired();
+        builder.Property(o => o.UserId).HasConversion(p => p.Value, p => UserId.From(p)).IsRequired();
 
         builder.Property(o => o.OrderDate)
             .IsRequired();
 
-    builder.Property(o => o.Status)
-        .IsRequired()
-        .HasConversion(
-            v => v.Value,
-            v => OrderStatus.FromValue<OrderStatus>(v)
-        )
-        .HasColumnType("int");
+        builder.Property(o => o.Status)
+            .IsRequired()
+            .HasConversion(
+                v => v.Value,
+                v => OrderStatus.FromValue<OrderStatus>(v)
+            )
+            .HasColumnType("int");
 
         builder.HasMany(o => o.OrderItems)
             .WithOne()

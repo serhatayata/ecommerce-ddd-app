@@ -8,6 +8,10 @@ public class Shipment : Entity, IAggregateRoot
 {
     private readonly List<ShipmentItem> _items = new();
 
+    private Shipment()
+    {
+    }
+
     private Shipment(
         OrderId orderId,
         Address shippingAddress,
@@ -83,5 +87,5 @@ public class Shipment : Entity, IAggregateRoot
         => ShipmentCompanyId = shipmentCompanyId;
 
     public void AddItem(ProductId productId, int quantity)
-        => _items.Add(new ShipmentItem(productId, quantity));
+        => _items.Add(ShipmentItem.Create(productId, quantity));
 }

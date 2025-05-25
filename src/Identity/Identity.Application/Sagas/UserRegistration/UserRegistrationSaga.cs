@@ -29,7 +29,7 @@ public class UserRegistrationSaga : MassTransitStateMachine<UserRegistrationStat
             When(UserCreatedEvent)
                 .Then(context =>
                 {
-                    context.Saga.UserId = UserId.From(context.Message.UserId);
+                    context.Saga.UserId = context.Message.UserId;
                     context.Saga.Email = context.Message.Email;
                     context.Saga.CreatedAt = DateTime.UtcNow;
                 })

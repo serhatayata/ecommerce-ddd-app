@@ -45,8 +45,8 @@ public class OrderAddSaga : MassTransitStateMachine<OrderAddState>
             When(OrderAddedEvent)
                 .ThenAsync(async context =>
                 {
-                    context.Saga.OrderId = OrderId.From(context.Message.OrderId);
-                    context.Saga.UserId = UserId.From(context.Message.UserId);
+                    context.Saga.OrderId = context.Message.OrderId;
+                    context.Saga.UserId = context.Message.UserId;
                     context.Saga.OrderDate = context.Message.OrderDate;
                     context.Saga.CreatedAt = DateTime.UtcNow;
 
@@ -65,7 +65,7 @@ public class OrderAddSaga : MassTransitStateMachine<OrderAddState>
             When(StockReservedEvent)
                 .ThenAsync(async context =>
                 {
-                    context.Saga.OrderId = OrderId.From(context.Message.OrderId);
+                    context.Saga.OrderId = context.Message.OrderId;
                     context.Saga.CreatedAt = DateTime.UtcNow;
 
                     var paymentCreateRequestEvent = new PaymentCreateRequestEvent(

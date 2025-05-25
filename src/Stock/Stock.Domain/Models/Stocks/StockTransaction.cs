@@ -1,5 +1,4 @@
 using Common.Domain.Models;
-using Common.Domain.ValueObjects;
 
 namespace Stock.Domain.Models.Stocks;
 
@@ -12,8 +11,8 @@ public class StockTransaction : Entity
 {
     private StockTransaction() { }
 
-    public StockTransaction(
-        StockItemId stockItemId,
+    private StockTransaction(
+        int stockItemId,
         int quantity,
         StockTransactionType type,
         string reason)
@@ -25,7 +24,14 @@ public class StockTransaction : Entity
         TransactionDate = DateTime.UtcNow;
     }
 
-    public StockItemId StockItemId { get; private set; }
+    public static StockTransaction Create(
+        int stockItemId,
+        int quantity,
+        StockTransactionType type,
+        string reason)
+        => new StockTransaction(stockItemId, quantity, type, reason);
+
+    public int StockItemId { get; private set; }
     public int Quantity { get; private set; }
     public StockTransactionType Type { get; private set; }
     public string Reason { get; private set; }

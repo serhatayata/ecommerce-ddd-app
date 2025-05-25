@@ -31,7 +31,7 @@ public class PaymentInfoCreateCommand : IRequest<PaymentInfoCreateResponse>, Cor
         PaymentInfoCreateCommand request,
         CancellationToken cancellationToken)
         {
-            var paymentInfo = new Domain.Models.PaymentInfo(
+            var paymentInfo = Domain.Models.PaymentInfo.Create(
                 Common.Domain.ValueObjects.OrderId.From(request.OrderId),
                 request.CardNumber,
                 request.IBAN,

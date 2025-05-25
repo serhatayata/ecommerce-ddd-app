@@ -63,7 +63,7 @@ public class StockItemRepository : EfRepository<StockItem, StockDbContext>, ISto
         StockItemId stockItemId,
         CancellationToken cancellationToken = default)
         => await _dbContext.StockReservations
-            .Where(s => s.StockItemId == stockItemId)
+            .Where(s => s.StockItemId == stockItemId.Value)
             .ToListAsync(cancellationToken);
 
     public async Task<List<(int StockItemId, int Quantity)>> ReserveProductsStocks(
@@ -150,7 +150,7 @@ public class StockItemRepository : EfRepository<StockItem, StockDbContext>, ISto
         StockItemId stockItemId,
         CancellationToken cancellationToken = default)
         => await _dbContext.StockTransactions
-            .Where(s => s.StockItemId == stockItemId)
+            .Where(s => s.StockItemId == stockItemId.Value)
             .ToListAsync(cancellationToken);
 
     public async Task<StockTransaction> GetTransactionByIdAsync(

@@ -32,10 +32,10 @@ internal class ProductCatalogDbInitializer : DbInitializer
 
         var brands = new[]
         {
-            new Brand("Dell", "Computer manufacturer", "www.dell.com"),
-            new Brand("Philips", "Electronics manufacturer", "www.philips.com"),
-            new Brand("Nike", "Sports equipment manufacturer", "www.nike.com"),
-            new Brand("Sony", "Electronics and entertainment company", "www.sony.com")
+            Brand.Create("Dell", "Computer manufacturer", "www.dell.com"),
+            Brand.Create("Philips", "Electronics manufacturer", "www.philips.com"),
+            Brand.Create("Nike", "Sports equipment manufacturer", "www.nike.com"),
+            Brand.Create("Sony", "Electronics and entertainment company", "www.sony.com")
         };
 
         _dbContext.Brands.AddRange(brands);
@@ -47,18 +47,18 @@ internal class ProductCatalogDbInitializer : DbInitializer
         if (_dbContext.Categories.Any())
             return;
 
-        var electronics = new Category("Electronics", "Electronic devices and accessories");
-        var sports = new Category("Sports", "Sports equipment and accessories");
-        var homeAppliances = new Category("Home Appliances", "Kitchen and home electronics");
+        var electronics = Category.Create("Electronics", "Electronic devices and accessories");
+        var sports = Category.Create("Sports", "Sports equipment and accessories");
+        var homeAppliances = Category.Create("Home Appliances", "Kitchen and home electronics");
 
         _dbContext.Categories.AddRange(electronics, sports, homeAppliances);
         _dbContext.SaveChanges();
 
         var children = new[]
         {
-            new Category("Computers", "Desktop and laptop computers", electronics.Id),
-            new Category("Audio Devices", "Headphones and speakers", electronics.Id),
-            new Category("Footwear", "Athletic shoes and boots", sports.Id)
+            Category.Create("Computers", "Desktop and laptop computers", electronics.Id),
+            Category.Create("Audio Devices", "Headphones and speakers", electronics.Id),
+            Category.Create("Footwear", "Athletic shoes and boots", sports.Id)
         };
 
         _dbContext.Categories.AddRange(children);
@@ -72,14 +72,14 @@ internal class ProductCatalogDbInitializer : DbInitializer
 
         var suppliers = new[]
         {
-            new Supplier(
+            Supplier.Create(
                 "TechWorld Distribution",
                 "John Smith",
                 "john.smith@techworld.com",
                 "1-555-0123",
                 Address.From("123 Tech Street", "Silicon Valley", "CA", "USA", "94025")),
             
-            new Supplier(
+            Supplier.Create(
                 "Global Electronics",
                 "Jane Doe",
                 "jane.doe@globalelec.com",

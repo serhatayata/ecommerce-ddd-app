@@ -8,6 +8,11 @@ public class Order : Entity, IAggregateRoot
 {
     public HashSet<OrderItem> OrderItems { get; private set; }
 
+    private Order()
+    {
+        OrderItems = new HashSet<OrderItem>();
+    }
+
     private Order(
     UserId userId,
     DateTime orderDate)

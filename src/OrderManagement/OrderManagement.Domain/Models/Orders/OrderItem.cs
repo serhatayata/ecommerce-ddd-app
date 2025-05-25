@@ -5,12 +5,12 @@ namespace OrderManagement.Domain.Models.Orders;
 
 public class OrderItem : Entity
 {
-    public OrderItem()
+    private OrderItem()
     {
     }
 
-    public OrderItem(
-    OrderId orderId, 
+    private OrderItem(
+    int orderId, 
     int productId, 
     int quantity,
     Money unitPrice)
@@ -21,7 +21,14 @@ public class OrderItem : Entity
         UnitPrice = unitPrice;
     }
 
-    public OrderId OrderId { get; private set; }
+    public static OrderItem Create(
+        int orderId,
+        int productId,
+        int quantity,
+        Money unitPrice)
+        => new OrderItem(orderId, productId, quantity, unitPrice);
+
+    public int OrderId { get; private set; }
     public int ProductId { get; private set; }
     public int Quantity { get; private set; }
     public Money UnitPrice { get; private set; }
