@@ -64,24 +64,30 @@ public class Shipment : Entity, IAggregateRoot
         {
             case ShipmentStatus.Shipped:
                 ShippedAt = DateTime.UtcNow;
-                AddEvent(new ShipmentShippedDomainEvent(
-                    Id,
-                    TrackingNumber,
-                    ShippedAt.Value,
-                    correlationId
-                ));
+                RaiseShipmentShippedDomainEvent(correlationId);
                 break;
             case ShipmentStatus.Delivered:
                 DeliveredAt = DateTime.UtcNow;
-                AddEvent(new ShipmentDeliveredDomainEvent(
-                    Id,
-                    TrackingNumber,
-                    DeliveredAt.Value,
-                    correlationId
-                ));
+                RaiseShipmentDeliveredDomainEvent(correlationId);
                 break;
         }
     }
+
+    public void RaiseShipmentShippedDomainEvent(Guid? correlationId = null)
+        => AddEvent(new ShipmentShippedDomainEvent(
+            Id,
+            TrackingNumber,
+            ShippedAt.Value,
+            correlationId
+        ));
+
+    public void RaiseShipmentDeliveredDomainEvent(Guid? correlationId = null)
+        => AddEvent(new ShipmentDeliveredDomainEvent(
+            Id,
+            TrackingNumber,
+            DeliveredAt.Value,
+            correlationId
+        ));
 
     public void UpdateShipmentCompany(int shipmentCompanyId)
         => ShipmentCompanyId = shipmentCompanyId;

@@ -33,8 +33,9 @@ public class StockRemoveCommand : IRequest<StockRemoveResponse>, CorrelatedBy<Gu
 
             stockItem.RemoveStock(
                 request.RemovedQuantity, 
-                "Stock removed via command.",
-                request.CorrelationId);
+                "Stock removed via command.");
+
+            stockItem.RaiseStockRemovedDomainEvent(request.CorrelationId);
                 
             await _stockItemRepository.SaveAsync(stockItem, cancellationToken);
                 

@@ -31,8 +31,9 @@ public class StockAddCommand : IRequest<StockAddResponse>, CorrelatedBy<Guid?>
 
             stockItem.AddStock(
                 request.AddedQuantity, 
-                "Stock added via command.", 
-                request.CorrelationId);
+                "Stock added via command.");
+
+            stockItem.RaiseStockAddedDomainEvent(request.CorrelationId);
 
             await _stockItemRepository.UpdateAsync(stockItem, cancellationToken);
 

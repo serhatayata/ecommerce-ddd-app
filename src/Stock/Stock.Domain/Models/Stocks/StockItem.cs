@@ -45,9 +45,8 @@ public class StockItem : Entity, IAggregateRoot
     public ICollection<StockReservation> Reservations => _reservations.AsReadOnly();
 
     public void AddStock(
-    int quantity, 
-    string reason, 
-    Guid? correlationId = null)
+    int quantity,
+    string reason)
     {
         if (quantity <= 0)
             throw new ArgumentException("Quantity must be positive", nameof(quantity));
@@ -57,14 +56,11 @@ public class StockItem : Entity, IAggregateRoot
 
         var transaction = StockTransaction.Create(Id, quantity, StockTransactionType.Addition, reason);
         _transactions.Add(transaction);
-
-        AddEvent(new StockAddedDomainEvent(Id, quantity, correlationId));
     }
 
     public void RemoveStock(
-    int quantity, 
-    string reason,
-    Guid? correlationId = null)
+    int quantity,
+    string reason)
     {
         if (quantity <= 0)
             throw new ArgumentException("Quantity must be positive", nameof(quantity));
@@ -77,12 +73,10 @@ public class StockItem : Entity, IAggregateRoot
 
         var transaction = StockTransaction.Create(Id, quantity, StockTransactionType.Removal, reason);
         _transactions.Add(transaction);
-
-        AddEvent(new StockRemovedDomainEvent(Id, quantity, DateTime.UtcNow, correlationId));
     }
 
     public void ReserveStock(
-    int quantity, 
+    int quantity,
     OrderId orderId)
     {
         if (GetAvailableQuantity() < quantity)
@@ -97,4 +91,10 @@ public class StockItem : Entity, IAggregateRoot
         var reservedQuantity = _reservations.Sum(r => r.Quantity);
         return Quantity - reservedQuantity;
     }
+
+    public void RaiseStockRemovedDomainEvent(Guid? correlationId = null)
+        => AddEvent(new StockRemovedDomainEvent(Id, Quantity, DateTime.UtcNow, correlationId));
+
+    public void RaiseStockAddedDomainEvent(Guid? correlationId = null)
+        => AddEvent(new StockAddedDomainEvent(Id, Quantity, correlationId));
 }
