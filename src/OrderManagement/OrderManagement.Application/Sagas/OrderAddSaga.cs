@@ -42,55 +42,55 @@ public class OrderAddSaga : MassTransitStateMachine<OrderAddState>
 
         Initially(
             When(OrderAddedEvent)
-                .ThenAsync(async context =>
+                .Then(context =>
                 {
                     context.Saga.OrderId = context.Message.OrderId;
                     context.Saga.UserId = context.Message.UserId;
                     context.Saga.OrderDate = context.Message.OrderDate;
                     context.Saga.CreatedAt = DateTime.UtcNow;
-
-                    var stockReserveRequestEvent = new StockReserveRequestEvent(
+                })
+                .Publish(context =>
+                {
+                    return new StockReserveRequestEvent(
                         context.Message.CorrelationId,
                         context.Message.OrderId,
                         context.Message.Items
                     );
-                    
-                    await context.Publish(stockReserveRequestEvent);
                 })
                 .TransitionTo(OrderAdded)
         );
 
         During(OrderAdded,
             When(StockReservedEvent)
-                .ThenAsync(async context =>
+                .Then(context =>
                 {
                     context.Saga.OrderId = context.Message.OrderId;
                     context.Saga.CreatedAt = DateTime.UtcNow;
-
-                    var paymentCreateRequestEvent = new PaymentCreateRequestEvent(
+                })
+                .Publish(context =>
+                {
+                    return new PaymentCreateRequestEvent(
                         context.Message.CorrelationId,
                         context.Message.OrderId
                     );
-                    
-                    await context.Publish(paymentCreateRequestEvent);
                 })
                 .TransitionTo(StockReserved)
         );
 
         During(StockReserved,
             When(PaymentCompletedEvent)
-                .ThenAsync(async context =>
+                .Then(context =>
                 {
                     context.Saga.OrderId = context.Message.OrderId;
                     context.Saga.CreatedAt = DateTime.UtcNow;
-
-                    var shipmentShippedEvent = new ShipShipmentRequestEvent(
+                })
+                .Publish(context =>
+                {
+                    return new ShipShipmentRequestEvent(
                         context.Message.CorrelationId,
                         context.Message.OrderId,
                         DateTime.UtcNow
                     );
-
-                    await context.Publish(shipmentShippedEvent);
                 })
                 .TransitionTo(PaymentCompleted)
         );

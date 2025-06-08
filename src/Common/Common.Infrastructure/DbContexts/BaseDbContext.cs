@@ -16,8 +16,11 @@ public abstract class BaseDbContext<TContext> : DbContext where TContext : DbCon
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        await _publisher.DispatchDomainEventsAsync(this, cancellationToken);
+        var changes = await base.SaveChangesAsync(cancellationToken);
 
-        return await base.SaveChangesAsync(cancellationToken);
+        if (changes > 0)
+            await _publisher.DispatchDomainEventsAsync(this, cancellationToken);
+
+        return changes;
     }
 }

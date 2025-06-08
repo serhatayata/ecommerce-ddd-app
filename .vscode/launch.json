@@ -169,7 +169,7 @@
         },
         {
             "name": "All Services",
-            "configurations": ["Identity API", "Notification Worker", "ProductCatalog API", "Shipping API", "Stock API"]
+            "configurations": ["Identity API", "Notification Worker", "ProductCatalog API", "Shipping API", "Stock API", "PaymentSystem API", "Order API"]        
         },
         {
             "name": "Stock API",
