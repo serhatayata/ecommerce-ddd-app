@@ -24,6 +24,6 @@ public class ShipmentItem : Entity
 
     public ProductId ProductId { get; private set; }
     public int Quantity { get; private set; }
-    public ShipmentId ShipmentId { get; private set; }
+    public int ShipmentId { get; private set; }
     public virtual Shipment Shipment { get; private set; }
 }

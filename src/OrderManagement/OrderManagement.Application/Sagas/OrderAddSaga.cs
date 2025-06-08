@@ -3,7 +3,6 @@ using Common.Domain.Events.PaymentSystems;
 using Common.Domain.Events.Stocks;
 using MassTransit;
 using Common.Domain.Events.Shippings;
-using Common.Domain.ValueObjects;
 
 namespace OrderManagement.Application.Sagas;
 
@@ -80,6 +79,19 @@ public class OrderAddSaga : MassTransitStateMachine<OrderAddState>
 
         During(StockReserved,
             When(PaymentCompletedEvent)
+                .ThenAsync(async context =>
+                {
+                    context.Saga.OrderId = context.Message.OrderId;
+                    context.Saga.CreatedAt = DateTime.UtcNow;
+
+                    var shipmentShippedEvent = new ShipShipmentRequestEvent(
+                        context.Message.CorrelationId,
+                        context.Message.OrderId,
+                        DateTime.UtcNow
+                    );
+
+                    await context.Publish(shipmentShippedEvent);
+                })
                 .TransitionTo(PaymentCompleted)
         );
 

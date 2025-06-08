@@ -19,6 +19,7 @@ public class ShipmentDeliveredDomainEventHandler : INotificationHandler<Shipment
     {
         var shipmentDeliveredEvent = new ShipmentDeliveredEvent(
             notification.CorrelationId,
+            notification.OrderId,
             notification.ShipmentId,
             notification.TrackingNumber,
             notification.DeliveredDate);

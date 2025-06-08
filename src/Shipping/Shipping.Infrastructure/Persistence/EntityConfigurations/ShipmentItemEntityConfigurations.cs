@@ -17,10 +17,6 @@ public class ShipmentItemEntityConfigurations : IEntityTypeConfiguration<Shipmen
             .HasConversion(p => p.Value, p => ProductId.From(p))
             .IsRequired();
 
-        builder.Property(x => x.ShipmentId)
-            .HasConversion(p => p.Value, p => ShipmentId.From(p))
-            .IsRequired();
-
         builder.Property(x => x.Quantity)
             .IsRequired();
 

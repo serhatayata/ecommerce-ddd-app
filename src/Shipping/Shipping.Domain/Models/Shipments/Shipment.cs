@@ -83,6 +83,7 @@ public class Shipment : Entity, IAggregateRoot
 
     public void RaiseShipmentDeliveredDomainEvent(Guid? correlationId = null)
         => AddEvent(new ShipmentDeliveredDomainEvent(
+            OrderId.Value,
             Id,
             TrackingNumber,
             DeliveredAt.Value,

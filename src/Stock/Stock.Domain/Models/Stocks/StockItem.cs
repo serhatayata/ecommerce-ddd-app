@@ -16,24 +16,20 @@ public class StockItem : Entity, IAggregateRoot
     private StockItem(
         ProductId productId,
         int quantity,
-        Location location,
-        Guid? correlationId = null)
+        Location location)
     {
         ProductId = productId;
         Quantity = quantity;
         Location = location;
         Status = StockStatus.Available;
         LastUpdated = DateTime.UtcNow;
-
-        AddEvent(new StockItemCreatedDomainEvent(Id, ProductId.Value, Quantity, Location.Warehouse, Location.Aisle, Location.Shelf, Location.Bin, LastUpdated, correlationId));
     }
 
     public static StockItem Create(
         ProductId productId,
         int quantity,
-        Location location,
-        Guid? correlationId = null)
-        => new StockItem(productId, quantity, location, correlationId);
+        Location location)
+        => new StockItem(productId, quantity, location);
 
     public ProductId ProductId { get; private set; }
     public int Quantity { get; private set; }

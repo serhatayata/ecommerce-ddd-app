@@ -40,8 +40,7 @@ public class StockItemCreateCommand : IRequest<StockItemCreateResponse>, Correla
                     request.Warehouse,
                     request.Aisle,
                     request.Shelf,
-                    request.Bin),
-                request.CorrelationId);
+                    request.Bin));
 
             await _stockItemRepository.SaveAsync(stockItem, cancellationToken);
 

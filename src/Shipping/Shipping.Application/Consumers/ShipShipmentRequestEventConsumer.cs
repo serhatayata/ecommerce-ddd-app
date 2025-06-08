@@ -10,32 +10,29 @@ public class ShipShipmentRequestEventConsumer : IConsumer<ShipShipmentRequestEve
 {
     private readonly ILogger<ShipShipmentRequestEventConsumer> _logger;
     private readonly IMediator _mediator;
-    private readonly IPublishEndpoint _publishEndpoint;
 
     public ShipShipmentRequestEventConsumer(
         ILogger<ShipShipmentRequestEventConsumer> logger,
-        IMediator mediator,
-        IPublishEndpoint publishEndpoint)
+        IMediator mediator)
     {
         _logger = logger;
         _mediator = mediator;
-        _publishEndpoint = publishEndpoint;
     }
 
     public async Task Consume(ConsumeContext<ShipShipmentRequestEvent> context)
     {
         var message = context.Message;
-        _logger.LogInformation("Received shipment shipped request for: {TrackingNumber}", 
-            message.TrackingNumber);
+        _logger.LogInformation("Received shipment shipped request for: {OrderId}", 
+            message.OrderId);
 
         try
         {
-            _ = await _mediator.Send(new ShipShipmentCommand() { ShipmentId = message.ShipmentId });
+            _ = await _mediator.Send(new ShipShipmentCommand() { ShipmentId = message.OrderId });
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error processing shipment for tracking number: {TrackingNumber}", 
-                message.TrackingNumber);
+            _logger.LogError(ex, "Error processing shipment for order ID: {OrderId}", 
+                message.OrderId);
         }
     }
 }

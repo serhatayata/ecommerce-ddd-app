@@ -10,16 +10,13 @@ public class DeliverShipmentRequestEventConsumer : IConsumer<DeliverShipmentRequ
 {
     private readonly ILogger<DeliverShipmentRequestEventConsumer> _logger;
     private readonly IMediator _mediator;
-    private readonly IPublishEndpoint _publishEndpoint;
 
     public DeliverShipmentRequestEventConsumer(
         ILogger<DeliverShipmentRequestEventConsumer> logger,
-        IMediator mediator,
-        IPublishEndpoint publishEndpoint)
+        IMediator mediator)
     {
         _logger = logger;
         _mediator = mediator;
-        _publishEndpoint = publishEndpoint;
     }
 
     public async Task Consume(ConsumeContext<DeliverShipmentRequestEvent> context)

@@ -61,7 +61,6 @@ public class ShipmentController : BaseApiController
         await _publishEndpoint.Publish(new ShipShipmentRequestEvent(
             Guid.NewGuid(),
             command.OrderId,
-            command.TrackingNumber,
             DateTime.Now));
 
         return Ok();
