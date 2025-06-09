@@ -6,7 +6,7 @@ namespace OrderManagement.Application.Services.PaymentSystems;
 public interface IPaymentSystemApiService
 {
     public Task<PaymentInfoCreateResponse> CreatePaymentInfoAsync(
-        OrderId orderId,
+        int orderId,
         string cardNumber,
         string iban,
         string cvv,

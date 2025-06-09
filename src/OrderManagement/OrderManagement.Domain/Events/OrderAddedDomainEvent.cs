@@ -13,7 +13,7 @@ public sealed record OrderAddedDomainEvent : DomainEvent, INotification
     }
 
     public OrderAddedDomainEvent(
-        int orderId,
+        int id,
         int userId,
         DateTime orderDate,
         OrderStatus status,
@@ -21,14 +21,14 @@ public sealed record OrderAddedDomainEvent : DomainEvent, INotification
         Guid? correlationId = null)
         : base(correlationId)
     {
-        OrderId = orderId;
+        Id = id;
         UserId = userId;
         OrderDate = orderDate;
         Status = status;
         TotalAmount = totalAmount;
     }
 
-    public int OrderId { get; init; }
+    public int Id { get; init; }
     public int UserId { get; init; }
     public DateTime OrderDate { get; init; }
     public OrderStatus Status { get; init; }

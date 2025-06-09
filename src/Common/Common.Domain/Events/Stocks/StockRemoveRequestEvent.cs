@@ -2,12 +2,18 @@ namespace Common.Domain.Events.Stocks;
 
 public sealed record StockRemoveRequestEvent : IntegrationEvent
 {
-    public int StockItemId { get; }
-    public int RemovedQuantity { get; }
+    public StockRemoveRequestEvent()
+    {
+    }
 
-    public StockRemoveRequestEvent(int stockItemId, int removedQuantity)
+    public StockRemoveRequestEvent(
+    int stockItemId,
+    int removedQuantity)
     {
         StockItemId = stockItemId;
         RemovedQuantity = removedQuantity;
     }
+
+    public int StockItemId { get; }
+    public int RemovedQuantity { get; }
 }

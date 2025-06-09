@@ -25,7 +25,7 @@ public static class ShippingInfrastructureConfiguration
             .AddRepositories()
             .AddTransient<IDbInitializer, ShippingDbInitializer>()
             .AddTransient<IShipmentRepository, ShipmentRepository>()
-            .AddQueueConfigurations();
+            .AddQueueConfigurations(configuration);
 
         return services;
     }
@@ -66,7 +66,8 @@ public static class ShippingInfrastructureConfiguration
     }
 
     private static IServiceCollection AddQueueConfigurations(
-    this IServiceCollection services)
+    this IServiceCollection services,
+    IConfiguration configuration)
     {
         return services.AddMassTransit(m =>
         {
@@ -75,20 +76,10 @@ public static class ShippingInfrastructureConfiguration
 
             m.UsingRabbitMq((context, cfg) =>
             {
-                #region ShipShipmentRequestEvent
-                var shipShipmentRequestEventName = MessageBrokerExtensions.GetQueueName<ShipShipmentRequestEvent>();
-                cfg.ReceiveEndpoint(shipShipmentRequestEventName, e =>
-                {
-                    e.ConfigureConsumer<ShipShipmentRequestEventConsumer>(context);
-                });
-                #endregion
-                #region DeliverShipmentRequestEvent
-                var deliverShipmentRequestEventName = MessageBrokerExtensions.GetQueueName<DeliverShipmentRequestEvent>();
-                cfg.ReceiveEndpoint(deliverShipmentRequestEventName, e =>
-                {
-                    e.ConfigureConsumer<DeliverShipmentRequestEventConsumer>(context);
-                });
-                #endregion
+                var rabbitMQHost = configuration.GetConnectionString("RabbitMQ");
+                cfg.Host(rabbitMQHost);
+
+                cfg.ConfigureEndpoints(context);
             });
         });
     }

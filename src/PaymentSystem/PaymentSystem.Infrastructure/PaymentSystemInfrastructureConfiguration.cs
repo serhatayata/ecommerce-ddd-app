@@ -25,7 +25,7 @@ public static class PaymentSystemInfrastructureConfiguration
             .AddTransient<IDbInitializer, PaymentSystemDbInitializer>()
             .AddTransient<IPaymentRepository, PaymentRepository>()
             .AddTransient<IOrderManagementApiService, OrderManagementApiService>()
-            .AddQueueConfigurations();
+            .AddQueueConfigurations(configuration);
 
         return services;
     }
@@ -66,13 +66,17 @@ public static class PaymentSystemInfrastructureConfiguration
     }
 
     private static IServiceCollection AddQueueConfigurations(
-    this IServiceCollection services)
+    this IServiceCollection services,
+    IConfiguration configuration)
     {
         return services.AddMassTransit(m =>
         {
             m.UsingRabbitMq((context, cfg) =>
             {
+                var rabbitMQHost = configuration.GetConnectionString("RabbitMQ");
+                cfg.Host(rabbitMQHost);
 
+                cfg.ConfigureEndpoints(context);
             });
         });
     }

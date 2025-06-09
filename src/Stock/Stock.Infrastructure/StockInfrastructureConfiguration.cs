@@ -1,12 +1,11 @@
 using System.Reflection;
-using Common.Application.Extensions;
-using Common.Domain.Events.Stocks;
 using Common.Domain.Repositories;
 using Common.Infrastructure.Persistence;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Stock.Application.Consumers;
 using Stock.Domain.Contracts;
 using Stock.Infrastructure.Persistence;
 using Stock.Infrastructure.Repositories.StockItems;
@@ -24,7 +23,7 @@ public static class StockInfrastructureConfiguration
             .AddRepositories()
             .AddTransient<IDbInitializer, StockDbInitializer>()
             .AddTransient<IStockItemRepository, StockItemRepository>()
-            .AddQueueConfigurations();
+            .AddQueueConfigurations(configuration);
 
         return services;
     }
@@ -65,13 +64,22 @@ public static class StockInfrastructureConfiguration
     }
 
     private static IServiceCollection AddQueueConfigurations(
-    this IServiceCollection services)
+    this IServiceCollection services,
+    IConfiguration configuration)
     {
         return services.AddMassTransit(m =>
         {
+            m.AddConsumer<StockAddRequestEventConsumer>();
+            m.AddConsumer<StockItemCreateRequestEventConsumer>();
+            m.AddConsumer<StockRemoveRequestEventConsumer>();
+            m.AddConsumer<StockReserveRequestEventConsumer>();
+
             m.UsingRabbitMq((context, cfg) =>
             {
+                var rabbitMQHost = configuration.GetConnectionString("RabbitMQ");
+                cfg.Host(rabbitMQHost);
 
+                cfg.ConfigureEndpoints(context);
             });
         });
     }

@@ -2,11 +2,15 @@ namespace Common.Domain.Events.Shippings;
 
 public sealed record DeliverShipmentRequestEvent : IntegrationEvent
 {
+    public DeliverShipmentRequestEvent()
+    {
+    }
+
     public DeliverShipmentRequestEvent(
         Guid correlationId,
         int shipmentId,
         string trackingNumber,
-        DateTime deliveredDate) 
+        DateTime deliveredDate)
     : base(correlationId, DateTime.UtcNow)
     {
         ShipmentId = shipmentId;

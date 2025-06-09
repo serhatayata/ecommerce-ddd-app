@@ -90,11 +90,13 @@ public static class OrderInfrastructureConfiguration
              {
                  opt.ExistingDbContext<OrderManagementSagaDbContext>();
              });
-
+ 
             m.UsingRabbitMq((context, cfg) =>
             {
                 var rabbitMQHost = configuration.GetConnectionString("RabbitMQ");
                 cfg.Host(rabbitMQHost);
+
+                cfg.ConfigureEndpoints(context);
             });
         });
     }

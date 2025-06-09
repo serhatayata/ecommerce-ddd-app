@@ -39,7 +39,7 @@ public class OrderAddCommand : IRequest<OrderAddResponse>
         }
 
         public async Task<OrderAddResponse> Handle(
-            OrderAddCommand request, 
+            OrderAddCommand request,
             CancellationToken cancellationToken)
         {
             var userId = request.UserId;
@@ -63,16 +63,16 @@ public class OrderAddCommand : IRequest<OrderAddResponse>
                 });
 
             var order = Order.Create(Common.Domain.ValueObjects.UserId.From(userId), DateTime.UtcNow);
-            
+
             foreach (var orderItem in orderItems)
                 order.AddOrderItem(orderItem);
 
-            order.RaiseOrderCreatedEvent();
+            _ = await _orderRepository.SaveAsync(order, cancellationToken) > 0;
 
-            _ = await _orderRepository.SaveAsync(order, cancellationToken) > 0;         
+            await PublishOrderEvents(order, cancellationToken);
 
             var paymentInfoResponse = await _paymentSystemApiService.CreatePaymentInfoAsync(
-                OrderId.From(order.Id),
+                order.Id,
                 request.CardNumber,
                 request.IBAN,
                 request.CVV,
@@ -87,6 +87,18 @@ public class OrderAddCommand : IRequest<OrderAddResponse>
                 PaymentInfoId = paymentInfoResponse.Id,
                 OrderDate = order.OrderDate
             };
+        }
+
+        private async Task PublishOrderEvents(
+        Order order,
+        CancellationToken cancellationToken)
+        {
+            order.RaiseOrderCreatedEvent();
+
+            foreach (var domainEvent in order.Events)
+                await _mediator.Publish(domainEvent, cancellationToken);
+
+            order.ClearEvents(); 
         }
     }
 }

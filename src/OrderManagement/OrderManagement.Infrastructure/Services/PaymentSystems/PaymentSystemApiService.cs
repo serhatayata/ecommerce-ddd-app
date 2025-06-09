@@ -17,7 +17,7 @@ public class PaymentSystemApiService : IPaymentSystemApiService
 
     #region PaymentInfo
     public async Task<PaymentInfoCreateResponse> CreatePaymentInfoAsync(
-    OrderId orderId,
+    int orderId,
     string cardNumber,
     string iban,
     string cvv,
@@ -33,7 +33,8 @@ public class PaymentSystemApiService : IPaymentSystemApiService
                 IBAN = iban,
                 CVV = cvv,
                 HolderName = holderName,
-                ExpirationDate = expirationDate
+                ExpirationDate = expirationDate,
+                Method = PaymentMethod.CreditCard
             },
             cancellationToken);
     #endregion

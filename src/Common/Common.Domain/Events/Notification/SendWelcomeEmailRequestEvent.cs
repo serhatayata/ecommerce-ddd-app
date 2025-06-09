@@ -2,9 +2,13 @@ namespace Common.Domain.Events.Notification;
 
 public sealed record SendWelcomeEmailRequestEvent : IntegrationEvent
 {
+    public SendWelcomeEmailRequestEvent()
+    {   
+    }
+
     public SendWelcomeEmailRequestEvent(
-    Guid correlationId, 
-    string email) 
+    Guid correlationId,
+    string email)
     : base(correlationId, DateTime.UtcNow)
     {
         Email = email;

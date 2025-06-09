@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Common.Domain.Events.OrderManagements;
 using Common.Domain.Models.DTOs.OrderManagements;
 using MassTransit;
@@ -24,7 +25,7 @@ public class OrderAddedDomainEventHandler : INotificationHandler<OrderAddedDomai
         OrderAddedDomainEvent notification, 
         CancellationToken cancellationToken)
     {
-        var order = await _orderRepository.GetByIdWithItemsAsync(notification.OrderId);
+        var order = await _orderRepository.GetByIdWithItemsAsync(notification.Id);
         var orderItems = order.OrderItems
                             .Select(s => new OrderItemDto
                             {
@@ -35,13 +36,12 @@ public class OrderAddedDomainEventHandler : INotificationHandler<OrderAddedDomai
 
         var orderAddedEvent = new OrderAddedEvent(
             notification.CorrelationId,
-            notification.OrderId,
+            notification.Id,
             notification.UserId,
             notification.OrderDate,
-            notification.Status,
-            notification.TotalAmount,
             orderItems);
 
         await _publishEndpoint.Publish(orderAddedEvent, cancellationToken);
     }
+
 }

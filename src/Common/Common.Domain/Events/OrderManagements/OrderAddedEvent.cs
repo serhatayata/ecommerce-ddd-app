@@ -1,33 +1,30 @@
+using System.Text.Json.Serialization;
 using Common.Domain.Models.DTOs.OrderManagements;
-using Common.Domain.ValueObjects;
 
 namespace Common.Domain.Events.OrderManagements;
 
 public sealed record OrderAddedEvent : IntegrationEvent
 {
+    public OrderAddedEvent()
+    {
+    }
+
     public OrderAddedEvent(
         Guid? correlationId,
         int orderId,
         int userId,
-        DateTime addedDate,
-        OrderStatus status,
-        decimal totalAmount,
+        DateTime orderDate,
         List<OrderItemDto> items)
-        : base(correlationId, addedDate)
+        : base(correlationId, orderDate)
     {
         OrderId = orderId;
         UserId = userId;
-        OrderDate = addedDate;
-        Status = status;
-        TotalAmount = totalAmount;
+        OrderDate = orderDate;
         Items = items;
     }
 
-    public int OrderId { get; init; }
-    public int UserId { get; init; }
-    public DateTime OrderDate { get; init; }
-    public OrderStatus Status { get; init; }
-    public decimal TotalAmount { get; init; }
-
-    public List<OrderItemDto> Items { get; init; }
+    public int OrderId { get; set; }
+    public int UserId { get; set; }
+    public DateTime OrderDate { get; set; }
+    public List<OrderItemDto> Items { get; set; }
 }

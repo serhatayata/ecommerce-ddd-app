@@ -4,8 +4,9 @@ namespace Common.Domain.Events.Stocks;
 
 public sealed record StockReserveRequestEvent : IntegrationEvent
 {
-    public int OrderId { get; }
-    public List<OrderItemDto> Items { get; set; }
+    public StockReserveRequestEvent()
+    {
+    }
 
     public StockReserveRequestEvent(
     Guid? correlationId,
@@ -16,4 +17,7 @@ public sealed record StockReserveRequestEvent : IntegrationEvent
         OrderId = orderId;
         Items = items;
     }
+
+    public int OrderId { get; set; }
+    public List<OrderItemDto> Items { get; set; }
 }

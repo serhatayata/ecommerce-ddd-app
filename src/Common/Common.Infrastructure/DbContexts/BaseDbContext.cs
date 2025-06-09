@@ -18,8 +18,7 @@ public abstract class BaseDbContext<TContext> : DbContext where TContext : DbCon
     {
         var changes = await base.SaveChangesAsync(cancellationToken);
 
-        if (changes > 0)
-            await _publisher.DispatchDomainEventsAsync(this, cancellationToken);
+        await _publisher.DispatchDomainEventsAsync(this, cancellationToken);
 
         return changes;
     }
