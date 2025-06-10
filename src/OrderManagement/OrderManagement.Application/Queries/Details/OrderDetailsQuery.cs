@@ -7,7 +7,7 @@ namespace OrderManagement.Application.Queries.Details;
 
 public class OrderDetailsQuery : IRequest<OrderResponse>
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     public class OrderDetailsQueryHandler : IRequestHandler<OrderDetailsQuery, OrderResponse>
     {

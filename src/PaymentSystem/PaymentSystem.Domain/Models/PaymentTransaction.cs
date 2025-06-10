@@ -1,5 +1,4 @@
 using Common.Domain.Models;
-using Common.Domain.ValueObjects;
 
 namespace PaymentSystem.Domain.Models;
 

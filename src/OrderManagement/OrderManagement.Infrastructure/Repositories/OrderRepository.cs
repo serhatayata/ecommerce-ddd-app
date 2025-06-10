@@ -1,3 +1,4 @@
+using Common.Domain.ValueObjects;
 using Common.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using OrderManagement.Domain.Contracts;
@@ -17,7 +18,7 @@ public class OrderRepository : EfRepository<Order, OrderDbContext>, IOrderReposi
     }
 
     public async Task<Order> GetByIdWithItemsAsync(
-    int id, 
+    Guid id, 
     CancellationToken cancellationToken = default)
         => await _dbContext.Orders
             .Include(o => o.OrderItems)

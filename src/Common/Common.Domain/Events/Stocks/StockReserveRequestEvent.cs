@@ -10,7 +10,7 @@ public sealed record StockReserveRequestEvent : IntegrationEvent
 
     public StockReserveRequestEvent(
     Guid? correlationId,
-    int orderId,
+    Guid orderId,
     List<OrderItemDto> items)
     : base(correlationId, DateTime.UtcNow)
     {
@@ -18,6 +18,6 @@ public sealed record StockReserveRequestEvent : IntegrationEvent
         Items = items;
     }
 
-    public int OrderId { get; set; }
+    public Guid OrderId { get; set; }
     public List<OrderItemDto> Items { get; set; }
 }

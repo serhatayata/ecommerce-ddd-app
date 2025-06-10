@@ -13,7 +13,7 @@ public sealed record OrderAddedDomainEvent : DomainEvent, INotification
     }
 
     public OrderAddedDomainEvent(
-        int id,
+        Guid id,
         int userId,
         DateTime orderDate,
         OrderStatus status,
@@ -28,7 +28,7 @@ public sealed record OrderAddedDomainEvent : DomainEvent, INotification
         TotalAmount = totalAmount;
     }
 
-    public int Id { get; init; }
+    public Guid Id { get; init; }
     public int UserId { get; init; }
     public DateTime OrderDate { get; init; }
     public OrderStatus Status { get; init; }

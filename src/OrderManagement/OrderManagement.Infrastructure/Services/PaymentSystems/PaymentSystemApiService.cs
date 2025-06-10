@@ -17,7 +17,7 @@ public class PaymentSystemApiService : IPaymentSystemApiService
 
     #region PaymentInfo
     public async Task<PaymentInfoCreateResponse> CreatePaymentInfoAsync(
-    int orderId,
+    Guid orderId,
     string cardNumber,
     string iban,
     string cvv,

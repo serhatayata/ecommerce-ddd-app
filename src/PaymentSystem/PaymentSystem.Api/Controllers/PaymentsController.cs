@@ -30,7 +30,7 @@ public class PaymentsController : BaseApiController
         => await Send(command);
 
     [HttpGet("info/{orderId}")]
-    public async Task<ActionResult<PaymentInfoResponse>> GetPaymentInfo(int orderId)
+    public async Task<ActionResult<PaymentInfoResponse>> GetPaymentInfo(Guid orderId)
         => await Send(new PaymentInfoDetailsQuery { OrderId = orderId });
 
     [HttpPost("info/create")]

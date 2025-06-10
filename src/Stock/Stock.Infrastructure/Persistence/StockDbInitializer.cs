@@ -36,8 +36,8 @@ public class StockDbInitializer : DbInitializer
         stockItems[2].RemoveStock(10, "Damaged goods removal");
 
         // Add some reservations
-        stockItems[0].ReserveStock(10, OrderId.From(1001));
-        stockItems[1].ReserveStock(5, OrderId.From(1002));
+        stockItems[0].ReserveStock(10, OrderId.From(Guid.NewGuid()));
+        stockItems[1].ReserveStock(5, OrderId.From(Guid.NewGuid()));
 
         _dbContext.SaveChanges();
     }

@@ -1,14 +1,13 @@
 using Common.Application.Models;
 using MediatR;
 using Shipping.Domain.Contracts;
-using Shipping.Domain.Events;
 using Shipping.Domain.Models.Shipments;
 
 namespace Shipping.Application.Commands.Shipments.Ship;
 
 public class ShipShipmentCommand : IRequest<Result>
 {
-    public int ShipmentId { get; set; }
+    public Guid OrderId { get; set; }
     public Guid? CorrelationId { get; set; }
 
 
@@ -23,14 +22,11 @@ public class ShipShipmentCommand : IRequest<Result>
 
         public async Task<Result> Handle(ShipShipmentCommand request, CancellationToken cancellationToken)
         {
-            var shipment = await _shipmentRepository.GetByIdAsync(request.ShipmentId, cancellationToken);
+            // BURADA SHIPMENT OLUŞTURACAĞIZ...
 
-            if (shipment == null)
-                return Result.Failure(null);
+            // shipment.UpdateStatus(ShipmentStatus.Shipped, request.CorrelationId);
 
-            shipment.UpdateStatus(ShipmentStatus.Shipped, request.CorrelationId);
-
-            _ = await _shipmentRepository.SaveAsync(shipment, cancellationToken) > 0;
+            // _ = await _shipmentRepository.SaveAsync(shipment, cancellationToken) > 0;
 
             return Result.Success;
         }

@@ -5,7 +5,7 @@ namespace Stock.Domain.Events;
 public sealed record StockReservedDomainEvent : DomainEvent
 {
     public StockReservedDomainEvent(
-        int orderId,
+        Guid orderId,
         DateTime reservedDate,
         Guid? correlationId) 
         : base(correlationId)
@@ -14,6 +14,6 @@ public sealed record StockReservedDomainEvent : DomainEvent
         ReservedDate = reservedDate;
     }
 
-    public int OrderId { get; set; }
+    public Guid OrderId { get; set; }
     public DateTime ReservedDate { get; set; }
 }

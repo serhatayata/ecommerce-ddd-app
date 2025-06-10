@@ -8,7 +8,7 @@ namespace PaymentSystem.Application.Queries.PaymentInfo.Details;
 
 public class PaymentInfoDetailsQuery : IRequest<PaymentInfoResponse>
 {
-    public int OrderId { get; set; }
+    public Guid OrderId { get; set; }
 
     public class PaymentInfoDetailsQueryHandler : IRequestHandler<PaymentInfoDetailsQuery, PaymentInfoResponse>
     {

@@ -1,3 +1,4 @@
+using Common.Domain.ValueObjects;
 using Common.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Shipping.Domain.Contracts;
@@ -37,6 +38,10 @@ public class ShipmentRepository : EfRepository<Shipment, ShippingDbContext>, ISh
         _dbContext.ShipmentCompanies.Remove(shipmentCompany);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
+
+    public Task<Shipment> GetByOrderIdAsync(OrderId orderId, CancellationToken cancellationToken = default)
+        => _dbContext.Shipments
+            .FirstOrDefaultAsync(x => x.OrderId == orderId, cancellationToken);
 
     public async Task<ShipmentCompany> GetShipmentCompanyByIdAsync(
     int id, 

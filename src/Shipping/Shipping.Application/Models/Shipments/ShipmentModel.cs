@@ -6,7 +6,7 @@ namespace Shipping.Application.Models.Shipments;
 
 public class ShipmentModel : IMapFrom<Shipment>
 {
-    public int OrderId { get; set; }
+    public Guid OrderId { get; set; }
     public string Street { get; set; }
     public string City { get; set; }
     public string State { get; set; }

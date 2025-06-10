@@ -8,11 +8,11 @@ public sealed record PaymentCreateRequestEvent : IntegrationEvent
 
     public PaymentCreateRequestEvent(
         Guid? correlationId,
-        int orderId)
+        Guid orderId)
         : base(correlationId, DateTime.UtcNow)
     {
         OrderId = orderId;
     }
 
-    public int OrderId { get; set; }
+    public Guid OrderId { get; set; }
 }

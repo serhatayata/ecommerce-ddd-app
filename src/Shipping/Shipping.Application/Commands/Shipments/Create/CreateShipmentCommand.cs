@@ -1,4 +1,3 @@
-using Common.Domain.ValueObjects;
 using MediatR;
 using Shipping.Domain.Contracts;
 using Shipping.Domain.Models.Shipments;
@@ -7,7 +6,7 @@ namespace Shipping.Application.Commands.Shipments.Create;
 
 public class CreateShipmentCommand : IRequest<CreateShipmentResponse>
 {
-    public int OrderId { get; set; }
+    public Guid OrderId { get; set; }
     public string Street { get; set; }
     public string City { get; set; }
     public string State { get; set; }

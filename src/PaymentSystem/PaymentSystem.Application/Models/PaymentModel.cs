@@ -7,7 +7,7 @@ namespace PaymentSystem.Application.Models;
 
 public class PaymentModel : IMapFrom<Payment>
 {
-    public int OrderId { get; set; }
+    public Guid OrderId { get; set; }
     public decimal Amount { get; set; }
     public PaymentMethod Method { get; set; }
     public PaymentStatus Status { get; set; }

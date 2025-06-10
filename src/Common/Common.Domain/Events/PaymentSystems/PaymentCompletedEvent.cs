@@ -1,12 +1,10 @@
-using Common.Domain.ValueObjects;
-
 namespace Common.Domain.Events.PaymentSystems;
 
 public sealed record PaymentCompletedEvent : IntegrationEvent
 {
     public PaymentCompletedEvent(
         Guid? correlationId,
-        int orderId,
+        Guid orderId,
         int paymentId,
         decimal amount) 
         : base(correlationId, DateTime.UtcNow)
@@ -16,7 +14,7 @@ public sealed record PaymentCompletedEvent : IntegrationEvent
         Amount = amount;
     }
 
-    public int OrderId { get; set; }
+    public Guid OrderId { get; set; }
     public int PaymentId { get; set; }
     public decimal Amount { get; set; }
 }

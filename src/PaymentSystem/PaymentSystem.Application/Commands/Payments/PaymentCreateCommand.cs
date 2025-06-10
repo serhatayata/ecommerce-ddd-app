@@ -8,7 +8,7 @@ namespace PaymentSystem.Application.Commands.Payments;
 
 public class PaymentCreateCommand : IRequest<PaymentCreateResponse>, CorrelatedBy<Guid?>
 {
-    public int OrderId { get; set; }
+    public Guid OrderId { get; set; }
     public Guid? CorrelationId { get; set; }
 
     public class PaymentCreateCommandHandler : IRequestHandler<PaymentCreateCommand, PaymentCreateResponse>

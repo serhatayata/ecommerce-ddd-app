@@ -8,13 +8,14 @@ public sealed record ShipShipmentRequestEvent : IntegrationEvent
 
     public ShipShipmentRequestEvent(
         Guid correlationId,
-        int orderId,
+        Guid orderId,
         DateTime shippedDate) :
     base(correlationId, DateTime.UtcNow)
     {
         ShippedDate = shippedDate;
+        OrderId = orderId;
     }
     
-    public int OrderId { get; set; }
+    public Guid OrderId { get; set; }
     public DateTime ShippedDate { get; set; }
 }

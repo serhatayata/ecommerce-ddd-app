@@ -9,7 +9,7 @@ namespace Stock.Application.Commands.StockReservations.StockReserve;
 
 public class StockReserveCommand : IRequest<StockReserveResponse>, CorrelatedBy<Guid?>
 {
-    public int OrderId { get; set; }
+    public Guid OrderId { get; set; }
     public List<OrderItemDto> Items { get; set; }
     public Guid? CorrelationId { get; set; }
 

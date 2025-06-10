@@ -7,8 +7,8 @@ public class CreateShipmentCommandValidator : AbstractValidator<CreateShipmentCo
     public CreateShipmentCommandValidator()
     {
         RuleFor(x => x.OrderId)
-            .GreaterThan(0)
-            .WithMessage("Order ID must be greater than 0");
+            .NotEmpty()
+            .WithMessage("Order ID must be provided");
 
         RuleFor(x => x.Street)
             .NotEmpty()

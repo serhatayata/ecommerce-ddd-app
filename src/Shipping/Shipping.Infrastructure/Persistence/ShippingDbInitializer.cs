@@ -26,7 +26,7 @@ public class ShippingDbInitializer : DbInitializer
         _dbContext.SaveChanges();
 
         var shipment1 = Shipment.Create(
-            orderId: OrderId.From(1),
+            orderId: OrderId.From(Guid.NewGuid()),
             shippingAddress: new Address("Cicek Sk", "Istanbul", "IST", "Turkiye", "34755"),
             trackingNumber: "TRACK001",
             shipmentCompanyId: shipmentCompany1.Id
@@ -36,7 +36,7 @@ public class ShippingDbInitializer : DbInitializer
         shipment1.Ship();
 
         var shipment2 = Shipment.Create(
-            orderId: OrderId.From(2),
+            orderId: OrderId.From(Guid.NewGuid()),
             shippingAddress: new Address("Guzel Sk", "Kocaeli", "KOA", "Turkiye", "41756"),
             trackingNumber: "TRACK002",
             shipmentCompanyId: shipmentCompany2.Id

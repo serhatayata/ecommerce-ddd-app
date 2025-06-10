@@ -11,7 +11,7 @@ public sealed record OrderAddedEvent : IntegrationEvent
 
     public OrderAddedEvent(
         Guid? correlationId,
-        int orderId,
+        Guid orderId,
         int userId,
         DateTime orderDate,
         List<OrderItemDto> items)
@@ -23,7 +23,7 @@ public sealed record OrderAddedEvent : IntegrationEvent
         Items = items;
     }
 
-    public int OrderId { get; set; }
+    public Guid OrderId { get; set; }
     public int UserId { get; set; }
     public DateTime OrderDate { get; set; }
     public List<OrderItemDto> Items { get; set; }

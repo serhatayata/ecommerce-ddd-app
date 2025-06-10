@@ -4,7 +4,7 @@ public sealed record ShipmentDeliveredEvent : IntegrationEvent
 {
     public ShipmentDeliveredEvent(
         Guid correlationId,
-        int orderId,
+        Guid orderId,
         int shipmentId,
         string trackingNumber,
         DateTime deliveredDate)
@@ -17,7 +17,7 @@ public sealed record ShipmentDeliveredEvent : IntegrationEvent
     }
 
     public int ShipmentId { get; }
-    public int OrderId { get; }
+    public Guid OrderId { get; }
     public string TrackingNumber { get; }
     public DateTime DeliveredDate { get; }
 }

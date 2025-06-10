@@ -8,7 +8,7 @@ public class OrderAddState : SagaStateMachineInstance
 {
     public Guid CorrelationId { get; set; }
     public string CurrentState { get; set; }
-    public int OrderId { get; set; }
+    public Guid OrderId { get; set; }
     public int UserId { get; set; }
     public DateTime OrderDate { get; set; }
     public DateTime CreatedAt { get; set; }

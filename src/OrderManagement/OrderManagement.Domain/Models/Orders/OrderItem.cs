@@ -10,7 +10,7 @@ public class OrderItem : Entity
     }
 
     private OrderItem(
-    int orderId, 
+    Guid orderId, 
     int productId, 
     int quantity,
     Money unitPrice)
@@ -22,13 +22,13 @@ public class OrderItem : Entity
     }
 
     public static OrderItem Create(
-        int orderId,
+        Guid orderId,
         int productId,
         int quantity,
         Money unitPrice)
         => new OrderItem(orderId, productId, quantity, unitPrice);
 
-    public int OrderId { get; private set; }
+    public Guid OrderId { get; private set; }
     public int ProductId { get; private set; }
     public int Quantity { get; private set; }
     public Money UnitPrice { get; private set; }

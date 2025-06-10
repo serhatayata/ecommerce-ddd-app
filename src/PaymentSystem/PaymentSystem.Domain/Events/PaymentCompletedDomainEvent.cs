@@ -6,7 +6,7 @@ namespace PaymentSystem.Domain.Events;
 
 public sealed record PaymentCompletedDomainEvent : DomainEvent
 {
-    public int OrderId { get; }
+    public Guid OrderId { get; }
     public int PaymentId { get; }
     public decimal Amount { get; }
     public PaymentMethod Method { get; }
@@ -17,7 +17,7 @@ public sealed record PaymentCompletedDomainEvent : DomainEvent
     }
 
     public PaymentCompletedDomainEvent(
-        int orderId,
+        Guid orderId,
         int paymentId,
         decimal amount,
         PaymentMethod method,

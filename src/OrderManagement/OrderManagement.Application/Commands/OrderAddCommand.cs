@@ -4,7 +4,6 @@ using OrderManagement.Application.Services.Products;
 using OrderManagement.Domain.Contracts;
 using OrderManagement.Domain.Models.Orders;
 using OrderManagement.Application.Services.PaymentSystems;
-using Common.Domain.ValueObjects;
 
 namespace OrderManagement.Application.Commands;
 
@@ -24,18 +23,15 @@ public class OrderAddCommand : IRequest<OrderAddResponse>
         private readonly IOrderRepository _orderRepository;
         private readonly IProductCatalogApiService _productCatalogApiService;
         private readonly IPaymentSystemApiService _paymentSystemApiService;
-        private readonly IMediator _mediator;
 
         public OrderAddCommandHandler(
         IOrderRepository orderRepository,
         IProductCatalogApiService productCatalogApiService,
-        IPaymentSystemApiService paymentSystemApiService,
-        IMediator mediator)
+        IPaymentSystemApiService paymentSystemApiService)
         {
             _orderRepository = orderRepository;
             _productCatalogApiService = productCatalogApiService;
             _paymentSystemApiService = paymentSystemApiService;
-            _mediator = mediator;
         }
 
         public async Task<OrderAddResponse> Handle(
@@ -67,9 +63,9 @@ public class OrderAddCommand : IRequest<OrderAddResponse>
             foreach (var orderItem in orderItems)
                 order.AddOrderItem(orderItem);
 
-            _ = await _orderRepository.SaveAsync(order, cancellationToken) > 0;
+            order.RaiseOrderCreatedEvent();
 
-            await PublishOrderEvents(order, cancellationToken);
+            _ = await _orderRepository.SaveAsync(order, cancellationToken) > 0;
 
             var paymentInfoResponse = await _paymentSystemApiService.CreatePaymentInfoAsync(
                 order.Id,
@@ -87,18 +83,6 @@ public class OrderAddCommand : IRequest<OrderAddResponse>
                 PaymentInfoId = paymentInfoResponse.Id,
                 OrderDate = order.OrderDate
             };
-        }
-
-        private async Task PublishOrderEvents(
-        Order order,
-        CancellationToken cancellationToken)
-        {
-            order.RaiseOrderCreatedEvent();
-
-            foreach (var domainEvent in order.Events)
-                await _mediator.Publish(domainEvent, cancellationToken);
-
-            order.ClearEvents(); 
         }
     }
 }

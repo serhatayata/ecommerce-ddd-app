@@ -5,7 +5,7 @@ namespace Common.Application.Models.Responses.PaymentSystems;
 public class PaymentInfoCreateResponse
 {
     public int Id { get; set; }
-    public int OrderId { get; set; }
+    public Guid OrderId { get; set; }
     public string CardNumber { get; set; }
     public string IBAN { get; set; }
     public string CVV { get; set; }

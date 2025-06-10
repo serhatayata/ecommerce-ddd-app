@@ -11,7 +11,7 @@ public sealed record ShipmentDeliveredDomainEvent : DomainEvent
     }
 
     public ShipmentDeliveredDomainEvent(
-        int orderId,
+        Guid orderId,
         int shipmentId,
         string trackingNumber,
         DateTime deliveredDate,
@@ -24,7 +24,7 @@ public sealed record ShipmentDeliveredDomainEvent : DomainEvent
         DeliveredDate = deliveredDate;
     }
 
-    public int OrderId { get; }
+    public Guid OrderId { get; }
     public int ShipmentId { get; }
     public string TrackingNumber { get; }
     public DateTime DeliveredDate { get; }

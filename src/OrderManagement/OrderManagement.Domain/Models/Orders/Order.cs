@@ -6,17 +6,20 @@ namespace OrderManagement.Domain.Models.Orders;
 
 public class Order : Entity, IAggregateRoot
 {
+    public Guid Id { get; private set; }
     public HashSet<OrderItem> OrderItems { get; private set; }
 
     private Order()
     {
+        Id = Guid.NewGuid();
         OrderItems = new HashSet<OrderItem>();
     }
 
     private Order(
-    UserId userId,
-    DateTime orderDate)
+        UserId userId,
+        DateTime orderDate)
     {
+        Id = Guid.NewGuid();
         UserId = userId;
         OrderDate = orderDate;
         OrderItems = new HashSet<OrderItem>();
@@ -24,8 +27,8 @@ public class Order : Entity, IAggregateRoot
     }
 
     public static Order Create(
-    UserId userId,
-    DateTime orderDate)
+        UserId userId,
+        DateTime orderDate)
         => new(userId, orderDate);
 
     public UserId UserId { get; private set; }
@@ -55,4 +58,14 @@ public class Order : Entity, IAggregateRoot
             totalAmount
         ));
     }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is not Order other) return false;
+        if (ReferenceEquals(this, other)) return true;
+        if (Id.Equals(default) || other.Id.Equals(default)) return false;
+        return Id.Equals(other.Id);
+    }
+
+    public override int GetHashCode() => (GetType().ToString() + Id).GetHashCode();
 }
