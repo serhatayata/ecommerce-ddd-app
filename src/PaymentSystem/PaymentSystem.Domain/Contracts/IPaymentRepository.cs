@@ -4,7 +4,7 @@ using PaymentSystem.Domain.Models;
 
 namespace PaymentSystem.Domain.Contracts;
 
-public interface IPaymentRepository : IRepository<Payment>
+public interface IPaymentRepository : IRepository<Payment, int>
 {
     Task<Payment> GetByOrderIdAsync(OrderId orderId, CancellationToken cancellationToken);
     Task<bool> ExistsAsync(PaymentId id, CancellationToken cancellationToken);

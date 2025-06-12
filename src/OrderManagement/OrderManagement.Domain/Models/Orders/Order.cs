@@ -4,9 +4,8 @@ using OrderManagement.Domain.Events;
 
 namespace OrderManagement.Domain.Models.Orders;
 
-public class Order : Entity, IAggregateRoot
+public class Order : Entity<Guid>, IAggregateRoot
 {
-    public Guid Id { get; private set; }
     public HashSet<OrderItem> OrderItems { get; private set; }
 
     private Order()

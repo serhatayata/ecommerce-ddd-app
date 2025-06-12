@@ -9,7 +9,7 @@ using ProductCatalog.Infrastructure.Persistence;
 
 namespace ProductCatalog.Infrastructure.Repositories.Products;
 
-public class ProductRepository : EfRepository<Product, ProductCatalogDbContext>, IProductRepository
+public class ProductRepository : EfRepository<Product, ProductCatalogDbContext, int>, IProductRepository
 {
     private readonly ProductCatalogDbContext _dbContext;
 

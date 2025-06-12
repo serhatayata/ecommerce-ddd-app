@@ -1,18 +1,12 @@
+using Common.Domain.SharedKernel;
+
 namespace Common.Domain.ValueObjects;
 
-public sealed class ShipmentId : ValueObject
+public sealed class ShipmentId : TypedIdValueBase<ShipmentId, int>
 {
-    public int Value { get; }
-
-    private ShipmentId(int value)
+    private ShipmentId(int value) : base(value)
     {
-        if (value <= 0)
-            throw new ArgumentException("Shipment ID must be a positive number", nameof(value));
-            
-        Value = value;
     }
-
+    
     public static ShipmentId From(int value) => new(value);
-
-    public override string ToString() => Value.ToString();
 }

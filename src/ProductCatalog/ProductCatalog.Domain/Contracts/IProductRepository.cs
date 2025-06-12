@@ -6,7 +6,7 @@ using ProductCatalog.Domain.Models.Suppliers;
 
 namespace ProductCatalog.Domain.Contracts;
 
-public interface IProductRepository : IRepository<Product>
+public interface IProductRepository : IRepository<Product, int>
 {
     Task<List<Product>> GetProductsByIdsAsync(int[] ids, CancellationToken cancellationToken = default);
 

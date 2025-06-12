@@ -7,7 +7,7 @@ using PaymentSystem.Infrastructure.Persistence;
 
 namespace PaymentSystem.Infrastructure.Repositories;
 
-public class PaymentRepository : EfRepository<Payment, PaymentSystemDbContext>, IPaymentRepository
+public class PaymentRepository : EfRepository<Payment, PaymentSystemDbContext, int>, IPaymentRepository
 {
     private readonly PaymentSystemDbContext _dbContext;
 

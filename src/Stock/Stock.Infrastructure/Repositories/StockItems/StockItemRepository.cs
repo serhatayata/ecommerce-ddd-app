@@ -7,7 +7,7 @@ using Stock.Infrastructure.Persistence;
 
 namespace Stock.Infrastructure.Repositories.StockItems;
 
-public class StockItemRepository : EfRepository<StockItem, StockDbContext>, IStockItemRepository
+public class StockItemRepository : EfRepository<StockItem, StockDbContext, int>, IStockItemRepository
 {
     private readonly StockDbContext _dbContext;
 

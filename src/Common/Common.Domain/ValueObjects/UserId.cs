@@ -1,18 +1,12 @@
+using Common.Domain.SharedKernel;
+
 namespace Common.Domain.ValueObjects;
 
-public sealed class UserId : ValueObject
+public sealed class UserId : TypedIdValueBase<UserId, int>
 {
-    public int Value { get; }
-
-    private UserId(int value)
+    private UserId(int value) : base(value)
     {
-        if (value <= 0)
-            throw new ArgumentException("User ID must be a positive number", nameof(value));
-            
-        Value = value;
     }
-
+    
     public static UserId From(int value) => new(value);
-
-    public override string ToString() => Value.ToString();
 }

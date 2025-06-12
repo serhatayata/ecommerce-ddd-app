@@ -1,7 +1,7 @@
 using Common.Domain.Events.PaymentSystems;
 using MediatR;
 using PaymentSystem.Domain.Events;
-using MassTransit; // Add this using
+using MassTransit;
 
 namespace PaymentSystem.Application.Events.Handlers;
 
@@ -18,9 +18,7 @@ public class PaymentCompletedDomainEventHandler : INotificationHandler<PaymentCo
     {
         var paymentCompletedEvent = new PaymentCompletedEvent(
             notification.CorrelationId,
-            notification.OrderId,
-            notification.PaymentId,
-            notification.Amount);
+            notification.OrderId);
 
         await _publishEndpoint.Publish(paymentCompletedEvent, cancellationToken);
     }

@@ -4,7 +4,7 @@ using Shipping.Domain.Models.Shipments;
 
 namespace Shipping.Domain.Contracts;
 
-public interface IShipmentRepository : IRepository<Shipment>
+public interface IShipmentRepository : IRepository<Shipment, int>
 {
     Task<ShipmentCompany> GetShipmentCompanyByIdAsync(int id, CancellationToken cancellationToken);
     Task<Shipment> GetByOrderIdAsync(OrderId orderId, CancellationToken cancellationToken = default);

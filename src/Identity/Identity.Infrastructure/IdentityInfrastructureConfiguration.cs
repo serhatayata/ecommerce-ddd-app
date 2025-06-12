@@ -80,7 +80,7 @@ public static class IdentityInfrastructureConfiguration
             .Scan(scan => scan
                 .FromAssemblies(Assembly.GetExecutingAssembly())
                 .AddClasses(classes => classes
-                    .AssignableTo(typeof(IRepository<>)))
+                    .AssignableTo(typeof(IRepository<,>)))
                 .AsImplementedInterfaces()
                 .WithTransientLifetime());
 

@@ -42,9 +42,6 @@ public class Payment : Entity, IAggregateRoot
 
         var paymentCompletedEvent = new PaymentCompletedDomainEvent(
             OrderId.Value,
-            Id,
-            Amount.Amount,
-            Method,
             correlationId
         );
 

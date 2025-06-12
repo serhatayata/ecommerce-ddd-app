@@ -7,7 +7,7 @@ using OrderManagement.Infrastructure.Persistence;
 
 namespace OrderManagement.Infrastructure.Repositories;
 
-public class OrderRepository : EfRepository<Order, OrderDbContext>, IOrderRepository
+public class OrderRepository : EfRepository<Order, OrderDbContext, Guid>, IOrderRepository
 {
     private readonly OrderDbContext _dbContext;
 

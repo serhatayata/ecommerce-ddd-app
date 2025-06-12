@@ -1,18 +1,12 @@
+using Common.Domain.SharedKernel;
+
 namespace Common.Domain.ValueObjects;
 
-public sealed class StockItemId : ValueObject
+public sealed class StockItemId : TypedIdValueBase<StockItemId, int>
 {
-    public int Value { get; }
-
-    private StockItemId(int value)
+    private StockItemId(int value) : base(value)
     {
-        if (value <= 0)
-            throw new ArgumentException("Stock Item ID must be a positive number", nameof(value));
-            
-        Value = value;
     }
-
+    
     public static StockItemId From(int value) => new(value);
-
-    public override string ToString() => Value.ToString();
 }

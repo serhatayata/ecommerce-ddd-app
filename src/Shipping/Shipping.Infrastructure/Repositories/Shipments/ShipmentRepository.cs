@@ -7,7 +7,7 @@ using Shipping.Infrastructure.Persistence;
 
 namespace Shipping.Infrastructure.Repositories.Shipments;
 
-public class ShipmentRepository : EfRepository<Shipment, ShippingDbContext>, IShipmentRepository
+public class ShipmentRepository : EfRepository<Shipment, ShippingDbContext, int>, IShipmentRepository
 {
     private readonly ShippingDbContext _dbContext;
 

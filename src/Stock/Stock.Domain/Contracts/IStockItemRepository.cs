@@ -4,7 +4,7 @@ using Stock.Domain.Models.Stocks;
 
 namespace Stock.Domain.Contracts;
 
-public interface IStockItemRepository : IRepository<StockItem>
+public interface IStockItemRepository : IRepository<StockItem, int>
 {
     #region StockReservation
     Task<StockReservation> GetReservationByIdAsync(int id, CancellationToken cancellationToken = default);
