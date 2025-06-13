@@ -2,7 +2,7 @@ using Common.Domain.Events;
 
 namespace Common.Domain.Models;
 
-public abstract class Entity<TId>
+public abstract class Entity<TId> : IEntity
 {
     private readonly ICollection<IDomainEvent> events;
 
@@ -39,7 +39,7 @@ public abstract class Entity<TId>
     public override int GetHashCode() => (GetType().ToString() + Id?.ToString()).GetHashCode();
 }
 
-// Keep backward compatibility for existing entities using int Id
+
 public abstract class Entity : Entity<int>
 {
 }

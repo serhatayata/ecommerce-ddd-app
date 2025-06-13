@@ -12,16 +12,16 @@ public static class MediatorExtensions
     CancellationToken cancellationToken = default) where TContext : DbContext
     {
         var domainEntities = ctx.ChangeTracker
-            .Entries<Entity>()
-            .Where(x => x.Entity.Events.Any())
+            .Entries()
+            .Where(x => x.Entity is IEntity entity && entity.Events.Any())
             .ToList();
 
         var domainEvents = domainEntities
-            .SelectMany(x => x.Entity.Events)
+            .SelectMany(x => ((IEntity)x.Entity).Events)
             .ToList();
 
         domainEntities
-            .ForEach(entity => entity.Entity.ClearEvents());
+            .ForEach(entity => ((IEntity)entity.Entity).ClearEvents());
 
         var notifications = domainEvents.Select(domainEvent => publisher.Publish(domainEvent, cancellationToken));
         await Task.WhenAll(notifications);

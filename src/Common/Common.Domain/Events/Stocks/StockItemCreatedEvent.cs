@@ -2,6 +2,10 @@ namespace Common.Domain.Events.Stocks;
 
 public sealed record StockItemCreatedEvent : IntegrationEvent
 {
+    public StockItemCreatedEvent()
+    {
+    }
+
     public StockItemCreatedEvent(
         int stockItemId,
         int productId,
@@ -11,7 +15,7 @@ public sealed record StockItemCreatedEvent : IntegrationEvent
         string shelf,
         string bin,
         DateTime createdDate,
-        Guid correlationId) 
+        Guid correlationId)
         : base(correlationId, DateTime.UtcNow)
     {
         StockItemId = stockItemId;

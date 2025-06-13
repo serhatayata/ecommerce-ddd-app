@@ -2,11 +2,15 @@ namespace Common.Domain.Events.Stocks;
 
 public sealed record StockAddedEvent : IntegrationEvent
 {
+    public StockAddedEvent()
+    {   
+    }
+
     public StockAddedEvent(
         Guid? correlationId,
         int stockItemId,
         int quantity,
-        DateTime addedDate) 
+        DateTime addedDate)
         : base(correlationId, addedDate)
     {
         StockItemId = stockItemId;
