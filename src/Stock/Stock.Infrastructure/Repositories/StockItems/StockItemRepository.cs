@@ -18,35 +18,6 @@ public class StockItemRepository : EfRepository<StockItem, StockDbContext, int>,
     }
 
     #region Stock Reservation
-    public async Task<StockReservation> CreateReservationAsync(
-        StockReservation reservation,
-        CancellationToken cancellationToken = default)
-    {
-        await _dbContext.StockReservations.AddAsync(reservation, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-
-        return reservation;
-    }
-
-    public async Task UpdateReservationAsync(
-        StockReservation reservation,
-        CancellationToken cancellationToken = default)
-    {
-        _dbContext.Entry(reservation).State = EntityState.Modified;
-        await _dbContext.SaveChangesAsync(cancellationToken);
-    }
-
-    public async Task DeleteReservationAsync(
-        int id,
-        CancellationToken cancellationToken = default)
-    {
-        var reservation = await GetReservationByIdAsync(id, cancellationToken);
-        if (reservation == null) return;
-
-        _dbContext.StockReservations.Remove(reservation);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-    }
-
     public async Task<StockReservation> GetReservationByIdAsync(
         int id,
         CancellationToken cancellationToken = default)
@@ -117,35 +88,6 @@ public class StockItemRepository : EfRepository<StockItem, StockDbContext, int>,
     #endregion
 
     #region Stock Transaction
-    public async Task<StockTransaction> CreateTransactionAsync(
-        StockTransaction transaction,
-        CancellationToken cancellationToken = default)
-    {
-        await _dbContext.StockTransactions.AddAsync(transaction, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-
-        return transaction;
-    }
-
-    public async Task UpdateTransactionAsync(
-        StockTransaction transaction,
-        CancellationToken cancellationToken = default)
-    {
-        _dbContext.Entry(transaction).State = EntityState.Modified;
-        await _dbContext.SaveChangesAsync(cancellationToken);
-    }
-
-    public async Task DeleteTransactionAsync(
-        int id,
-        CancellationToken cancellationToken = default)
-    {
-        var transaction = await GetTransactionByIdAsync(id, cancellationToken);
-        if (transaction == null) return;
-
-        _dbContext.StockTransactions.Remove(transaction);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-    }
-
     public async Task<IEnumerable<StockTransaction>> GetTransactionsByStockItemIdAsync(
         StockItemId stockItemId,
         CancellationToken cancellationToken = default)
