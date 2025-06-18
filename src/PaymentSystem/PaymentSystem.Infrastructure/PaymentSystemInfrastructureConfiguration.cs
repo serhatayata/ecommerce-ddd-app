@@ -5,6 +5,7 @@ using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PaymentSystem.Application.Consumers;
 using PaymentSystem.Application.Services.OrderManagements;
 using PaymentSystem.Domain.Contracts;
 using PaymentSystem.Infrastructure.Persistence;
@@ -71,6 +72,8 @@ public static class PaymentSystemInfrastructureConfiguration
     {
         return services.AddMassTransit(m =>
         {
+            m.AddConsumer<PaymentCreateRequestEventConsumer>();
+
             m.UsingRabbitMq((context, cfg) =>
             {
                 var rabbitMQHost = configuration.GetConnectionString("RabbitMQ");

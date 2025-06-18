@@ -54,7 +54,8 @@ public class Order : Entity<Guid>, IAggregateRoot
             UserId.Value,
             OrderDate,
             Status,
-            totalAmount
+            totalAmount,
+            Guid.NewGuid()
         ));
     }
 

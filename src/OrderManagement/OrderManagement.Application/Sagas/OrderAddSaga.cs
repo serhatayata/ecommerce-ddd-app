@@ -48,6 +48,7 @@ public class OrderAddSaga : MassTransitStateMachine<OrderAddState>
                     context.Saga.UserId = context.Message.UserId;
                     context.Saga.OrderDate = context.Message.OrderDate;
                     context.Saga.CreatedAt = DateTime.UtcNow;
+                    context.Saga.CorrelationId = context.Message.CorrelationId;
                 })
                 .Publish(context =>
                 {
@@ -65,6 +66,7 @@ public class OrderAddSaga : MassTransitStateMachine<OrderAddState>
                 .Then(context =>
                 {
                     context.Saga.OrderId = context.Message.OrderId;
+                    context.Saga.CorrelationId = context.Message.CorrelationId;
                     context.Saga.CreatedAt = DateTime.UtcNow;
                 })
                 .Publish(context =>
@@ -81,6 +83,7 @@ public class OrderAddSaga : MassTransitStateMachine<OrderAddState>
             When(PaymentCompletedEvent)
                 .Then(context =>
                 {
+                    context.Saga.CorrelationId = context.Message.CorrelationId;
                     context.Saga.OrderId = context.Message.OrderId;
                     context.Saga.CreatedAt = DateTime.UtcNow;
                 })
@@ -104,6 +107,7 @@ public class OrderAddSaga : MassTransitStateMachine<OrderAddState>
             When(ShipmentDeliveredEvent)
                 .Then(context =>
                 {
+                    context.Saga.CorrelationId = context.Message.CorrelationId;
                     context.Saga.CompletedAt = DateTime.UtcNow;
                 })
                 .TransitionTo(Completed)
