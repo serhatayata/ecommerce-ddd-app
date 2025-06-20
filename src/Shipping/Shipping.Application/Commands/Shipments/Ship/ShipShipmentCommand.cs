@@ -20,9 +20,11 @@ public class ShipShipmentCommand : IRequest<Result>
             _shipmentRepository = shipmentRepository;
         }
 
-        public async Task<Result> Handle(ShipShipmentCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(
+        ShipShipmentCommand request,
+        CancellationToken cancellationToken)
         {
-            // BURADA SHIPMENT OLUŞTURACAĞIZ...
+            
 
             // shipment.UpdateStatus(ShipmentStatus.Shipped, request.CorrelationId);
 

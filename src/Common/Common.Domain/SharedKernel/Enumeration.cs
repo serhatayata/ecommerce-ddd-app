@@ -7,6 +7,10 @@ public abstract class Enumeration : IComparable
 {
     private static readonly ConcurrentDictionary<Type, IEnumerable<object>> EnumCache = new();
 
+    protected Enumeration()
+    {
+    }
+
     protected Enumeration(int value, string name)
     {
         this.Value = value;

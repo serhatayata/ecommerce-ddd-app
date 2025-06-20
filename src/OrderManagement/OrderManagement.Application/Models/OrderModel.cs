@@ -9,7 +9,7 @@ public class OrderModel : IMapFrom<Order>
 {
     public int UserId { get; set; }
     public DateTime OrderDate { get; set; }
-    public OrderStatus Status { get; set; }
+    public int Status { get; set; }
 
     public HashSet<OrderItemModel> OrderItems { get; set; }
 

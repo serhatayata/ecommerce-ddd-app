@@ -9,10 +9,11 @@ public class OrderItemModel : IMapFrom<OrderItem>
 {
     public int ProductId { get; set; }
     public int Quantity { get; set; }
-    public Money UnitPrice { get; set; }
+    public decimal UnitPrice { get; set; }
 
     public virtual void Mapping(Profile profile)
     {
-        profile.CreateMap<OrderItem, OrderItemModel>();
+        profile.CreateMap<OrderItem, OrderItemModel>()
+            .ForMember(dest => dest.UnitPrice, opt => opt.MapFrom(src => src.UnitPrice.Amount));
     }
 }

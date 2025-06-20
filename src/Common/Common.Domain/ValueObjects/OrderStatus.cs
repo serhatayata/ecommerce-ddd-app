@@ -20,4 +20,8 @@ public class OrderStatus : Enumeration
         : this(value, FromValue<OrderStatus>(value).Name)
     {
     }
+
+    private OrderStatus()
+    {
+    }
 }

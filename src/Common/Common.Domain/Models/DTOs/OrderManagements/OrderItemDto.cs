@@ -1,3 +1,5 @@
+using Common.Domain.ValueObjects;
+
 namespace Common.Domain.Models.DTOs.OrderManagements;
 
 public class OrderItemDto

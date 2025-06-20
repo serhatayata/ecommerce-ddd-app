@@ -13,8 +13,18 @@ public class OrderManagementApiService : IOrderManagementApiService
     {
         _orderManagementHttpClient = httpClientFactory.CreateClient("order-management");
     }
-    
+
     public async Task<OrderDetailResponse> GetOrderDetailById(OrderId orderId)
-        => await _orderManagementHttpClient.GetFromJsonAsync<OrderDetailResponse>(
-            $"orders/{orderId}");
+    {
+        var url = $"orders/detail?Id={orderId.Value}";
+        try
+        {
+            var result = await _orderManagementHttpClient.GetFromJsonAsync<OrderDetailResponse>(url);
+            return result;
+        }
+        catch (System.Exception ex)
+        {
+            throw;
+        }
+    }
 }
