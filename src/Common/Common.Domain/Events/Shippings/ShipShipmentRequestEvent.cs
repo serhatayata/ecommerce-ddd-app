@@ -1,3 +1,5 @@
+using Common.Domain.Models.DTOs.Shippings;
+
 namespace Common.Domain.Events.Shippings;
 
 public sealed record ShipShipmentRequestEvent : IntegrationEvent
@@ -15,7 +17,8 @@ public sealed record ShipShipmentRequestEvent : IntegrationEvent
         ShippedDate = shippedDate;
         OrderId = orderId;
     }
-    
+
     public Guid OrderId { get; set; }
     public DateTime ShippedDate { get; set; }
+    public ShipmentDto ShipmentDetail { get; set; }
 }

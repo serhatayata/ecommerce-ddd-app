@@ -18,6 +18,7 @@ public sealed record OrderAddedDomainEvent : DomainEvent, INotification
         DateTime orderDate,
         OrderStatus status,
         decimal totalAmount,
+        string shipmentDetail,
         Guid? correlationId = null)
         : base(correlationId)
     {
@@ -26,6 +27,7 @@ public sealed record OrderAddedDomainEvent : DomainEvent, INotification
         OrderDate = orderDate;
         Status = status;
         TotalAmount = totalAmount;
+        ShipmentDetail = shipmentDetail;
     }
 
     public Guid Id { get; init; }
@@ -33,4 +35,5 @@ public sealed record OrderAddedDomainEvent : DomainEvent, INotification
     public DateTime OrderDate { get; init; }
     public OrderStatus Status { get; init; }
     public decimal TotalAmount { get; init; }
+    public string ShipmentDetail { get; init; }
 }

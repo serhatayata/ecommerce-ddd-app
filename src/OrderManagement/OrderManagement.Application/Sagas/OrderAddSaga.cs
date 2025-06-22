@@ -49,6 +49,7 @@ public class OrderAddSaga : MassTransitStateMachine<OrderAddState>
                     context.Saga.OrderDate = context.Message.OrderDate;
                     context.Saga.CreatedAt = DateTime.UtcNow;
                     context.Saga.CorrelationId = context.Message.CorrelationId;
+                    context.Saga.ShipmentDetail = context.Message.ShipmentDetail;
                 })
                 .Publish(context =>
                 {

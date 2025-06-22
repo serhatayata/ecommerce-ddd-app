@@ -1,4 +1,5 @@
 using Common.Domain.Models;
+using Common.Domain.SharedKernel;
 using Common.Domain.ValueObjects;
 using Shipping.Domain.Events;
 

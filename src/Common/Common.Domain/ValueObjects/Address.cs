@@ -1,7 +1,11 @@
-namespace Shipping.Domain.Models.Shipments;
+namespace Common.Domain.ValueObjects;
 
-public record Address
+public class Address : ValueObject
 {
+    public Address()
+    {
+    }
+
     public Address(
         string street,
         string city,

@@ -1,4 +1,5 @@
 using Common.Application.Models;
+using Common.Domain.SharedKernel;
 using MediatR;
 using Shipping.Domain.Contracts;
 using Shipping.Domain.Models.Shipments;

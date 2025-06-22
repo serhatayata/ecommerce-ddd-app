@@ -1,6 +1,7 @@
 using Common.Api.Controllers;
 using Common.Application.Models;
 using Common.Domain.Events.Shippings;
+using Common.Domain.SharedKernel;
 using Common.Domain.ValueObjects;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;

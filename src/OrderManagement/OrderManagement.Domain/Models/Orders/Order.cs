@@ -45,7 +45,7 @@ public class Order : Entity<Guid>, IAggregateRoot
         OrderItems.Add(orderItem);
     }
 
-    public void RaiseOrderCreatedEvent()
+    public void RaiseOrderCreatedEvent(string shipmentDetails)
     {
         decimal totalAmount = OrderItems?.Sum(x => x.UnitPrice?.Amount ?? 0) ?? 0;
 
@@ -55,6 +55,7 @@ public class Order : Entity<Guid>, IAggregateRoot
             OrderDate,
             Status,
             totalAmount,
+            shipmentDetails,
             Guid.NewGuid()
         ));
     }

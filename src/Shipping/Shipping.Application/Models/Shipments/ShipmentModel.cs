@@ -1,5 +1,6 @@
 using AutoMapper;
 using Common.Application.Mapping;
+using Common.Domain.SharedKernel;
 using Shipping.Domain.Models.Shipments;
 
 namespace Shipping.Application.Models.Shipments;

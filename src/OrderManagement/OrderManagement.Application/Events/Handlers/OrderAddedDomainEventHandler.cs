@@ -39,6 +39,7 @@ public class OrderAddedDomainEventHandler : INotificationHandler<OrderAddedDomai
             notification.Id,
             notification.UserId,
             notification.OrderDate,
+            notification.ShipmentDetail,
             orderItems);
 
         await _publishEndpoint.Publish(orderAddedEvent, cancellationToken);

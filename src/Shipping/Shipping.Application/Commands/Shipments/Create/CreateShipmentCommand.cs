@@ -1,3 +1,5 @@
+using Common.Domain.SharedKernel;
+using Common.Domain.ValueObjects;
 using MediatR;
 using Shipping.Domain.Contracts;
 using Shipping.Domain.Models.Shipments;

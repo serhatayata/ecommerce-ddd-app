@@ -4,6 +4,8 @@ using OrderManagement.Application.Services.Products;
 using OrderManagement.Domain.Contracts;
 using OrderManagement.Domain.Models.Orders;
 using OrderManagement.Application.Services.PaymentSystems;
+using OrderManagement.Application.Models.Shippings;
+using System.Text.Json;
 
 namespace OrderManagement.Application.Commands;
 
@@ -15,6 +17,7 @@ public class OrderAddCommand : IRequest<OrderAddResponse>
     public string CVV { get; set; }
     public string ExpirationDate { get; set; }
     public string HolderName { get; set; }
+    public OrderShipmentItemModel ShipmentDetail { get; set;}
 
     public HashSet<OrderItemAddModel> OrderItems { get; set; }
 
@@ -63,7 +66,9 @@ public class OrderAddCommand : IRequest<OrderAddResponse>
             foreach (var orderItem in orderItems)
                 order.AddOrderItem(orderItem);
 
-            order.RaiseOrderCreatedEvent();
+            var shipmentDetail = JsonSerializer.Serialize(request.ShipmentDetail);
+
+            order.RaiseOrderCreatedEvent(shipmentDetail);
 
             _ = await _orderRepository.SaveAsync(order, cancellationToken) > 0;
 

@@ -1,4 +1,4 @@
-namespace Shipping.Domain.Models.Shipments;
+namespace Common.Domain.SharedKernel;
 
 public enum ShipmentStatus
 {
