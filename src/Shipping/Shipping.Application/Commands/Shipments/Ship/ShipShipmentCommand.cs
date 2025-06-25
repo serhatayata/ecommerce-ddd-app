@@ -35,7 +35,13 @@ public class ShipShipmentCommand : IRequest<Result>
 
             var shipment = Shipment.Create(
                 Common.Domain.ValueObjects.OrderId.From(request.OrderId),
-                shipmentDetail.ShippingAddress,
+                new(
+                    shipmentDetail.ShippingAddress.Street,
+                    shipmentDetail.ShippingAddress.City,
+                    shipmentDetail.ShippingAddress.State,
+                    shipmentDetail.ShippingAddress.Country,
+                    shipmentDetail.ShippingAddress.ZipCode
+                ),
                 trackingNumber,
                 shipmentDetail.ShipmentCompanyId
                 );

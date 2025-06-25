@@ -11,11 +11,13 @@ public sealed record ShipShipmentRequestEvent : IntegrationEvent
     public ShipShipmentRequestEvent(
         Guid correlationId,
         Guid orderId,
+        ShipmentDto shipmentDetail,
         DateTime shippedDate) :
     base(correlationId, DateTime.UtcNow)
     {
         ShippedDate = shippedDate;
         OrderId = orderId;
+        ShipmentDetail = shipmentDetail;
     }
 
     public Guid OrderId { get; set; }

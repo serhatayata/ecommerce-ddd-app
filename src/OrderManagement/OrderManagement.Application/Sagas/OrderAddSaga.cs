@@ -3,6 +3,8 @@ using Common.Domain.Events.PaymentSystems;
 using Common.Domain.Events.Stocks;
 using MassTransit;
 using Common.Domain.Events.Shippings;
+using System.Text.Json;
+using Common.Domain.Models.DTOs.Shippings;
 
 namespace OrderManagement.Application.Sagas;
 
@@ -90,9 +92,11 @@ public class OrderAddSaga : MassTransitStateMachine<OrderAddState>
                 })
                 .Publish(context =>
                 {
+                    var shipmentDetail = JsonSerializer.Deserialize<ShipmentDto>(context.Saga.ShipmentDetail);
                     return new ShipShipmentRequestEvent(
                         context.Message.CorrelationId,
                         context.Message.OrderId,
+                        shipmentDetail,
                         DateTime.UtcNow
                     );
                 })

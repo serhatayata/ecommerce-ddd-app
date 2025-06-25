@@ -5,8 +5,8 @@ namespace OrderManagement.Application.Models.Shippings;
 
 public class OrderShipmentModel
 {
-    public int OrderId { get; set; }
-    public Address ShippingAddress { get; set; }
+    public Guid OrderId { get; set; }
+    public OrderAddressModel ShippingAddress { get; set; }
     public string TrackingNumber { get; set; }
     public int ShipmentCompanyId { get; set; }
     public ShipmentStatus Status { get; set; }

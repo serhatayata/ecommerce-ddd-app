@@ -2,6 +2,10 @@ namespace Common.Domain.Events.Shippings;
 
 public sealed record ShipmentShippedEvent : IntegrationEvent
 {
+    public ShipmentShippedEvent()
+    {
+    }
+
     public ShipmentShippedEvent(
         Guid correlationId,
         int shipmentId,
@@ -14,7 +18,7 @@ public sealed record ShipmentShippedEvent : IntegrationEvent
         ShippedDate = shippedDate;
     }
 
-    public int ShipmentId { get; }
-    public string TrackingNumber { get; }
-    public DateTime ShippedDate { get; }
+    public int ShipmentId { get; set; }
+    public string TrackingNumber { get; set; }
+    public DateTime ShippedDate { get; set; }
 }

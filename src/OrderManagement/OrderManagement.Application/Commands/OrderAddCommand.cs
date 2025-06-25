@@ -17,7 +17,7 @@ public class OrderAddCommand : IRequest<OrderAddResponse>
     public string CVV { get; set; }
     public string ExpirationDate { get; set; }
     public string HolderName { get; set; }
-    public OrderShipmentItemModel ShipmentDetail { get; set;}
+    public OrderShipmentModel ShipmentDetail { get; set;}
 
     public HashSet<OrderItemAddModel> OrderItems { get; set; }
 

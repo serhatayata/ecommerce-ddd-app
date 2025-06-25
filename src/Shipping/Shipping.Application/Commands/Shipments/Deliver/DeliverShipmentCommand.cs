@@ -31,7 +31,7 @@ public class DeliverShipmentCommand : IRequest<Result>
 
             shipment.UpdateStatus(ShipmentStatus.Delivered, request.CorrelationId);
 
-            _ = await _shipmentRepository.SaveAsync(shipment, cancellationToken) > 0;
+            _ = await _shipmentRepository.UpdateAsync(shipment, cancellationToken) > 0;
 
             return Result.Success;
         }

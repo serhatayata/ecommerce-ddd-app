@@ -2,6 +2,10 @@ namespace Common.Domain.Events.Shippings;
 
 public sealed record ShipmentDeliveredEvent : IntegrationEvent
 {
+    public ShipmentDeliveredEvent()
+    {
+    }
+
     public ShipmentDeliveredEvent(
         Guid correlationId,
         Guid orderId,

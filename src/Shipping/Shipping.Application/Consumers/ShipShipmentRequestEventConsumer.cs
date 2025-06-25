@@ -27,7 +27,12 @@ public class ShipShipmentRequestEventConsumer : IConsumer<ShipShipmentRequestEve
 
         try
         {
-            _ = await _mediator.Send(new ShipShipmentCommand() { OrderId = message.OrderId });
+            _ = await _mediator.Send(new ShipShipmentCommand()
+            {
+                OrderId = message.OrderId,
+                CorrelationId = message.CorrelationId,
+                ShipmentDetail = message.ShipmentDetail
+            }, context.CancellationToken);
         }
         catch (Exception ex)
         {

@@ -1,12 +1,14 @@
 using Common.Api.Controllers;
 using Common.Application.Models;
 using Common.Domain.Events.Shippings;
+using Common.Domain.Models.DTOs.Shippings;
 using Common.Domain.SharedKernel;
 using Common.Domain.ValueObjects;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Shipping.Application.Commands.ShipmentCompanies.Create;
 using Shipping.Application.Commands.Shipments.Create;
+using Shipping.Application.Commands.Shipments.Deliver;
 using Shipping.Application.Queries.ShipmentCompanies.Common;
 using Shipping.Application.Queries.ShipmentCompanies.Details;
 using Shipping.Domain.Models.Shipments;
@@ -62,9 +64,38 @@ public class ShipmentController : BaseApiController
         await _publishEndpoint.Publish(new ShipShipmentRequestEvent(
             Guid.NewGuid(),
             command.OrderId,
+            new ShipmentDto()
+            {
+                OrderId = command.OrderId,
+                ShippingAddress = new AddressDto
+                {
+                    Street = command.Street,
+                    City = command.City,
+                    State = command.State,
+                    Country = command.Country,
+                    ZipCode = command.ZipCode
+                },
+                TrackingNumber = command.TrackingNumber,
+                ShipmentCompanyId = command.ShipmentCompanyId,
+                Status = command.Status,
+                Items = new List<ShipmentItemDto>()
+                {
+                    new ShipmentItemDto()
+                    {
+                        ProductId = random.Next(1, 5),
+                        Quantity = random.Next(1, 5)
+                    }
+                }
+            },
             DateTime.Now));
 
         return Ok();
     }
+
+    [HttpPost]
+    [Route("deliver-shipment")]
+    public async Task<ActionResult<Result>> DeliverShipment(
+    [FromBody] DeliverShipmentCommand command)
+        => await Send(command);
     #endregion
 }

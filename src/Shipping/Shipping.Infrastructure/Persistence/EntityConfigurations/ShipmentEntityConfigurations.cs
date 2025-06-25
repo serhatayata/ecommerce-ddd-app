@@ -11,6 +11,9 @@ public class ShipmentEntityConfigurations : IEntityTypeConfiguration<Shipment>
     {
         builder.HasKey(x => x.Id);
 
+        builder.Property(x => x.Id)
+            .ValueGeneratedOnAdd();
+
         builder.Property(x => x.OrderId)
             .HasConversion(p => p.Value, p => OrderId.From(p))
             .IsRequired();
