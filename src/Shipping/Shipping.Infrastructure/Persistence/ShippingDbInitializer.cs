@@ -16,6 +16,8 @@ public class ShippingDbInitializer : DbInitializer
 
     public override void Initialize()
     {
+        base.Initialize();
+
         if (_dbContext.Shipments.Any())
             return;
 

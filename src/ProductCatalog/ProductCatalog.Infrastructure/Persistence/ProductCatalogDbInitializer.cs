@@ -19,6 +19,8 @@ internal class ProductCatalogDbInitializer : DbInitializer
 
     public override void Initialize()
     {
+        base.Initialize();
+
         InitializeBrands();
         InitializeCategories();
         InitializeSuppliers();

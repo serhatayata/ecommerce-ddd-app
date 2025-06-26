@@ -37,8 +37,6 @@ if (app.Environment.IsDevelopment())
 
 app.InitializeDB();
 
-app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
 

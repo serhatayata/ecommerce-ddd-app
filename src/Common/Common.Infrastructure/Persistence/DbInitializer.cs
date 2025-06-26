@@ -23,12 +23,14 @@ public abstract class DbInitializer : IDbInitializer
 
     public virtual void Initialize()
     {
+        db.Database.Migrate();
+
         foreach (var initialDataProvider in initialDataProviders)
         {
             if (DataSetIsEmpty(initialDataProvider.EntityType))
             {
                 var data = initialDataProvider.GetData();
-            
+
                 foreach (var entity in data)
                 {
                     db.Add(entity);

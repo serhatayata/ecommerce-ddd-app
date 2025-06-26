@@ -16,6 +16,8 @@ public class StockDbInitializer : DbInitializer
 
     public override void Initialize()
     {
+        base.Initialize();
+
         if (_dbContext.StockItems.Any())
             return;
 

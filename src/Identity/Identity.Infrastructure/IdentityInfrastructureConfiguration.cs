@@ -28,6 +28,7 @@ public static class IdentityInfrastructureConfiguration
             .AddDatabase(configuration)
             .AddRepositories()
             .AddTransient<IDbInitializer, IdentityDbInitializer>()
+            .AddTransient<IDbInitializer, IdentitySagaDbInitializer>()
             .AddSagaConfigurations(configuration);
 
         return services;

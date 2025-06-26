@@ -26,6 +26,7 @@ public static class OrderInfrastructureConfiguration
             .AddDatabase(configuration)
             .AddRepositories()
             .AddTransient<IDbInitializer, OrderDbInitializer>()
+            .AddTransient<IDbInitializer, OrderManagementSagaDbInitializer>()
             .AddTransient<IOrderRepository, OrderRepository>()
             .AddTransient<IProductCatalogApiService, ProductCatalogApiService>()
             .AddTransient<IPaymentSystemApiService, PaymentSystemApiService>()

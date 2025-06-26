@@ -17,6 +17,8 @@ public class OrderDbInitializer : DbInitializer
 
     public override void Initialize()
     {
+        base.Initialize();
+
         if (!_db.Set<Order>().Any())
         {
             var order1 = Order.Create(
