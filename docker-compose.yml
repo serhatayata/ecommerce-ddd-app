@@ -57,7 +57,7 @@ services:
       context: .
       dockerfile: src/Identity/Identity.Api/Dockerfile
     ports:
-      - "5001:8080"
+      - "5000:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
@@ -78,17 +78,14 @@ services:
       context: .
       dockerfile: src/OrderManagement/OrderManagement.Api/Dockerfile
     ports:
-      - "5002:8080"
+      - "5001:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
       - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=OrderManagementDb;User Id=sa;Password=sa.++112233;TrustServerCertificate=true;
       - ConnectionStrings__RabbitMQ=amqp://guest:guest@rabbitmq:5672
-      - Services__IdentityApi=http://identity-api:8080
-      - Services__ProductCatalogApi=http://product-catalog-api:8080
-      - Services__PaymentSystemApi=http://payment-system-api:8080
-      - Services__StockApi=http://stock-api:8080
-      - Services__ShippingApi=http://shipping-api:8080
+      - Services__ProductCatalog__BaseAddress=http://product-catalog-api:8080/api/
+      - Services__PaymentSystem__BaseAddress=http://payment-system-api:8080/api/
     depends_on:
       sqlserver:
         condition: service_healthy
@@ -114,12 +111,13 @@ services:
       context: .
       dockerfile: src/PaymentSystem/PaymentSystem.Api/Dockerfile
     ports:
-      - "5003:8080"
+      - "5002:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
       - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=PaymentSystemDb;User Id=sa;Password=sa.++112233;TrustServerCertificate=true;
       - ConnectionStrings__RabbitMQ=amqp://guest:guest@rabbitmq:5672
+      - Services__OrderManagement__BaseAddress=http://order-management-api:8080/api/
     depends_on:
       sqlserver:
         condition: service_healthy
@@ -135,7 +133,7 @@ services:
       context: .
       dockerfile: src/ProductCatalog/ProductCatalog.Api/Dockerfile
     ports:
-      - "5004:8080"
+      - "5003:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
@@ -156,7 +154,7 @@ services:
       context: .
       dockerfile: src/Shipping/Shipping.Api/Dockerfile
     ports:
-      - "5005:8080"
+      - "5004:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
@@ -177,7 +175,7 @@ services:
       context: .
       dockerfile: src/Stock/Stock.Api/Dockerfile
     ports:
-      - "5006:8080"
+      - "5005:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080

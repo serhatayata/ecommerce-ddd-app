@@ -27,7 +27,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.MapScalarApiReference();
+    app.MapScalarApiReference(opt =>
+    {
+        opt.AddServer("http://localhost:5003");
+    });
 }
 
 app.InitializeDB();
