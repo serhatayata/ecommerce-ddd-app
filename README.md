@@ -36,8 +36,6 @@ This project is structured using DDD and Clean Architecture, focusing on:
 
 ➡ MassTransit for SAGA
 
-➡ Event Sourcing with domain events
-
 ➡ Docker for containerization
 
 ➡ SQL Server for persistence
